@@ -12,8 +12,8 @@ Pour accèder à la liste des plugins installés depuis un projet, il suffit de 
 Ouvrir les paramètres du projet en appuyant sur les touches `Ctrl+Alt+Maj+S`. Ouvrir la section bibliothèques, cliquer sur le symbole `+`, séléctionner Java, puis trouver le dossier décompressé de JavaFX (étape 1) et séléctionner le dossier `lib`. Séléctionner les modules dans lequels importer la bibliothèque, et cliquer sur `OK` puis sur `Appliquer` et encore une fois sur `OK`.
 
 ### 4. Modifier les profils Run/Debug du projet
-Cliquer sur "Modifier les configurations", à gauche du bouton d'execution :\s\s
-![Bouton d'édition des configurations](https://i.imgur.com/FP5iPKO.png)\s\s
+Cliquer sur "Modifier les configurations", à gauche du bouton d'execution :  
+![Bouton d'édition des configurations](https://i.imgur.com/FP5iPKO.png)  
 Pour chaque profil, effectuer la combinaison de touches `Alt+V`, puis dans le champ "Options de VM" qui vient d'apparaitre, saisir la configuration suivante : 
 ```
 --module-path </path/to/javafx/sdk> --add-modules javafx.controls,javafx.fxml
