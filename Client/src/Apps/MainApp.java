@@ -1,6 +1,7 @@
 package Apps;
 
 import javafx.scene.layout.BorderPane;
+import javafx.stage.StageStyle;
 import models.Config;
 import views.HomeController;
 import javafx.application.Application;
@@ -39,6 +40,7 @@ public class MainApp extends Application {
         Scene configScene = new Scene(configLayout);
 
         this.configStage.setScene(configScene);
+        this.configStage.setResizable(false);
         this.configStage.show();
 
         WelcomeController configController = configLoader.getController();
