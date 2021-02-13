@@ -87,4 +87,12 @@ public class MainApp extends Application {
         this.resumeMainStageStartup();
 
     }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public Stage getConfigStage() {
+        return configStage;
+    }
 }
