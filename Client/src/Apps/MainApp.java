@@ -1,5 +1,7 @@
 package Apps;
 
+import javafx.scene.layout.BorderPane;
+import models.Config;
 import views.HomeController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -9,11 +11,14 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.Partie;
+import views.WelcomeController;
 
 public class MainApp extends Application {
 
     private Stage primaryStage;
+    private Stage configStage;
     private ObservableList<Partie> partiesList = FXCollections.observableArrayList();
+    private Config serverConfig;
 
     public static void main(String[] args) {
         launch(args);
@@ -24,17 +29,21 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Chasse au trésor");
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/home.fxml"));
+        this.configStage = new Stage();
+        this.configStage.setTitle("Configuration du jeu");
 
-        AnchorPane rootLayout = (AnchorPane) loader.load();
-        Scene scene = new Scene(rootLayout);
+        FXMLLoader configLoader = new FXMLLoader();
+        configLoader.setLocation(getClass().getResource("/views/welcome.fxml"));
 
-        this.primaryStage.setScene(scene);
-        this.primaryStage.show();
+        BorderPane configLayout = (BorderPane) configLoader.load();
+        Scene configScene = new Scene(configLayout);
 
-        HomeController controller = loader.getController();
-        controller.setMainApp(this);
+        this.configStage.setScene(configScene);
+        this.configStage.show();
+
+        WelcomeController configController = configLoader.getController();
+        configController.setMainApp(this);
+
     }
 
     public MainApp(){
@@ -50,7 +59,32 @@ public class MainApp extends Application {
 
     }
 
+    private void resumeMainStageStartup(){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/views/home.fxml"));
+
+            AnchorPane rootLayout = (AnchorPane) loader.load();
+            Scene scene = new Scene(rootLayout);
+
+            this.primaryStage.setScene(scene);
+            this.primaryStage.show();
+
+            HomeController controller = loader.getController();
+            controller.setMainApp(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public ObservableList<Partie> getPartiesList() {
         return partiesList;
+    }
+
+    public void warnConfigDone(Config config){
+        this.serverConfig = config;
+        this.configStage.close();
+        this.resumeMainStageStartup();
+
     }
 }
