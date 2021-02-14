@@ -67,4 +67,13 @@ public class HomeController {
         createurTableColumn.setCellValueFactory(cellData -> cellData.getValue().createurProperty());
         dimensionTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDimensionX()+"x"+cellData.getValue().getDimensionY()));
     }
+
+    @FXML
+    private void handleQuitButtonClick(){
+        try {
+            this.mainApp.quitMainScreen();
+        } catch (Exception e1){
+            e1.printStackTrace();
+        }
+    }
 }

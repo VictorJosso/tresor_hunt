@@ -30,21 +30,7 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Chasse au trésor");
 
-        this.configStage = new Stage();
-        this.configStage.setTitle("Configuration du jeu");
-
-        FXMLLoader configLoader = new FXMLLoader();
-        configLoader.setLocation(getClass().getResource("/views/welcome.fxml"));
-
-        BorderPane configLayout = (BorderPane) configLoader.load();
-        Scene configScene = new Scene(configLayout);
-
-        this.configStage.setScene(configScene);
-        this.configStage.setResizable(false);
-        this.configStage.show();
-
-        WelcomeController configController = configLoader.getController();
-        configController.setMainApp(this);
+        displayConfigStage();
 
     }
 
@@ -79,6 +65,24 @@ public class MainApp extends Application {
         }
     }
 
+    private void displayConfigStage() throws Exception{
+        this.configStage = new Stage();
+        this.configStage.setTitle("Configuration du jeu");
+
+        FXMLLoader configLoader = new FXMLLoader();
+        configLoader.setLocation(getClass().getResource("/views/welcome.fxml"));
+
+        BorderPane configLayout = (BorderPane) configLoader.load();
+        Scene configScene = new Scene(configLayout);
+
+        this.configStage.setScene(configScene);
+        this.configStage.setResizable(false);
+        this.configStage.show();
+
+        WelcomeController configController = configLoader.getController();
+        configController.setMainApp(this);
+    }
+
     public ObservableList<Partie> getPartiesList() {
         return partiesList;
     }
@@ -88,6 +92,12 @@ public class MainApp extends Application {
         this.configStage.close();
         this.resumeMainStageStartup();
 
+    }
+
+    public void quitMainScreen() throws Exception{
+        // TODO: AVERTIR LE SERVEUR DE LA DECONNEXION (LIBERATION DU USERNAME)
+        this.primaryStage.close();
+        this.displayConfigStage();
     }
 
     public Stage getPrimaryStage() {

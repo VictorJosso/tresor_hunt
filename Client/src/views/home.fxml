@@ -27,7 +27,7 @@
                      </font></Label>
                   <ButtonBar prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                     <buttons>
-                      <Button fx:id="rejoindrePartieButton" mnemonicParsing="false" text="Connexion" />
+                      <Button fx:id="rejoindrePartieButton" mnemonicParsing="false" text="Rejoindre" />
                     </buttons>
                   </ButtonBar>
                </children></AnchorPane>
@@ -74,7 +74,7 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Spinner fx:id="dimensionsXSpinner">
+                              <Spinner fx:id="dimensionsXSpinner" editable="true">
                                  <GridPane.margin>
                                     <Insets right="8.0" />
                                  </GridPane.margin>
@@ -82,7 +82,7 @@
                                       <SpinnerValueFactory.IntegerSpinnerValueFactory max="50" min="10" />
                                   </valueFactory>
                               </Spinner>
-                              <Spinner fx:id="dimensionsYSpinner" GridPane.columnIndex="1">
+                              <Spinner fx:id="dimensionsYSpinner" editable="true" GridPane.columnIndex="1">
                                  <GridPane.margin>
                                     <Insets left="8.0" />
                                  </GridPane.margin>
@@ -104,13 +104,16 @@
                          <font>
                              <Font name="Chilanka Regular" size="13.0" />
                          </font></Label>
-                        <Spinner fx:id="nombreDeTrousSpinner" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Spinner fx:id="nombreDeTrousSpinner" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                             <valueFactory>
                                 <SpinnerValueFactory.IntegerSpinnerValueFactory max="25" min="5" />
                             </valueFactory>
                         </Spinner>
-                        <CheckBox fx:id="robotsCheckBox" mnemonicParsing="false" text="cocher pour activer" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <ChoiceBox fx:id="nombreDeTresorsChoiceBox" prefWidth="150.0" value="10 trésors" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <CheckBox fx:id="robotsCheckBox" mnemonicParsing="false" text="cocher pour activer" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                           <font>
+                              <Font name="Chilanka Regular" size="13.0" />
+                           </font></CheckBox>
+                        <ChoiceBox fx:id="nombreDeTresorsChoiceBox" prefWidth="150.0" style="-fx-font-family: Chilanka;" value="10 trésors" GridPane.columnIndex="1" GridPane.rowIndex="3">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="5 trésors" />
@@ -122,9 +125,9 @@
                         </ChoiceBox>
                      </children>
                   </GridPane>
-                  <ButtonBar prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                  <ButtonBar prefHeight="40.0" prefWidth="369.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                     <buttons>
-                      <Button fx:id="quitterButton" mnemonicParsing="false" text="Quitter" />
+                      <Button fx:id="quitterButton" mnemonicParsing="false" onAction="#handleQuitButtonClick" text="Quitter" />
                         <Button fx:id="creationPartieButton" mnemonicParsing="false" text="Créer la partie" />
                     </buttons>
                   </ButtonBar>

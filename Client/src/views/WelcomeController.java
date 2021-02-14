@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import models.Config;
 
 public class WelcomeController {
@@ -33,7 +35,7 @@ public class WelcomeController {
     }
 
     @FXML
-    private void handleConnectionButonPressed(){
+    private void handleConnectionButtonPressed(){
         String username = usernameTextField.getText();
         boolean isValid = validateUsername(username);
         if (isValid){
@@ -49,4 +51,11 @@ public class WelcomeController {
             alert.showAndWait();
         }
     }
+
+//    @FXML
+//    private void onKeyPressed(KeyEvent keyEvent){
+//        if (keyEvent.getCode() == KeyCode.ENTER){
+//            handleConnectionButtonPressed();
+//        }
+//    }
 }
