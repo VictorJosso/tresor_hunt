@@ -52,9 +52,17 @@ public class HomeController {
     @FXML
     private CheckBox robotsCheckBox;
 
+    @FXML
+    private Label partiesOuvertesLabel;
+
+    @FXML
+    private Label creationPartiesLabel;
+
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
         partiesEnCoursTableView.setItems(mainApp.getPartiesList());
+        partiesOuvertesLabel.setText("Parties ouvertes à l'inscription sur "+mainApp.getServerConfig().getAdresseServeur()+":"+mainApp.getServerConfig().getPortServeur());
+        creationPartiesLabel.setText("Créer une partie sur " + mainApp.getServerConfig().getAdresseServeur()+":"+mainApp.getServerConfig().getPortServeur());
     }
 
     public HomeController() {

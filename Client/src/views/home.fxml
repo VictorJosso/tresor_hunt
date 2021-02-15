@@ -13,7 +13,7 @@
          <items>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <TableView fx:id="partiesEnCoursTableView" prefHeight="398.0" prefWidth="295.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+                  <TableView fx:id="partiesEnCoursTableView" prefHeight="398.0" prefWidth="295.0" style="-fx-font-family: Chilanka;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
                     <columns>
                       <TableColumn fx:id="identifiantTableColumn" prefWidth="75.0" text="Identifiants" />
                         <TableColumn fx:id="modeTableColumn" prefWidth="75.0" text="Mode de jeu" />
@@ -21,19 +21,25 @@
                         <TableColumn fx:id="dimensionTableColumn" prefWidth="75.0" text="Dimensions" />
                     </columns>
                   </TableView>
-                  <Label layoutX="14.0" layoutY="6.0" text="Parties ouvertes à l'inscription" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+                  <Label fx:id="partiesOuvertesLabel" layoutX="14.0" layoutY="6.0" text="Parties ouvertes à l'inscription" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <font>
                         <Font name="Chilanka Regular" size="13.0" />
                      </font></Label>
                   <ButtonBar prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                     <buttons>
-                      <Button fx:id="rejoindrePartieButton" mnemonicParsing="false" text="Rejoindre" />
+                      <Button fx:id="rejoindrePartieButton" mnemonicParsing="false" text="Rejoindre">
+                           <font>
+                              <Font name="Chilanka Regular" size="13.0" />
+                           </font></Button>
                     </buttons>
                   </ButtonBar>
                </children></AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="300.0">
                <children>
-                  <Label text="Créer une partie" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                  <Label fx:id="creationPartiesLabel" text="Créer une partie" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+                   <font>
+                       <Font name="Chilanka Regular" size="13.0" />
+                   </font></Label>
                   <Separator prefHeight="3.0" prefWidth="437.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
                   <GridPane style="-fx-min-height: 250;" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="50.0">
                     <columnConstraints>
@@ -74,7 +80,7 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Spinner fx:id="dimensionsXSpinner" editable="true">
+                              <Spinner fx:id="dimensionsXSpinner" style="-fx-font-family: Chilanka;">
                                  <GridPane.margin>
                                     <Insets right="8.0" />
                                  </GridPane.margin>
@@ -82,7 +88,7 @@
                                       <SpinnerValueFactory.IntegerSpinnerValueFactory max="50" min="10" />
                                   </valueFactory>
                               </Spinner>
-                              <Spinner fx:id="dimensionsYSpinner" editable="true" GridPane.columnIndex="1">
+                              <Spinner fx:id="dimensionsYSpinner" style="-fx-font-family: Chilanka;" GridPane.columnIndex="1">
                                  <GridPane.margin>
                                     <Insets left="8.0" />
                                  </GridPane.margin>
@@ -104,7 +110,7 @@
                          <font>
                              <Font name="Chilanka Regular" size="13.0" />
                          </font></Label>
-                        <Spinner fx:id="nombreDeTrousSpinner" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Spinner fx:id="nombreDeTrousSpinner" style="-fx-font-family: Chilanka;" GridPane.columnIndex="1" GridPane.rowIndex="2">
                             <valueFactory>
                                 <SpinnerValueFactory.IntegerSpinnerValueFactory max="25" min="5" />
                             </valueFactory>
@@ -127,8 +133,14 @@
                   </GridPane>
                   <ButtonBar prefHeight="40.0" prefWidth="369.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                     <buttons>
-                      <Button fx:id="quitterButton" mnemonicParsing="false" onAction="#handleQuitButtonClick" text="Quitter" />
-                        <Button fx:id="creationPartieButton" mnemonicParsing="false" text="Créer la partie" />
+                      <Button fx:id="quitterButton" mnemonicParsing="false" onAction="#handleQuitButtonClick" text="Quitter">
+                        <font>
+                            <Font name="Chilanka Regular" size="13.0" />
+                        </font></Button>
+                        <Button fx:id="creationPartieButton" mnemonicParsing="false" text="Créer la partie">
+                        <font>
+                            <Font name="Chilanka Regular" size="13.0" />
+                        </font></Button>
                     </buttons>
                   </ButtonBar>
                </children></AnchorPane>

@@ -107,4 +107,8 @@ public class MainApp extends Application {
     public Stage getConfigStage() {
         return configStage;
     }
+
+    public Config getServerConfig() {
+        return serverConfig;
+    }
 }
