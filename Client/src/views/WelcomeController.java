@@ -14,6 +14,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Config;
 
+/**
+ * The type Welcome controller.
+ */
 public class WelcomeController {
 
     private MainApp mainApp;
@@ -29,9 +32,17 @@ public class WelcomeController {
     @FXML
     private Button connectionButton;
 
+    /**
+     * Instantiates a new Welcome controller.
+     */
     public WelcomeController() {
     }
 
+    /**
+     * Sets main app.
+     *
+     * @param mainApp the main app
+     */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
@@ -43,6 +54,7 @@ public class WelcomeController {
 
     @FXML
     private void handleConnectionButtonPressed(){
+        // Cette méthode est appelée lorsque le bouton Connexion est pressé. Ce comportement est défini dans le fichier FXML
         String username = usernameTextField.getText();
         boolean isValid = validateUsername(username);
         if (isValid){
@@ -50,6 +62,7 @@ public class WelcomeController {
             mainApp.warnConfigDone(this.config);
         }
         else{
+            // On crée un dialogue pour avertir l'utilisateur de son erreur
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(mainApp.getConfigStage());
             alert.setTitle("Erreur");
@@ -69,6 +82,8 @@ public class WelcomeController {
 
     @FXML
     private void handleParametresButtonPressed() throws Exception{
+        // Cette méthode est appelée lorsque le bouton Paramètres est pressé. Ce comportement est défini dans le fichier FXML.
+        // On crée une nouvelle fenêtre, pour la procédure voir le fichier Apps.ainApp
         this.paramStage = new Stage();
         this.paramStage.setTitle("Paramètres du serveur");
 
@@ -84,6 +99,7 @@ public class WelcomeController {
         ParamServeurController parametresServeurController = parametresServeurLoader.getController();
         parametresServeurController.setParentController(this);
 
+        // Ces paramètres permettent de ne pas pouvoir interagir avec la fenêtre de configuration princpale (nom d'utilisateur) tant que celle du serveur est ouverte.
         this.paramStage.initModality(Modality.WINDOW_MODAL);
         this.paramStage.initOwner(mainApp.getConfigStage());
         this.paramStage.show();
@@ -91,14 +107,27 @@ public class WelcomeController {
 
     }
 
+    /**
+     * Gets config.
+     *
+     * @return the config
+     */
     public Config getConfig() {
         return config;
     }
 
+    /**
+     * Sets config.
+     *
+     * @param config the config
+     */
     public void setConfig(Config config) {
         this.config = config;
     }
 
+    /**
+     * Close server settings window.
+     */
     public void fermerParametresServeurFenetre(){
         this.paramStage.close();
     }

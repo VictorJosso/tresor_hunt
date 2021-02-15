@@ -6,6 +6,9 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import models.Config;
 
+/**
+ * The type Param serveur controller.
+ */
 public class ParamServeurController {
 
     @FXML
@@ -23,10 +26,20 @@ public class ParamServeurController {
     private WelcomeController parentController;
 
 
+    /**
+     * Gets parent controller.
+     *
+     * @return the parent controller
+     */
     public WelcomeController getParentController() {
         return parentController;
     }
 
+    /**
+     * Sets parent controller.
+     *
+     * @param parentController the parent controller
+     */
     public void setParentController(WelcomeController parentController) {
         this.parentController = parentController;
         this.adresseServeurTextField.setText(parentController.getConfig().getAdresseServeur());
@@ -34,6 +47,7 @@ public class ParamServeurController {
 
     @FXML
     private void handleOKButtonPressed(){
+        // Cette méthode est appelée lorsque le bouton OK est pressé. Ce comportement est défini dans le fichier FXML
         // TODO: VERFIFIER QUE L'URL EST VALIDE ET LA TESTER
         Config config = new Config();
         config.setAdresseServeur(adresseServeurTextField.getText());
@@ -45,6 +59,7 @@ public class ParamServeurController {
 
     @FXML
     private void handleCancelButtonPressed(){
+        // Cette méthode est appelée lorsque le bouton Annuler est pressé. Ce comportement est défini dans le fichier FXML
         this.parentController.fermerParametresServeurFenetre();
     }
 }

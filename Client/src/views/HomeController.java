@@ -6,6 +6,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.Partie;
 
+/**
+ * The type Home controller.
+ */
 public class HomeController {
 
     private MainApp mainApp;
@@ -58,6 +61,11 @@ public class HomeController {
     @FXML
     private Label creationPartiesLabel;
 
+    /**
+     * Sets main app, and fills UI with parties list and config
+     *
+     * @param mainApp the main app
+     */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
         partiesEnCoursTableView.setItems(mainApp.getPartiesList());
@@ -65,11 +73,16 @@ public class HomeController {
         creationPartiesLabel.setText("Créer une partie sur " + mainApp.getServerConfig().getAdresseServeur()+":"+mainApp.getServerConfig().getPortServeur());
     }
 
+    /**
+     * Instantiates a new Home controller.
+     */
     public HomeController() {
     }
     
     @FXML
     private void initialize() {
+        // Cette methode est appelée automatiquement par JavaFX lors de la création de la fénêtre.
+        // Les instructions permettent d'affecter les propriétés de l'élément Parties à chaque colonne du tableView
         identifiantTableColumn.setCellValueFactory(cellData -> cellData.getValue().identifiantProperty().asObject());
         modeTableColumn.setCellValueFactory(cellData -> cellData.getValue().modeDeJeuProperty());
         createurTableColumn.setCellValueFactory(cellData -> cellData.getValue().createurProperty());
@@ -78,6 +91,7 @@ public class HomeController {
 
     @FXML
     private void handleQuitButtonClick(){
+        // Cette methode est appelée lorsque l'on clique sur le bouton quitter. Ce comportement est défini dans le fichier FXML
         try {
             this.mainApp.quitMainScreen();
         } catch (Exception e1){
