@@ -23,6 +23,9 @@ public class ParamServeurController {
     @FXML
     private Button CancelButton;
 
+    @FXML
+    private Button resetButton;
+
     private WelcomeController parentController;
 
 
@@ -61,5 +64,12 @@ public class ParamServeurController {
     private void handleCancelButtonPressed(){
         // Cette méthode est appelée lorsque le bouton Annuler est pressé. Ce comportement est défini dans le fichier FXML
         this.parentController.fermerParametresServeurFenetre();
+    }
+
+    @FXML
+    private void handleResetButtonPressed(){
+        this.parentController.getConfig().resetServerConfig();
+        this.adresseServeurTextField.setText(this.parentController.getConfig().getAdresseServeur());
+        this.portServeurSpinner.getValueFactory().setValue(this.parentController.getConfig().getPortServeur());
     }
 }

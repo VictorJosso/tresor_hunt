@@ -29,7 +29,7 @@ public class MainApp extends Application {
     private ObservableList<Partie> partiesList = FXCollections.observableArrayList();
 
     // La configuration du serveur (adresse, port, nom d'utilisateur)
-    private Config serverConfig;
+    private Config serverConfig = new Config();
 
     /**
      * The entry point of application.
@@ -111,6 +111,8 @@ public class MainApp extends Application {
 
         WelcomeController configController = configLoader.getController();
         configController.setMainApp(this);
+        configController.setConfig(serverConfig);
+
     }
 
     /**

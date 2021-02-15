@@ -4,8 +4,8 @@ package models;
  * The type Config.
  */
 public class Config {
-    private String adresseServeur = "tresor.josso.fr";
-    private int portServeur = 7236;
+    private String adresseServeur;
+    private int portServeur;
     private String username;
 
 
@@ -26,7 +26,12 @@ public class Config {
      * Instantiates a new Config.
      */
     public Config(){
+        defaultConfig();
+    }
 
+    private void defaultConfig(){
+        adresseServeur = "tresor.josso.fr";
+        portServeur = 7236;
     }
 
     /**
@@ -35,6 +40,7 @@ public class Config {
      * @param username the username
      */
     public Config(String username) {
+        defaultConfig();
         this.username = username;
     }
 
@@ -91,4 +97,10 @@ public class Config {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public void resetServerConfig(){
+        defaultConfig();
+    }
+
+
 }
