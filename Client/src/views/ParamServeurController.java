@@ -1,10 +1,15 @@
 package views;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import models.Config;
+
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Scanner;
 
 /**
  * The type Param serveur controller.
@@ -48,15 +53,42 @@ public class ParamServeurController {
         this.adresseServeurTextField.setText(parentController.getConfig().getAdresseServeur());
     }
 
+    private boolean checkServerAddress(String url, int port){
+        try {
+            Socket socket = new Socket(url, port);
+            Scanner scanner = new Scanner(socket.getInputStream());
+            PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
+
+            printWriter.println("50 HELLO");
+            String rep = scanner.nextLine();
+            if (rep.split(" ")[0].equals("50") && rep.split(" ")[1].equals("HELLO")){
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e){
+            return false;
+        }
+    }
+
     @FXML
     private void handleOKButtonPressed(){
         // Cette méthode est appelée lorsque le bouton OK est pressé. Ce comportement est défini dans le fichier FXML
-        // TODO: VERFIFIER QUE L'URL EST VALIDE ET LA TESTER
-        Config config = new Config();
-        config.setAdresseServeur(adresseServeurTextField.getText());
-        config.setPortServeur(portServeurSpinner.getValue());
-        this.parentController.setConfig(config);
-        this.parentController.fermerParametresServeurFenetre();
+        if (checkServerAddress(adresseServeurTextField.getText(), portServeurSpinner.getValue())) {
+            Config config = new Config();
+            config.setAdresseServeur(adresseServeurTextField.getText());
+            config.setPortServeur(portServeurSpinner.getValue());
+            this.parentController.setConfig(config);
+            this.parentController.fermerParametresServeurFenetre();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner(parentController.getMainApp().getConfigStage());
+            alert.setTitle("Erreur");
+            alert.setHeaderText("Aucun serveur ne répond à l'adresse séléctionée.");
+            alert.setContentText("Vérifie que l'adresse et le port saisis sont corrects, puis vérifie que le serveur est actif.");
+
+            alert.showAndWait();
+        }
 
     }
 

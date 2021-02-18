@@ -1,6 +1,7 @@
 package views;
 
 import Apps.MainApp;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -50,6 +51,19 @@ public class WelcomeController {
     private boolean validateUsername(String username){
         // TODO: VERIFIER AUPRES DU SERVEUR SI LE NOM EST DEJA PRIS
         return (!username.equals("Kevin") && username.length() > 3);
+    }
+
+    // Cette fonction est appelée automatiquement par JavaFX après avoir dessiné l'inteface
+    @FXML
+    private void initialize(){
+        // Empêche l'utilisateur de saisir un nom d'utilisateur avec des espaces (et autres caractères invisibles)
+        usernameTextField.textProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (!newValue.equals("")) {
+                        ((StringProperty) observable).setValue(newValue.replaceAll("\\s+", ""));
+                    }
+                }
+        );
     }
 
     @FXML
@@ -130,5 +144,9 @@ public class WelcomeController {
      */
     public void fermerParametresServeurFenetre(){
         this.paramStage.close();
+    }
+
+    protected MainApp getMainApp(){
+        return mainApp;
     }
 }
