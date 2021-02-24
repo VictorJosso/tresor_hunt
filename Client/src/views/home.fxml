@@ -27,7 +27,7 @@
                      </font></Label>
                   <ButtonBar prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                     <buttons>
-                      <Button fx:id="rejoindrePartieButton" mnemonicParsing="false" text="Rejoindre">
+                      <Button fx:id="rejoindrePartieButton" mnemonicParsing="false" onAction="#handlejoinButtonClick" text="Rejoindre">
                            <font>
                               <Font name="Chilanka Regular" size="13.0" />
                            </font></Button>

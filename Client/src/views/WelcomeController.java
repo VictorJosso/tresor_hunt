@@ -15,6 +15,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Config;
 
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Scanner;
+
 /**
  * The type Welcome controller.
  */
@@ -50,7 +54,22 @@ public class WelcomeController {
 
     private boolean validateUsername(String username){
         // TODO: VERIFIER AUPRES DU SERVEUR SI LE NOM EST DEJA PRIS
-        return (!username.equals("Kevin") && username.length() > 3);
+        try {
+            Socket socket = new Socket (config.getAdresseServeur(), config.getPortServeur());
+            Scanner scanner = new Scanner (socket.getInputStream());
+            PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
+
+            printWriter.println("100 HELLO PLAYER "+username);
+            String rep = scanner.nextLine();
+            if (rep.split(" ")[0].equals("101") && rep.split(" ")[1].equals("WELCOME") && rep.split(" ")[2].equals(username)){
+                return true;
+            } else {
+                return false;
+            }
+        } catch(Exception e) {
+            return false;
+        }
+        //return (!username.equals("Kevin") && username.length() > 3);
     }
 
     // Cette fonction est appelée automatiquement par JavaFX après avoir dessiné l'inteface
