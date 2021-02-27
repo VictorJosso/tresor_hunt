@@ -1,8 +1,8 @@
 package Apps;
 
 import javafx.scene.layout.BorderPane;
-import javafx.stage.StageStyle;
 import models.Config;
+import utils.ConnectionHandler;
 import views.HomeController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -31,6 +31,8 @@ public class MainApp extends Application {
     // La configuration du serveur (adresse, port, nom d'utilisateur)
     private Config serverConfig = new Config();
 
+    private ConnectionHandler connectionHandler;
+
     /**
      * The entry point of application.
      *
@@ -55,6 +57,14 @@ public class MainApp extends Application {
         // On récupère les parties disponibles. A terme, cette fonction doit être appelée après que la configuration soit terminée
         fetchPartiesList();
 
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        if (this.connectionHandler != null){
+            this.connectionHandler.quitter();
+        }
     }
 
     private void fetchPartiesList(){
@@ -113,6 +123,11 @@ public class MainApp extends Application {
         configController.setMainApp(this);
         configController.setConfig(serverConfig);
 
+    }
+
+    public void createServerConnection(Config config){
+        this.connectionHandler = new ConnectionHandler(config);
+        this.connectionHandler.start();
     }
 
     /**
@@ -176,5 +191,9 @@ public class MainApp extends Application {
      */
     public Config getServerConfig() {
         return serverConfig;
+    }
+
+    public ConnectionHandler getConnectionHandler() {
+        return connectionHandler;
     }
 }

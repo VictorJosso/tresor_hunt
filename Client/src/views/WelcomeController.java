@@ -1,6 +1,7 @@
 package views;
 
 import Apps.MainApp;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,11 +15,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Config;
+import utils.Controller;
 
 /**
  * The type Welcome controller.
  */
-public class WelcomeController {
+public class WelcomeController extends Controller {
 
     private MainApp mainApp;
     private Config config = new Config();
@@ -48,9 +50,14 @@ public class WelcomeController {
         this.mainApp = mainApp;
     }
 
-    private boolean validateUsername(String username){
-        // TODO: VERIFIER AUPRES DU SERVEUR SI LE NOM EST DEJA PRIS
-        return (!username.equals("Kevin") && username.length() > 3);
+    private void validateUsername(String username){
+        if (username.equals("Kevin")){
+            this.resumeConnectionCallback(false);
+        } else {
+            mainApp.getConnectionHandler().registerCallback("101", this, (controller, message) -> controller.resumeConnectionCallback(true));
+            mainApp.getConnectionHandler().registerCallback("901", this, (controller, message) -> controller.resumeConnectionCallback(false));
+            mainApp.getConnectionHandler().send("100 HELLO PLAYER " + username);
+        }
     }
 
     // Cette fonction est appelée automatiquement par JavaFX après avoir dessiné l'inteface
@@ -67,23 +74,30 @@ public class WelcomeController {
     }
 
     @FXML
-    private void handleConnectionButtonPressed(){
+    private void handleConnectionButtonPressed() {
         // Cette méthode est appelée lorsque le bouton Connexion est pressé. Ce comportement est défini dans le fichier FXML
         String username = usernameTextField.getText();
-        boolean isValid = validateUsername(username);
+        mainApp.createServerConnection(this.config);
+        validateUsername(username);
+    }
+
+    @Override
+    public void resumeConnectionCallback(boolean isValid) {
         if (isValid){
-            config.setUsername(username);
-            mainApp.warnConfigDone(this.config);
+            config.setUsername(usernameTextField.getText());
+            Platform.runLater(() -> mainApp.warnConfigDone(this.config));
         }
         else{
-            // On crée un dialogue pour avertir l'utilisateur de son erreur
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(mainApp.getConfigStage());
-            alert.setTitle("Erreur");
-            alert.setHeaderText("Nom d'utilisateur non disponible");
-            alert.setContentText("Soit le nom d'utilisateur est déjà pris, soit il fait moins de 4 caractères.");
+            Platform.runLater(() -> {
+                // On crée un dialogue pour avertir l'utilisateur de son erreur
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.initOwner(mainApp.getConfigStage());
+                alert.setTitle("Erreur");
+                alert.setHeaderText("Nom d'utilisateur non disponible");
+                alert.setContentText("Soit le nom d'utilisateur est déjà pris, soit il fait moins de 4 caractères.");
 
-            alert.showAndWait();
+                alert.showAndWait();
+            });
         }
     }
 
