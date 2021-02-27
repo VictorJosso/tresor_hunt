@@ -26,6 +26,11 @@ public class ClientHandler implements Runnable{
 
     }
 
+    private void illegalCommand(){
+        send("550 ILLEGAL COMMAND. BYE");
+        closeConnection();
+    }
+
     @Override
     public void run(){
         try {
@@ -37,8 +42,33 @@ public class ClientHandler implements Runnable{
                         printWriter.println("50 HELLO " + ConnectionHandler.SERVER_VERSION);
                         socket.close();
                         break;
+                    //On attend -> 100 HELLO PLAYER username
+                    case "100":
+                        if (command.split(" ").length == 4 && command.split(" ")[1].equals("HELLO") && command.split(" ")[2].equals("PLAYER")){
+                            if (mainApp.usernamesSet.contains(command.split(" ")[3])){
+                                send("901 THIS NAME IS ALREADY USED");
+                                break;
+                            }
+                            if (command.split(" ")[3].length() > 30){
+                                send("990 TOO LARGE WORD IN COMMAND");
+                                break;
+                            }
+                            mainApp.usernamesSet.add(command.split(" ")[3]);
+                            client.setUsername(command.split(" ")[3]);
+                            client.setLoggedIn(true);
+                            send("101 WELCOME "+command.split(" ")[3]);
+                            break;
+                        } else {
+                            illegalCommand();
+                            break;
+                        }
                     default:
-                        this.parser.parse(command);
+                        if (client.isLoggedIn()) {
+                            this.parser.parse(command);
+                        } else {
+                            send("555 UNAUTHORIZED. PLEASE LOG IN");
+                        }
+                        break;
                 }
             }
         } catch (Exception e){

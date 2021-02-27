@@ -1,5 +1,8 @@
 package Models;
 
+import Apps.ConnectionHandler;
+import Utils.ClientHandler;
+
 public class WarFog extends Game{
 
     //Attributs
@@ -8,7 +11,7 @@ public class WarFog extends Game{
 
 
     //Constructeur
-    public WarFog(int x, int y, int tres, int holes, int mode) {
-        super(x,y,tres,holes,mode);
+    public WarFog(int x, int y, int tres, int holes, ClientHandler owner, ConnectionHandler mainHandler) {
+        super(x, y, tres, holes, owner, mainHandler);
     }
 }
