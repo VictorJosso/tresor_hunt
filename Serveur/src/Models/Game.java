@@ -13,16 +13,19 @@ public abstract class Game {
     private final int treasures;
     private final int holes;
     private final int id;
+    private final int maxPlayers;
     private ConnectionHandler mainHandler;
     private ClientHandler owner;
+    public int mode;
     private CopyOnWriteArrayList<ClientHandler> players = new CopyOnWriteArrayList<>();
 
 
-    public Game(int x, int y, int tres, int holes, ClientHandler owner,  ConnectionHandler mainHandler) {
+    public Game(int x, int y, int tres, int holes, int maxPlayers, ClientHandler owner,  ConnectionHandler mainHandler) {
         this.x=x;
         this.y=y;
         this.treasures=tres;
         this.holes=holes;
+        this.maxPlayers = maxPlayers;
         this.owner= owner;
         this.mainHandler = mainHandler;
         this.id = mainHandler.registerGameId(this);
@@ -38,5 +41,29 @@ public abstract class Game {
 
     public int getId() {
         return id;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getTreasures() {
+        return treasures;
+    }
+
+    public int getHoles() {
+        return holes;
+    }
+
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public void launch(){
+        mainHandler.getAvailableGamesMap().remove(this.id);
     }
 }

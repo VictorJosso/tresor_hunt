@@ -115,21 +115,21 @@ public class Parser {
 
                     //Speeding contest
                     if(Integer.parseInt(response[2]) == 1) {
-                        SpeedingContest partie = new SpeedingContest(sizeX, sizeY, nbTres, nbHoles, client, mainHandler);
+                        SpeedingContest partie = new SpeedingContest(sizeX, sizeY, nbTres, nbHoles, nbPlayers, client, mainHandler);
                         client.send("111 MAP CREATED " + partie.getId());
 
                     }
 
                     //Tour par tour
                     if(Integer.parseInt(response[2]) == 2) {
-                        TourParTour partie = new TourParTour(sizeX, sizeY, nbTres, nbHoles, client,  mainHandler);
+                        TourParTour partie = new TourParTour(sizeX, sizeY, nbTres, nbHoles, nbPlayers, client,  mainHandler);
                         client.send("111 MAP CREATED " + partie.getId());
 
                     }
 
                     //Brouillard de guerre
                     if(Integer.parseInt(response[2]) == 3) {
-                        WarFog partie = new WarFog(sizeX, sizeY, nbTres, nbHoles, client, mainHandler);
+                        WarFog partie = new WarFog(sizeX, sizeY, nbTres, nbHoles, nbPlayers, client, mainHandler);
                         client.send("111 MAP CREATED " + partie.getId());
 
                     }
@@ -141,6 +141,25 @@ public class Parser {
                 }
                 break;
 
+            // 120 GETLIST
+            case "120":
+                if (response.length == 2 && response[1].equals("GETLIST")){
+                    client.send("121 NUMBER " + mainHandler.getAvailableGamesMap().size());
+                    int i = 1;
+                    for (int gameId : mainHandler.getAvailableGamesMap().keySet()){
+                        client.send(String.format("121 MESS %d ID %d %d %d %d %d %d %d", i++, gameId,
+                                mainHandler.getAvailableGamesMap().get(gameId).mode,
+                                mainHandler.getAvailableGamesMap().get(gameId).getX(),
+                                mainHandler.getAvailableGamesMap().get(gameId).getY(),
+                                mainHandler.getAvailableGamesMap().get(gameId).getHoles(),
+                                mainHandler.getAvailableGamesMap().get(gameId).getTreasures(),
+                                mainHandler.getAvailableGamesMap().get(gameId).getMaxPlayers()));
+                    }
+                }
+                else {
+                    illegalCommand();
+                }
+                break;
 
             default:
                 illegalCommand();

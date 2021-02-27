@@ -15,6 +15,7 @@ public class ConnectionHandler {
     public static double SERVER_VERSION = 1.0;
     public CopyOnWriteArrayList<String> usernamesSet = new CopyOnWriteArrayList<>();
     private final Map<Integer, Game> gamesMap = new ConcurrentHashMap<>();
+    private final Map<Integer, Game> availableGamesMap = new ConcurrentHashMap<>();
 
 
     public ConnectionHandler() throws Exception{
@@ -27,6 +28,7 @@ public class ConnectionHandler {
             return registerGameId(game);
         } else {
             gamesMap.put(id, game);
+            availableGamesMap.put(id, game);
             return id;
         }
     }
@@ -38,5 +40,9 @@ public class ConnectionHandler {
         while (true) {
             pool.execute(new ClientHandler(listener.accept(), this));
         }
+    }
+
+    public Map<Integer, Game> getAvailableGamesMap() {
+        return availableGamesMap;
     }
 }
