@@ -16,6 +16,7 @@
       <element id="archive" name="JavaFXApp.jar">
         <element id="module-output" name="tresor-hunt" />
       </element>
+      <element id="library" level="project" name="lib" />
     </root>
   </artifact>
 </component>
