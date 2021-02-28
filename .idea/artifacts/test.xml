@@ -3,7 +3,6 @@
     <output-path>$PROJECT_DIR$/out/artifacts/test</output-path>
     <root id="archive" name="test.jar">
       <element id="module-output" name="tresor-hunt" />
-      <element id="library" level="project" name="lib" />
     </root>
   </artifact>
 </component>
