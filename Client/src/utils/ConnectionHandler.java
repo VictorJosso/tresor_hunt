@@ -23,6 +23,7 @@ public class ConnectionHandler extends Thread{
     }
 
     public void quitter(){
+        send("102 QUIT");
         running = false;
         if (socket != null){
             try {
@@ -45,6 +46,11 @@ public class ConnectionHandler extends Thread{
     public void registerCallback(String code, Controller controller, CallbackServer callback){
         callLinks.put(code, callback);
         callOwners.put(code, controller);
+    }
+
+    public void releaseCallback(String code){
+        callLinks.remove(code);
+        callOwners.remove(code);
     }
 
     @Override

@@ -101,12 +101,12 @@ public class WelcomeController extends Controller {
         }
     }
 
-//    @FXML
-//    private void onKeyPressed(KeyEvent keyEvent){
-//        if (keyEvent.getCode() == KeyCode.ENTER){
-//            handleConnectionButtonPressed();
-//        }
-//    }
+    @FXML
+    private void onKeyPressed(KeyEvent keyEvent){
+        if (keyEvent.getCode() == KeyCode.ENTER){
+            handleConnectionButtonPressed();
+        }
+    }
 
     @FXML
     private void handleParametresButtonPressed() throws Exception{
