@@ -63,7 +63,13 @@ public abstract class Game {
         return maxPlayers;
     }
 
+    public ClientHandler getOwner() {
+        return owner;
+    }
+
     public void launch(){
         mainHandler.getAvailableGamesMap().remove(this.id);
     }
+
+
 }

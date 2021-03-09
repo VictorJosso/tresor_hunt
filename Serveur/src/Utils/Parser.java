@@ -36,6 +36,9 @@ public class Parser {
     private void illegalCommand(){
         client.send("550 ILLEGAL COMMAND. BYE");
         client.closeConnection();
+        if (client.getClient().isLoggedIn()){
+            mainHandler.usernamesSet.remove(client.getClient().getUsername());
+        }
     }
 
 
@@ -147,13 +150,14 @@ public class Parser {
                     client.send("121 NUMBER " + mainHandler.getAvailableGamesMap().size());
                     int i = 1;
                     for (int gameId : mainHandler.getAvailableGamesMap().keySet()){
-                        client.send(String.format("121 MESS %d ID %d %d %d %d %d %d %d", i++, gameId,
+                        client.send(String.format("121 MESS %d ID %d %d %d %d %d %d %d %s", i++, gameId,
                                 mainHandler.getAvailableGamesMap().get(gameId).mode,
                                 mainHandler.getAvailableGamesMap().get(gameId).getX(),
                                 mainHandler.getAvailableGamesMap().get(gameId).getY(),
                                 mainHandler.getAvailableGamesMap().get(gameId).getHoles(),
                                 mainHandler.getAvailableGamesMap().get(gameId).getTreasures(),
-                                mainHandler.getAvailableGamesMap().get(gameId).getMaxPlayers()));
+                                mainHandler.getAvailableGamesMap().get(gameId).getMaxPlayers(),
+                                mainHandler.getAvailableGamesMap().get(gameId).getOwner().getClient().getUsername()));
                     }
                 }
                 else {

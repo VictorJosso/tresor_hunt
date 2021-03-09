@@ -1,6 +1,8 @@
 package Apps;
 
+import javafx.event.EventHandler;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.WindowEvent;
 import models.Config;
 import utils.ConnectionHandler;
 import views.HomeController;
@@ -93,6 +95,12 @@ public class MainApp extends Application {
             // On affecte la scène au stage principal et on l'affiche
             this.primaryStage.setScene(scene);
             this.primaryStage.show();
+            this.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent windowEvent) {
+                    connectionHandler.quitter();
+                }
+            });
 
             // On récupère l'instance du controlleur du loader. Il est spécifié dans le fichier fxml
             HomeController controller = loader.getController();
@@ -150,7 +158,7 @@ public class MainApp extends Application {
      */
     public void quitMainScreen() throws Exception{
         // Gère l'appui sur le bouton Quitter de l'inteface
-        // TODO: AVERTIR LE SERVEUR DE LA DECONNEXION (LIBERATION DU USERNAME)
+        this.connectionHandler.quitter();
         this.primaryStage.close();
         this.displayConfigStage();
     }
