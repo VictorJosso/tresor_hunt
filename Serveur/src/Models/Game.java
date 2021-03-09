@@ -18,9 +18,10 @@ public abstract class Game {
     private ClientHandler owner;
     public int mode;
     private CopyOnWriteArrayList<ClientHandler> players = new CopyOnWriteArrayList<>();
+    private final boolean robots;
 
 
-    public Game(int x, int y, int tres, int holes, int maxPlayers, ClientHandler owner,  ConnectionHandler mainHandler) {
+    public Game(int x, int y, int tres, int holes, int maxPlayers, boolean robots, ClientHandler owner,  ConnectionHandler mainHandler) {
         this.x=x;
         this.y=y;
         this.treasures=tres;
@@ -29,6 +30,7 @@ public abstract class Game {
         this.owner= owner;
         this.mainHandler = mainHandler;
         this.id = mainHandler.registerGameId(this);
+        this.robots = robots;
     }
 
     public void addPlayer(ClientHandler client){
@@ -71,5 +73,7 @@ public abstract class Game {
         mainHandler.getAvailableGamesMap().remove(this.id);
     }
 
-
+    public boolean isRobots() {
+        return robots;
+    }
 }

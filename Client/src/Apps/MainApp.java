@@ -1,10 +1,14 @@
 package Apps;
 
+import com.sun.javafx.binding.StringFormatter;
 import javafx.event.EventHandler;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.WindowEvent;
 import models.Config;
+import utils.CallbackInstance;
 import utils.ConnectionHandler;
+import utils.PartiesUpdater;
+import utils.RecurrentServerRequest;
 import views.HomeController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -15,6 +19,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.Partie;
 import views.WelcomeController;
+
+import java.util.ArrayList;
+import java.util.Timer;
 
 /**
  * The type Main app.
@@ -56,9 +63,6 @@ public class MainApp extends Application {
      * Instantiates a new Main app.
      */
     public MainApp(){
-        // On récupère les parties disponibles. A terme, cette fonction doit être appelée après que la configuration soit terminée
-        fetchPartiesList();
-
     }
 
     @Override
@@ -70,13 +74,37 @@ public class MainApp extends Application {
     }
 
     private void fetchPartiesList(){
-        // TODO: RECUPERER LES PARTIES AUPRES DU SERVEUR
+        connectionHandler.registerCallback("121", new PartiesUpdater(this), (controller, message) -> controller.parse(message));
+        Timer timer = connectionHandler.registerRecurrentServerCall(new RecurrentServerRequest() {
+            @Override
+            public void run() {
+                handler.send("120 GETLIST");
+            }
+        }, 1000);
 
         // On simule 3 parties que l'on peut rejoindre
-        partiesList.add(new Partie(1, "Victor", "Tour par tour", 40, 40, 10, 15, true));
-        partiesList.add(new Partie(2, "Basile", "Speeding Contest", 30, 60, 3, 5, false));
-        partiesList.add(new Partie(3, "Leah", "Brouillard de guerre", 60, 80, 30, 25, true));
 
+
+    }
+    public void updateParties(ArrayList<String> list){
+        ArrayList<Integer> identifiants = new ArrayList<>();
+        for (Partie partie : this.partiesList){
+            identifiants.add(partie.getIdentifiant());
+        }
+        for (String message : list){
+            String[] liste_commandes = message.split(" ");
+            int id = Integer.parseInt(liste_commandes[4]);
+            if (identifiants.contains(id)){
+                identifiants.remove((Integer) id);
+            } else {
+                Partie nouvelle_partie = new Partie(Integer.parseInt(liste_commandes[4]), liste_commandes[11],
+                        liste_commandes[5], Integer.parseInt(liste_commandes[6]), Integer.parseInt(liste_commandes[7]),
+                        Integer.parseInt(liste_commandes[8]), Integer.parseInt(liste_commandes[9]), Integer.parseInt(liste_commandes[10]),
+                        Boolean.parseBoolean(liste_commandes[12]));
+                partiesList.add(nouvelle_partie);
+            }
+        }
+        partiesList.removeIf(partie -> identifiants.contains(partie.getIdentifiant()));
     }
 
     private void resumeMainStageStartup(){
@@ -101,6 +129,8 @@ public class MainApp extends Application {
                     connectionHandler.quitter();
                 }
             });
+
+            this.fetchPartiesList();
 
             // On récupère l'instance du controlleur du loader. Il est spécifié dans le fichier fxml
             HomeController controller = loader.getController();

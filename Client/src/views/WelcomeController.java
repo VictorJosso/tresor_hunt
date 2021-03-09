@@ -15,12 +15,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Config;
-import utils.Controller;
+import utils.CallbackInstance;
 
 /**
  * The type Welcome controller.
  */
-public class WelcomeController extends Controller {
+public class WelcomeController extends CallbackInstance {
 
     private MainApp mainApp;
     private Config config = new Config();
