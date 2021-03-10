@@ -125,7 +125,7 @@ public class MainApp extends Application {
 
     }
 
-    public void createServerConnection(Config config){
+      public void createServerConnection(Config config){
         this.connectionHandler = new ConnectionHandler(config);
         this.connectionHandler.start();
     }
