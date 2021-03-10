@@ -98,4 +98,14 @@ public class HomeController {
             e1.printStackTrace();
         }
     }
+
+    @FXML
+    private void handlejoinButtonClick() {
+        // Cette méthode est appelée lorsque l'on clique sur le bouton rejoindre la partie. Comprtement défini dans le fichier XML
+        try {
+            this.mainApp.joinGameLobby();
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+    }
 }

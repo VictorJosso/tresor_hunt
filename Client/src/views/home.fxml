@@ -9,14 +9,14 @@
 
 <AnchorPane prefHeight="495.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.HomeController">
    <children>
-      <SplitPane dividerPositions="0.42659974905897113" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane dividerPositions="0.4581497797356828" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
                   <TableView fx:id="partiesEnCoursTableView" prefHeight="398.0" prefWidth="295.0" style="-fx-font-family: Chilanka;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
                     <columns>
-                      <TableColumn fx:id="identifiantTableColumn" prefWidth="75.0" text="Identifiants" />
-                        <TableColumn fx:id="modeTableColumn" prefWidth="75.0" text="Mode de jeu" />
+                      <TableColumn fx:id="identifiantTableColumn" prefWidth="82.0" text="Identifiants" />
+                        <TableColumn fx:id="modeTableColumn" minWidth="0.0" prefWidth="68.0" text="Mode de jeu" />
                       <TableColumn fx:id="createurTableColumn" prefWidth="75.0" text="Créateur" />
                         <TableColumn fx:id="dimensionTableColumn" prefWidth="75.0" text="Dimensions" />
                     </columns>
@@ -27,14 +27,14 @@
                      </font></Label>
                   <ButtonBar prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                     <buttons>
-                      <Button fx:id="rejoindrePartieButton" mnemonicParsing="false" text="Rejoindre">
+                      <Button fx:id="rejoindrePartieButton" mnemonicParsing="false" onAction="#handlejoinButtonClick" text="Rejoindre">
                            <font>
                               <Font name="Chilanka Regular" size="13.0" />
                            </font></Button>
                     </buttons>
                   </ButtonBar>
                </children></AnchorPane>
-            <AnchorPane prefHeight="200.0" prefWidth="300.0">
+            <AnchorPane prefHeight="493.0" prefWidth="571.0">
                <children>
                   <Label fx:id="creationPartiesLabel" text="Créer une partie" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
                    <font>
