@@ -11,7 +11,7 @@ public class SpeedingContest extends Game{
 
 
     //Constructeur
-    public SpeedingContest(int x, int y, int tres, int holes, int maxPlayers, ClientHandler owner, ConnectionHandler mainHandler) {
-        super(x, y, tres, holes, maxPlayers, owner, mainHandler);
+    public SpeedingContest(int x, int y, int tres, int holes, int maxPlayers, boolean robots, ClientHandler owner, ConnectionHandler mainHandler) {
+        super(x, y, tres, holes, maxPlayers, robots, owner, mainHandler);
     }
 }

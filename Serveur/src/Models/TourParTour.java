@@ -12,7 +12,7 @@ public class TourParTour extends Game{
 
 
     //Constructeur
-    public TourParTour(int x, int y, int tres, int holes, int maxPlayers, ClientHandler owner, ConnectionHandler mainHandler) {
-        super(x, y, tres, holes, maxPlayers, owner, mainHandler);
+    public TourParTour(int x, int y, int tres, int holes, int maxPlayers, boolean robots, ClientHandler owner, ConnectionHandler mainHandler) {
+        super(x, y, tres, holes, maxPlayers, robots, owner, mainHandler);
     }
 }

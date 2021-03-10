@@ -1,5 +1,6 @@
 package utils;
 
-public class Controller {
+public class CallbackInstance {
     public void resumeConnectionCallback(boolean b){}
+    public void parse(String s){}
 }
