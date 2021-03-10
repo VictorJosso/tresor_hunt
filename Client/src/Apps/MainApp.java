@@ -163,7 +163,24 @@ public class MainApp extends Application {
 
     }
 
-      public void createServerConnection(Config config){
+    private void displayLobbyStage() throws Exception {
+        this.configStage = new Stage();
+        this.configStage.setTitle("Lobby...");
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/lobby.fxml"));
+
+        AnchorPane rootLayout = (AnchorPane) loader.load();
+        Scene scene = new Scene (rootLayout);
+
+        this.primaryStage.setScene(scene);
+        this.primaryStage.show();
+
+        LobbyController controller = loader.getController();
+        controller.setMainApp(this);
+    }
+
+
+    public void createServerConnection(Config config){
         this.connectionHandler = new ConnectionHandler(config);
         this.connectionHandler.start();
     }
@@ -192,6 +209,13 @@ public class MainApp extends Application {
         this.primaryStage.close();
         this.displayConfigStage();
     }
+
+    public void joinGameLobby() throws Exception {
+        // Gère l'appui sur le bouton Rejoindre la partie de l'interface
+        this.configStage.close();
+        this.displayLobbyStage();
+    }
+
 
     // Getters & setters
 
