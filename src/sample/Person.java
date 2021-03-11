@@ -86,12 +86,12 @@ public class Person {
         return postalCode.get();
     }
 
-    public IntegerProperty postalCodeProperty() {
-        return postalCode;
-    }
-
     public void setPostalCode(int postalCode) {
         this.postalCode.set(postalCode);
+    }
+
+    public IntegerProperty postalCodeProperty() {
+        return postalCode;
     }
 
     public String getCity() {

@@ -36,9 +36,6 @@ public class Parser {
     private void illegalCommand(){
         client.send("550 ILLEGAL COMMAND. BYE");
         client.closeConnection();
-        if (client.getClient().isLoggedIn()){
-            mainHandler.usernamesSet.remove(client.getClient().getUsername());
-        }
     }
 
 
@@ -51,15 +48,14 @@ public class Parser {
         String[] response = response_text.split(" ");
         switch (response[0]){
 
-            //110 CREATE mode SIZE x y HOLE h TRES n PLAYERS p ROBOTS r
+            //110 CREATE mode SIZE x y HOLE h TRES n PLAYERS p
             case "110":
 
-                if(response.length == 14 && response[1].equals("CREATE") && response[3].equals("SIZE") &&
+                if(response.length == 12 && response[1].equals("CREATE") && response[3].equals("SIZE") &&
                         response[6].equals("HOLE") && response[8].equals("TRES") && response[10].equals("PLAYERS") &&
-                        response[12].equals("ROBOTS") && NumberUtils.isNumeric(response[2]) &&
-                        NumberUtils.isNumeric(response[4]) && NumberUtils.isNumeric(response[5]) &&
-                        NumberUtils.isNumeric(response[7]) && NumberUtils.isNumeric(response[9]) &&
-                        NumberUtils.isNumeric(response[11]) && (response[13].equals("false") || response[13].equals("true"))){
+                        NumberUtils.isNumeric(response[2]) && NumberUtils.isNumeric(response[4]) &&
+                        NumberUtils.isNumeric(response[5]) && NumberUtils.isNumeric(response[7]) &&
+                        NumberUtils.isNumeric(response[9]) && NumberUtils.isNumeric(response[11])) {
 
                     int gameMode = Integer.parseInt(response[2]);
                     int sizeX = Integer.parseInt(response[4]);
@@ -67,7 +63,6 @@ public class Parser {
                     int nbHoles = Integer.parseInt(response[7]);
                     int nbTres = Integer.parseInt(response[9]);
                     int nbPlayers = Integer.parseInt(response[11]);
-                    boolean robots = Boolean.parseBoolean(response[13]);
                     int nbWalls = (sizeX * sizeY) / 5;
 
                     if(gameMode < 1 || gameMode > 3 ) {
@@ -120,21 +115,21 @@ public class Parser {
 
                     //Speeding contest
                     if(Integer.parseInt(response[2]) == 1) {
-                        SpeedingContest partie = new SpeedingContest(sizeX, sizeY, nbTres, nbHoles, nbPlayers, robots, client, mainHandler);
+                        SpeedingContest partie = new SpeedingContest(sizeX, sizeY, nbTres, nbHoles, nbPlayers, client, mainHandler);
                         client.send("111 MAP CREATED " + partie.getId());
 
                     }
 
                     //Tour par tour
                     if(Integer.parseInt(response[2]) == 2) {
-                        TourParTour partie = new TourParTour(sizeX, sizeY, nbTres, nbHoles, nbPlayers, robots, client, mainHandler);
+                        TourParTour partie = new TourParTour(sizeX, sizeY, nbTres, nbHoles, nbPlayers, client,  mainHandler);
                         client.send("111 MAP CREATED " + partie.getId());
 
                     }
 
                     //Brouillard de guerre
                     if(Integer.parseInt(response[2]) == 3) {
-                        WarFog partie = new WarFog(sizeX, sizeY, nbTres, nbHoles, nbPlayers, robots, client, mainHandler);
+                        WarFog partie = new WarFog(sizeX, sizeY, nbTres, nbHoles, nbPlayers, client, mainHandler);
                         client.send("111 MAP CREATED " + partie.getId());
 
                     }
@@ -152,15 +147,13 @@ public class Parser {
                     client.send("121 NUMBER " + mainHandler.getAvailableGamesMap().size());
                     int i = 1;
                     for (int gameId : mainHandler.getAvailableGamesMap().keySet()){
-                        client.send(String.format("121 MESS %d ID %d %d %d %d %d %d %d %s %b", i++, gameId,
+                        client.send(String.format("121 MESS %d ID %d %d %d %d %d %d %d", i++, gameId,
                                 mainHandler.getAvailableGamesMap().get(gameId).mode,
                                 mainHandler.getAvailableGamesMap().get(gameId).getX(),
                                 mainHandler.getAvailableGamesMap().get(gameId).getY(),
                                 mainHandler.getAvailableGamesMap().get(gameId).getHoles(),
                                 mainHandler.getAvailableGamesMap().get(gameId).getTreasures(),
-                                mainHandler.getAvailableGamesMap().get(gameId).getMaxPlayers(),
-                                mainHandler.getAvailableGamesMap().get(gameId).getOwner().getClient().getUsername(),
-                                mainHandler.getAvailableGamesMap().get(gameId).isRobots()));
+                                mainHandler.getAvailableGamesMap().get(gameId).getMaxPlayers()));
                     }
                 }
                 else {

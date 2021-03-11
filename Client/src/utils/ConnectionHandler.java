@@ -8,7 +8,6 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Timer;
 
 public class ConnectionHandler extends Thread{
     private Config config;
@@ -17,14 +16,13 @@ public class ConnectionHandler extends Thread{
     private PrintWriter printWriter;
     private Socket socket;
     private Map<String, CallbackServer> callLinks = new HashMap<>();
-    private Map<String, CallbackInstance> callOwners = new HashMap<>();
+    private Map<String, Controller> callOwners = new HashMap<>();
 
     public ConnectionHandler(Config config) {
         this.config = config;
     }
 
     public void quitter(){
-        send("102 QUIT");
         running = false;
         if (socket != null){
             try {
@@ -44,21 +42,9 @@ public class ConnectionHandler extends Thread{
         }
     }
 
-    public void registerCallback(String code, CallbackInstance controller, CallbackServer callback){
+    public void registerCallback(String code, Controller controller, CallbackServer callback){
         callLinks.put(code, callback);
         callOwners.put(code, controller);
-    }
-
-    public void releaseCallback(String code){
-        callLinks.remove(code);
-        callOwners.remove(code);
-    }
-
-    public Timer registerRecurrentServerCall(RecurrentServerRequest recurrentServerRequest, int delay){
-        Timer timer = new Timer(true);
-        recurrentServerRequest.setHandler(this);
-        timer.schedule(recurrentServerRequest, 0, delay);
-        return timer;
     }
 
     @Override
