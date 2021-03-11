@@ -29,9 +29,6 @@ public class ClientHandler implements Runnable{
     private void illegalCommand(){
         send("550 ILLEGAL COMMAND. BYE");
         closeConnection();
-        if (client.isLoggedIn()){
-            mainApp.usernamesSet.remove(client.getUsername());
-        }
     }
 
     @Override
@@ -65,17 +62,6 @@ public class ClientHandler implements Runnable{
                             illegalCommand();
                             break;
                         }
-                    case "102":
-                        if (command.split(" ")[1].equals("QUIT")){
-                            if (client.isLoggedIn()){
-                                mainApp.usernamesSet.remove(client.getUsername());
-                            }
-                            send("103 BYE");
-                            socket.close();
-                        } else {
-                            illegalCommand();
-                        }
-                        break;
                     default:
                         if (client.isLoggedIn()) {
                             this.parser.parse(command);
