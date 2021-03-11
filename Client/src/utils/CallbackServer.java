@@ -1,5 +1,5 @@
 package utils;
 
 public interface CallbackServer {
-    void call(Controller controller, String message);
+    void call(CallbackInstance controller, String message);
 }

@@ -14,13 +14,14 @@ public class Partie {
     private IntegerProperty dimensionY;
     private IntegerProperty nombreDeTrous;
     private IntegerProperty nombreDeTresors;
+    private IntegerProperty maxPlayers;
     private BooleanProperty robots;
 
     /**
      * Instantiates a new Partie.
      */
     public Partie(){
-        this(-1, null, null, 0, 0, 0, 0, false);
+        this(-1, null, null, 0, 0, 0, 0, 0, false);
     }
 
     /**
@@ -35,7 +36,7 @@ public class Partie {
      * @param nombreDeTresors the nombre de tresors
      * @param robots          the robots
      */
-    public Partie(int identifiant, String createur, String modeDeJeu, int dimensionX, int dimensionY, int nombreDeTrous, int nombreDeTresors, boolean robots) {
+    public Partie(int identifiant, String createur, String modeDeJeu, int dimensionX, int dimensionY, int nombreDeTrous, int nombreDeTresors, int maxPlayers, boolean robots) {
         this.identifiant = new SimpleIntegerProperty(identifiant);
         this.createur = new SimpleStringProperty(createur);
         this.modeDeJeu = new SimpleStringProperty(modeDeJeu);
@@ -44,6 +45,7 @@ public class Partie {
         this.nombreDeTrous = new SimpleIntegerProperty(nombreDeTrous);
         this.nombreDeTresors = new SimpleIntegerProperty(nombreDeTresors);
         this.robots = new SimpleBooleanProperty(robots);
+        this.maxPlayers = new SimpleIntegerProperty(maxPlayers);
     }
 
     /**

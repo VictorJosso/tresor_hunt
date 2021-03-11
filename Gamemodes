@@ -1,0 +1,72 @@
+Mode 1 : Speeding Contest :
+
+Tous les joueurs voient l'entièreté de la map, c'est-à-dire les murs et les trésors
+Pas de bots.
+Pas de temps d'attente, chaque fois qu'un joueur se déplace, l'information sera envoyée au serveur
+Si le joueur tombe dans un trou, il est éliminé mais son score est enregistré et il peut finir premier
+Les trous NE SONT PAS CACHÉS
+La partie se termine quand tous les trésors sont découverts ou tous les joueurs éliminés. Le vainqueur est le joueur ayant obtenu le plus haut score
+Chaque client s’adresse au serveur pour obtenir la position des autres joueurs → PAS de connection CLIENT-CLIENT
+
+
+
+
+
+
+Implémentation du Speeding Contest :
+
+Nombre de joueurs actifs (pas éliminés)
+Taille de la map
+Nombre de trésors non découverts
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mode 2 : Tour par tour :
+
+Les joueurs se voient attribué un numéro de manière aléatoire pour savoir l’ordre dans lequel ils jouent
+Tous les joueurs voient l'entièreté de la map, c'est-à-dire les murs et les trésors
+Bots autorisés
+Les joueurs jouent un par un et par conséquent chacun sait ce que font ses adversaires
+Petite taille de plateau → pour pas attendre
+Petit nombre de joueur → pareil
+Si le joueur tombe dans un trou, il est éliminé mais son score est enregistré et il peut finir premier
+Les trous NE SONT PAS CACHÉS
+La partie se termine quand tous les trésors sont découverts ou tous les joueurs éliminés. Le vainqueur est le joueur ayant obtenu le plus haut score
+Chaque client s’adresse au serveur pour obtenir la position des autres joueurs → PAS de connection CLIENT-CLIENT
+
+
+
+Implémentation du Tour par Tour :
+
+Nombre de joueurs actifs (pas éliminés)
+Taille de la map
+Variable statique qui fait tourner un while correspondant au nombre de joueurs et fait tourner le jeu
+Nombre de trésors non découverts
+
+voir pour bonus, mettre des  option pour faire avancer de 3 cases au lieu d’une, sauter un tour comme uno, changer de sens de jeu comme uno, super chaussures (pour sauter d’un trou), multiplier point x2
+mettre un timer et si le joueur est considéré afk, hop hop hop, éliminé
+
+fonctions : nextTour(); qui incrémente la variable dans le while
+
+
+
+
