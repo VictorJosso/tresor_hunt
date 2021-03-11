@@ -19,6 +19,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.Partie;
 import views.WelcomeController;
+import views.LobbyController;
 
 import java.util.ArrayList;
 import java.util.Timer;
