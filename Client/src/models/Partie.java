@@ -34,6 +34,7 @@ public class Partie {
      * @param dimensionY      the dimension y
      * @param nombreDeTrous   the nombre de trous
      * @param nombreDeTresors the nombre de tresors
+     * @param maxPlayers      the max players
      * @param robots          the robots
      */
     public Partie(int identifiant, String createur, String modeDeJeu, int dimensionX, int dimensionY, int nombreDeTrous, int nombreDeTresors, int maxPlayers, boolean robots) {

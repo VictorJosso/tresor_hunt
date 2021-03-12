@@ -10,18 +10,38 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * The type Connection handler.
+ */
 public class ConnectionHandler {
 
+    /**
+     * The constant SERVER_VERSION.
+     */
     public static double SERVER_VERSION = 1.0;
+    /**
+     * The Usernames set.
+     */
     public CopyOnWriteArrayList<String> usernamesSet = new CopyOnWriteArrayList<>();
     private final Map<Integer, Game> gamesMap = new ConcurrentHashMap<>();
     private final Map<Integer, Game> availableGamesMap = new ConcurrentHashMap<>();
 
 
+    /**
+     * Instantiates a new Connection handler.
+     *
+     * @throws Exception the exception
+     */
     public ConnectionHandler() throws Exception{
         run();
     }
 
+    /**
+     * Register game id int.
+     *
+     * @param game the game
+     * @return the int
+     */
     public int registerGameId(Game game){
         int id = (int) (Math.random() * (9999-1000+1) + 1000);
         if (gamesMap.containsKey(id)){
@@ -42,6 +62,11 @@ public class ConnectionHandler {
         }
     }
 
+    /**
+     * Gets available games map.
+     *
+     * @return the available games map
+     */
     public Map<Integer, Game> getAvailableGamesMap() {
         return availableGamesMap;
     }

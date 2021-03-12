@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Timer;
 
+/**
+ * The type Connection handler.
+ */
 public class ConnectionHandler extends Thread{
     private Config config;
     private boolean running = true;
@@ -19,10 +22,18 @@ public class ConnectionHandler extends Thread{
     private Map<String, CallbackServer> callLinks = new HashMap<>();
     private Map<String, CallbackInstance> callOwners = new HashMap<>();
 
+    /**
+     * Instantiates a new Connection handler.
+     *
+     * @param config the config
+     */
     public ConnectionHandler(Config config) {
         this.config = config;
     }
 
+    /**
+     * Quitter.
+     */
     public void quitter(){
         send("102 QUIT");
         running = false;
@@ -33,6 +44,11 @@ public class ConnectionHandler extends Thread{
         }
     }
 
+    /**
+     * Send.
+     *
+     * @param message the message
+     */
     public void send(String message){
         if (printWriter != null) {
             printWriter.println(message);
@@ -44,16 +60,35 @@ public class ConnectionHandler extends Thread{
         }
     }
 
+    /**
+     * Register callback.
+     *
+     * @param code       the code
+     * @param controller the controller
+     * @param callback   the callback
+     */
     public void registerCallback(String code, CallbackInstance controller, CallbackServer callback){
         callLinks.put(code, callback);
         callOwners.put(code, controller);
     }
 
+    /**
+     * Release callback.
+     *
+     * @param code the code
+     */
     public void releaseCallback(String code){
         callLinks.remove(code);
         callOwners.remove(code);
     }
 
+    /**
+     * Register recurrent server call timer.
+     *
+     * @param recurrentServerRequest the recurrent server request
+     * @param delay                  the delay
+     * @return the timer
+     */
     public Timer registerRecurrentServerCall(RecurrentServerRequest recurrentServerRequest, int delay){
         Timer timer = new Timer(true);
         recurrentServerRequest.setHandler(this);

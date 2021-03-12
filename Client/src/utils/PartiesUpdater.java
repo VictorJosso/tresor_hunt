@@ -4,11 +4,28 @@ import Apps.MainApp;
 
 import java.util.ArrayList;
 
+/**
+ * The type Parties updater.
+ */
 public class PartiesUpdater extends CallbackInstance {
+    /**
+     * The Main app.
+     */
     MainApp mainApp;
+    /**
+     * The Total parties.
+     */
     int totalParties;
+    /**
+     * The Parties list brute.
+     */
     ArrayList<String> partiesListBrute = new ArrayList<>();
 
+    /**
+     * Instantiates a new Parties updater.
+     *
+     * @param mainApp the main app
+     */
     public PartiesUpdater(MainApp mainApp) {
         this.mainApp = mainApp;
     }

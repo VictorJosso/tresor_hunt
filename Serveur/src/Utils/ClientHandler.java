@@ -7,6 +7,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * The type Client handler.
+ */
 public class ClientHandler implements Runnable{
 
     private ConnectionHandler mainApp;
@@ -16,6 +19,13 @@ public class ClientHandler implements Runnable{
     private Parser parser;
     private Client client;
 
+    /**
+     * Instantiates a new Client handler.
+     *
+     * @param socket  the socket
+     * @param mainApp the main app
+     * @throws Exception the exception
+     */
     public ClientHandler(Socket socket, ConnectionHandler mainApp) throws Exception{
         this.socket = socket;
         this.mainApp = mainApp;
@@ -90,14 +100,27 @@ public class ClientHandler implements Runnable{
         }
     }
 
+    /**
+     * Gets client.
+     *
+     * @return the client
+     */
     public Client getClient() {
         return client;
     }
 
+    /**
+     * Send.
+     *
+     * @param message the message
+     */
     protected void send(String message){
         this.printWriter.println(message);
     }
 
+    /**
+     * Close connection.
+     */
     protected void closeConnection(){
         try{
             socket.close();

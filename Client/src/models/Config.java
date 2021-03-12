@@ -38,10 +38,20 @@ public class Config {
     }
 
 
+    /**
+     * Is serveur ameliore boolean.
+     *
+     * @return the boolean
+     */
     public boolean isServeurAmeliore() {
         return serveurAmeliore;
     }
 
+    /**
+     * Sets serveur ameliore.
+     *
+     * @param serveurAmeliore the serveur ameliore
+     */
     public void setServeurAmeliore(boolean serveurAmeliore) {
         this.serveurAmeliore = serveurAmeliore;
     }
@@ -110,6 +120,9 @@ public class Config {
         this.username = username;
     }
 
+    /**
+     * Reset server config.
+     */
     public void resetServerConfig(){
         defaultConfig();
     }

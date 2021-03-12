@@ -9,6 +9,9 @@ import javafx.scene.layout.StackPane;
 import models.Partie;
 
 
+/**
+ * The type Lobby controller.
+ */
 public class LobbyController {
 
     private MainApp mainApp;
@@ -38,7 +41,11 @@ public class LobbyController {
     private Label nombreTresorsLabel;
 
 
-
+    /**
+     * Sets main app.
+     *
+     * @param mainApp the main app
+     */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
 

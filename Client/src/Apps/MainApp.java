@@ -90,6 +90,12 @@ public class MainApp extends Application {
 
 
     }
+
+    /**
+     * Update parties.
+     *
+     * @param list the list
+     */
     public void updateParties(ArrayList<String> list){
         ArrayList<Integer> identifiants = new ArrayList<>();
         for (Partie partie : this.partiesList){
@@ -184,6 +190,11 @@ public class MainApp extends Application {
     }
 
 
+    /**
+     * Create server connection.
+     *
+     * @param config the config
+     */
     public void createServerConnection(Config config){
         this.connectionHandler = new ConnectionHandler(config);
         this.connectionHandler.start();
@@ -214,11 +225,21 @@ public class MainApp extends Application {
         this.displayConfigStage();
     }
 
+    /**
+     * Quit lobby.
+     *
+     * @throws Exception the exception
+     */
     public void quitLobby() throws Exception{
         this.lobbyStage.close();
         this.resumeMainStageStartup();
     }
 
+    /**
+     * Join game lobby.
+     *
+     * @throws Exception the exception
+     */
     public void joinGameLobby() throws Exception {
         // Gère l'appui sur le bouton Rejoindre la partie de l'interface
         this.primaryStage.close();
@@ -264,6 +285,11 @@ public class MainApp extends Application {
         return serverConfig;
     }
 
+    /**
+     * Gets connection handler.
+     *
+     * @return the connection handler
+     */
     public ConnectionHandler getConnectionHandler() {
         return connectionHandler;
     }

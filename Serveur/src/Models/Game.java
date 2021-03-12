@@ -5,6 +5,9 @@ import Utils.ClientHandler;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * The type Game.
+ */
 public abstract class Game {
 
     //Attributs
@@ -16,11 +19,26 @@ public abstract class Game {
     private final int maxPlayers;
     private ConnectionHandler mainHandler;
     private ClientHandler owner;
+    /**
+     * The Mode.
+     */
     public int mode;
     private CopyOnWriteArrayList<ClientHandler> players = new CopyOnWriteArrayList<>();
     private final boolean robots;
 
 
+    /**
+     * Instantiates a new Game.
+     *
+     * @param x           the x
+     * @param y           the y
+     * @param tres        the tres
+     * @param holes       the holes
+     * @param maxPlayers  the max players
+     * @param robots      the robots
+     * @param owner       the owner
+     * @param mainHandler the main handler
+     */
     public Game(int x, int y, int tres, int holes, int maxPlayers, boolean robots, ClientHandler owner,  ConnectionHandler mainHandler) {
         this.x=x;
         this.y=y;
@@ -33,46 +51,99 @@ public abstract class Game {
         this.robots = robots;
     }
 
+    /**
+     * Add player.
+     *
+     * @param client the client
+     */
     public void addPlayer(ClientHandler client){
         players.add(client);
     }
 
+    /**
+     * Remove player.
+     *
+     * @param client the client
+     */
     public void removePlayer(ClientHandler client){
         players.remove(client);
     }
 
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Gets x.
+     *
+     * @return the x
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Gets y.
+     *
+     * @return the y
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * Gets treasures.
+     *
+     * @return the treasures
+     */
     public int getTreasures() {
         return treasures;
     }
 
+    /**
+     * Gets holes.
+     *
+     * @return the holes
+     */
     public int getHoles() {
         return holes;
     }
 
+    /**
+     * Gets max players.
+     *
+     * @return the max players
+     */
     public int getMaxPlayers() {
         return maxPlayers;
     }
 
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     */
     public ClientHandler getOwner() {
         return owner;
     }
 
+    /**
+     * Launch.
+     */
     public void launch(){
         mainHandler.getAvailableGamesMap().remove(this.id);
     }
 
+    /**
+     * Is robots boolean.
+     *
+     * @return the boolean
+     */
     public boolean isRobots() {
         return robots;
     }

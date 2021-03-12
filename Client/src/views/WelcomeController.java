@@ -160,6 +160,11 @@ public class WelcomeController extends CallbackInstance {
         this.paramStage.close();
     }
 
+    /**
+     * Get main app main app.
+     *
+     * @return the main app
+     */
     protected MainApp getMainApp(){
         return mainApp;
     }

@@ -14,7 +14,6 @@ import java.util.Locale;
  * create java objects of the command
  * and call methods to process them
  */
-
 public class Parser {
 
     //Attributs
@@ -23,7 +22,13 @@ public class Parser {
     private final ConnectionHandler mainHandler;
 
 
-    //Constructeur
+    /**
+     * Instantiates a new Parser.
+     *
+     * @param client  the client
+     * @param handler the handler
+     */
+//Constructeur
     public Parser(ClientHandler client, ConnectionHandler handler) {
         this.client = client;
         this.mainHandler = handler;
@@ -42,10 +47,12 @@ public class Parser {
     }
 
 
-
-
-
-    //Méthode principale qui lit la commande envoyée par l'utilisateur et agit en fonction
+    /**
+     * Parse.
+     *
+     * @param response_text the response text
+     */
+//Méthode principale qui lit la commande envoyée par l'utilisateur et agit en fonction
     protected void parse(String response_text){
         System.out.println("PROCESSING COMMAND : "+ response_text);
         String[] response = response_text.split(" ");
