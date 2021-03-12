@@ -2,6 +2,8 @@ package views;
 
 import Apps.MainApp;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.Partie;
@@ -87,6 +89,17 @@ public class HomeController {
         modeTableColumn.setCellValueFactory(cellData -> cellData.getValue().modeDeJeuProperty());
         createurTableColumn.setCellValueFactory(cellData -> cellData.getValue().createurProperty());
         dimensionTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDimensionX()+"x"+cellData.getValue().getDimensionY()));
+        modeDeJeuChoiceBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue){
+                if (newValue.equals("Speeding contest")){
+                    robotsCheckBox.setSelected(false);
+                    robotsCheckBox.setDisable(true);
+                } else {
+                    robotsCheckBox.setDisable(false);
+                }
+            }
+        });
     }
 
     @FXML

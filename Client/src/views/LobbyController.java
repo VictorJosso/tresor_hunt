@@ -59,7 +59,7 @@ public class LobbyController {
     private void handleQuitButtonClick(){
         // Cette methode est appelée lorsque l'on clique sur le bouton quitter. Ce comportement est défini dans le fichier FXML
         try {
-            this.mainApp.quitMainScreen();
+            this.mainApp.quitLobby();
         } catch (Exception e1){
             e1.printStackTrace();
         }

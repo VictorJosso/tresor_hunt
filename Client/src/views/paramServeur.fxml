@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="280.0" prefWidth="499.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.ParamServeurController">
+<BorderPane prefHeight="275.0" prefWidth="497.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.ParamServeurController">
    <top>
       <Label text="Paramètres du serveur" BorderPane.alignment="CENTER">
          <font>
@@ -21,7 +21,8 @@
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="150.0" minHeight="10.0" prefHeight="77.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="156.0" minHeight="1.0" prefHeight="39.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="156.0" minHeight="1.0" prefHeight="47.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="170.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="170.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
@@ -39,7 +40,7 @@
                  <SpinnerValueFactory.IntegerSpinnerValueFactory initialValue="7236" max="65535" min="1024" />
              </valueFactory>
             </Spinner>
-            <ButtonBar prefHeight="40.0" prefWidth="320.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <ButtonBar prefHeight="40.0" prefWidth="320.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
               <buttons>
                   <Button fx:id="CancelButton" mnemonicParsing="false" onAction="#handleCancelButtonPressed" text="Annuler" />
                   <Button fx:id="resetButton" mnemonicParsing="false" onAction="#handleResetButtonPressed" text="Reset" />
@@ -49,6 +50,7 @@
                   <Insets />
                </GridPane.margin>
             </ButtonBar>
+            <CheckBox fx:id="serveurAmelioreCheckBox" mnemonicParsing="false" selected="true" text="Serveur amélioré" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
          <BorderPane.margin>
             <Insets left="40.0" />

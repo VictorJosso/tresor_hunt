@@ -18,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.Partie;
+import views.LobbyController;
 import views.WelcomeController;
 import views.LobbyController;
 
@@ -34,6 +35,8 @@ public class MainApp extends Application {
 
     // Fenetre de saisie du nom d'utilisateur
     private Stage configStage;
+
+    private Stage lobbyStage;
 
     // La liste des parties en cours. On utilise pas une liste classique car celle-ci permet de faire en sorte que l'interface graphique se mette a jour automatiquement.
     private ObservableList<Partie> partiesList = FXCollections.observableArrayList();
@@ -165,16 +168,16 @@ public class MainApp extends Application {
     }
 
     private void displayLobbyStage() throws Exception {
-        this.configStage = new Stage();
-        this.configStage.setTitle("Lobby...");
+        this.lobbyStage = new Stage();
+        this.lobbyStage.setTitle("Lobby");
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/views/lobby.fxml"));
 
         AnchorPane rootLayout = (AnchorPane) loader.load();
         Scene scene = new Scene (rootLayout);
 
-        this.primaryStage.setScene(scene);
-        this.primaryStage.show();
+        this.lobbyStage.setScene(scene);
+        this.lobbyStage.show();
 
         LobbyController controller = loader.getController();
         controller.setMainApp(this);
@@ -211,9 +214,14 @@ public class MainApp extends Application {
         this.displayConfigStage();
     }
 
+    public void quitLobby() throws Exception{
+        this.lobbyStage.close();
+        this.resumeMainStageStartup();
+    }
+
     public void joinGameLobby() throws Exception {
         // Gère l'appui sur le bouton Rejoindre la partie de l'interface
-        this.configStage.close();
+        this.primaryStage.close();
         this.displayLobbyStage();
     }
 

@@ -7,6 +7,7 @@ public class Config {
     private String adresseServeur;
     private int portServeur;
     private String username;
+    private boolean serveurAmeliore;
 
 
     /**
@@ -32,6 +33,17 @@ public class Config {
     private void defaultConfig(){
         adresseServeur = "tresor.josso.fr";
         portServeur = 7236;
+        serveurAmeliore = true;
+
+    }
+
+
+    public boolean isServeurAmeliore() {
+        return serveurAmeliore;
+    }
+
+    public void setServeurAmeliore(boolean serveurAmeliore) {
+        this.serveurAmeliore = serveurAmeliore;
     }
 
     /**

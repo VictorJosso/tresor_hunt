@@ -1,13 +1,11 @@
 package views;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import models.Config;
 
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -30,6 +28,9 @@ public class ParamServeurController {
 
     @FXML
     private Button resetButton;
+
+    @FXML
+    private CheckBox serveurAmelioreCheckBox;
 
     private WelcomeController parentController;
 
@@ -54,18 +55,18 @@ public class ParamServeurController {
     }
 
     private boolean checkServerAddress(String url, int port){
+        if (!serveurAmelioreCheckBox.isSelected()){
+            return true;
+        }
         try {
-            Socket socket = new Socket(url, port);
+            Socket socket = new Socket();
+            socket.connect(new InetSocketAddress(url, port), 3*1000);
             Scanner scanner = new Scanner(socket.getInputStream());
             PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
 
             printWriter.println("50 HELLO");
             String rep = scanner.nextLine();
-            if (rep.split(" ")[0].equals("50") && rep.split(" ")[1].equals("HELLO")){
-                return true;
-            } else {
-                return false;
-            }
+            return rep.split(" ")[0].equals("50") && rep.split(" ")[1].equals("HELLO");
         } catch (Exception e){
             return false;
         }
@@ -78,6 +79,7 @@ public class ParamServeurController {
             Config config = new Config();
             config.setAdresseServeur(adresseServeurTextField.getText());
             config.setPortServeur(portServeurSpinner.getValue());
+            config.setServeurAmeliore(serveurAmelioreCheckBox.isSelected());
             this.parentController.setConfig(config);
             this.parentController.fermerParametresServeurFenetre();
         } else {
