@@ -2,12 +2,9 @@ package Utils;
 
 
 import Apps.ConnectionHandler;
-import Models.Game;
-import Models.SpeedingContest;
-import Models.TourParTour;
-import Models.WarFog;
-
-import java.util.Locale;
+import Models.Games.SpeedingContest;
+import Models.Games.TourParTour;
+import Models.Games.WarFog;
 
 /**
  * This class is used to parse messages from clients,

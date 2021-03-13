@@ -1,4 +1,4 @@
-package Models;
+package Models.Games;
 
 import Apps.ConnectionHandler;
 import Utils.ClientHandler;

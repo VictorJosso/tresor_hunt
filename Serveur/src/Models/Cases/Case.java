@@ -1,10 +1,49 @@
-package Models;
+package Models.Cases;
 
-public class Case {
-    public int type;
+import Utils.ClientHandler;
+
+public abstract class Case {
+
+    protected boolean isFree;
+    protected int posVert;
+    protected int posHor;
+    protected ClientHandler playerOn;
+
+    public boolean isFree() {
+        return isFree;
+    }
+
+    public void free(){
+        isFree = true;
+        playerOn = null;
+    }
+
+    public void setPlayerOn(ClientHandler player){
+        if(isFree) {
+            playerOn = player;
+            isFree = false;
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
+    public int getX(){
+        return posHor;
+    }
+
+    public int getY(){
+        return posVert;
+    }
+
+    public Case(int X, int Y) {
+        this.posVert = Y;
+        this.posHor = X;
+    }
+}
+
     /*
-    Case soit vide, trésor 5, trésor 10, trésor 15, trésor 20, trésor X, mur, trou
-     */
+    public int type;
+
     int posVert;
     int posHor;
 
@@ -100,3 +139,4 @@ public class Case {
         this.type = -1;
     }
 }
+*/

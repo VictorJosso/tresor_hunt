@@ -1,6 +1,8 @@
 package Models;
 
-//import java.util.ArrayList;
+import java.util.ArrayList;
+import Models.Cases.Case;
+
 import java.util.Random;
 
 public class Plateau {
@@ -10,21 +12,23 @@ public class Plateau {
     int nb_vide;
     int nb_trs;
     int nb_trou;
-    Case[][] grille;
-    Case[][] grille2;
+    //Case[][] grille;
+    //Case[][] grille2;
 
 
-    //ArrayList<Case> L = new ArrayList<>();
+    ArrayList<ArrayList<Case>> grille = new ArrayList<>();
 
 
-    public Plateau(int x, int y, int nb_trs) {
+    public Plateau(int x, int y, int nbTrous, int nbTresors) {
         this.x=x;
         this.y=y;
-        this.nb_trs=nb_trs;
-        this.grille = new Case[y+2][x+2];
-        this.grille2 = new Case[y+2][x+2];
+        this.nb_trs=nbTrous;
+        for (int i = 0; i < x; i++){
+            grille.add(new ArrayList<>());
+        }
     }
 
+    /*
     public int caseTrs() {
         nb_trs=0;
         for (int i=1; i<grille.length-1; i++) {
@@ -86,7 +90,7 @@ public class Plateau {
         }
     }
 
-    /*public void initialisertst() {
+    public void initialisertst() {
         for(int i = 0; i < y + 2; i++) {
             for(int j = 0; j < x + 2; j++) {
                 grille[i][j]= new Case(3, i, j);
@@ -115,7 +119,7 @@ public class Plateau {
             }
         }
         return bool1;
-    }*/
+    }
 
     public void plateauR(int nb_murs, int nb_trs, int nb_trou) {
         if(nb_murs> this.x*this.y || nb_trs> this.x*this.y || nb_trou> this.x*this.y || nb_vide> this.x*this.y)
@@ -153,12 +157,12 @@ public class Plateau {
                 int h = new Random().nextInt(x - 1);
                 int i = new Random().nextInt(y - 1);
                 int z = 1 + new Random().nextInt(4);
-                /*
+
                 mettre des trésors de valeurs aléatoires (5,10,15,20) car on a dit dans Case.java
                 que si .type vaut 1 ou 2 ou 3 ou 4 alors c'est un trésor de valeurs respective :
                 5, 10, 15 ou 20.
                 On ajoute 1 car on veut que le nombre aléatoire soit compris entre 1 et 4 et pas 0 et 3
-                 */
+
                 if (grille[i][h].isVide()) {
                     grille[i][h].type = z;
                     g--;
@@ -255,5 +259,5 @@ public class Plateau {
         }
         System.out.println();
     }
-
+*/
 }

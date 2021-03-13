@@ -1,6 +1,6 @@
 package Apps;
 
-import Models.Game;
+import Models.Games.Game;
 import Utils.ClientHandler;
 
 import java.net.ServerSocket;

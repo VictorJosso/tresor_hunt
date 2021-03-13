@@ -1,18 +1,23 @@
-package Models;
+package Models.Games;
 
 import Apps.ConnectionHandler;
 import Utils.ClientHandler;
 
 /**
- * The type Tour par tour.
+ * The type War fog.
  */
-public class TourParTour extends Game{
+public class WarFog extends Game{
 
     //Attributs
 
+    /**
+     * The Mode.
+     */
+    public int mode = 3;
+
 
     /**
-     * Instantiates a new Tour par tour.
+     * Instantiates a new War fog.
      *
      * @param x           the x
      * @param y           the y
@@ -24,8 +29,8 @@ public class TourParTour extends Game{
      * @param mainHandler the main handler
      */
 //Constructeur
-    public TourParTour(int x, int y, int tres, int holes, int maxPlayers, boolean robots, ClientHandler owner, ConnectionHandler mainHandler) {
+    public WarFog(int x, int y, int tres, int holes, int maxPlayers, boolean robots, ClientHandler owner, ConnectionHandler mainHandler) {
         super(x, y, tres, holes, maxPlayers, robots, owner, mainHandler);
-        this.mode = 2;
+        this.mode = 3;
     }
 }
