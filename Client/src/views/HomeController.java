@@ -116,7 +116,10 @@ public class HomeController {
     private void handlejoinButtonClick() {
         // Cette méthode est appelée lorsque l'on clique sur le bouton rejoindre la partie. Comprtement défini dans le fichier XML
         try {
-            this.mainApp.joinGameLobby();
+            Partie selectedPartie = partiesEnCoursTableView.getSelectionModel().getSelectedItem();
+            if (selectedPartie!=null) {
+                this.mainApp.joinGameLobby(selectedPartie);
+            }
         } catch (Exception e1) {
             e1.printStackTrace();
         }
