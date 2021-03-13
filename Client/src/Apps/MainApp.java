@@ -173,7 +173,7 @@ public class MainApp extends Application {
 
     }
 
-    private void displayLobbyStage() throws Exception {
+    private void displayLobbyStage(Partie p) throws Exception {
         this.lobbyStage = new Stage();
         this.lobbyStage.setTitle("Lobby");
         FXMLLoader loader = new FXMLLoader();
@@ -186,7 +186,9 @@ public class MainApp extends Application {
         this.lobbyStage.show();
 
         LobbyController controller = loader.getController();
-        controller.setMainApp(this);
+        controller.setMainApp(this, p);
+
+        this.configStage.close();
     }
 
 

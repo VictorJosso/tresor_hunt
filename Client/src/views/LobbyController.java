@@ -46,8 +46,9 @@ public class LobbyController {
      *
      * @param mainApp the main app
      */
-    public void setMainApp(MainApp mainApp) {
+    public void setMainApp(MainApp mainApp, Partie p) {
         this.mainApp = mainApp;
+        this.partie = p;
 
         // initialiser la partie
     }
