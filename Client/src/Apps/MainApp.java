@@ -242,10 +242,10 @@ public class MainApp extends Application {
      *
      * @throws Exception the exception
      */
-    public void joinGameLobby() throws Exception {
+    public void joinGameLobby(Partie p) throws Exception {
         // Gère l'appui sur le bouton Rejoindre la partie de l'interface
         this.primaryStage.close();
-        this.displayLobbyStage();
+        this.displayLobbyStage(p);
     }
 
 
