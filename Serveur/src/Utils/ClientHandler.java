@@ -55,6 +55,13 @@ public class ClientHandler implements Runnable{
                         printWriter.println("50 HELLO " + ConnectionHandler.SERVER_VERSION);
                         socket.close();
                         break;
+                    case "55":
+                        if (command.split(" ")[1].equals("UPGRADE")){
+                            parser.setGoodClient(true);
+                            send("55 UPGRADED");
+                            System.out.println("Le client "+socket+" est un bon client.");
+                            break;
+                        }
                     //On attend -> 100 HELLO PLAYER username
                     case "100":
                         if (command.split(" ").length == 4 && command.split(" ")[1].equals("HELLO") && command.split(" ")[2].equals("PLAYER")){

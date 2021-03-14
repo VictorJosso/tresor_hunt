@@ -17,6 +17,7 @@ public class Parser {
 
     private final ClientHandler client;
     private final ConnectionHandler mainHandler;
+    private boolean goodClient = false;
 
 
     /**
@@ -43,6 +44,13 @@ public class Parser {
         }
     }
 
+    public boolean isGoodClient() {
+        return goodClient;
+    }
+
+    public void setGoodClient(boolean goodClient) {
+        this.goodClient = goodClient;
+    }
 
     /**
      * Parse.

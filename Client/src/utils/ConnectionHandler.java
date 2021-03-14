@@ -96,6 +96,10 @@ public class ConnectionHandler extends Thread{
         return timer;
     }
 
+    public void upgrade(){
+        send("55 UPGRADE");
+    }
+
     @Override
     public void run() {
         try {
@@ -105,6 +109,9 @@ public class ConnectionHandler extends Thread{
         } catch (IOException e){
             e.printStackTrace();
             return;
+        }
+        if (this.config.isServeurAmeliore()){
+            upgrade();
         }
         while (running && scanner.hasNext()){
             String command = scanner.nextLine();
