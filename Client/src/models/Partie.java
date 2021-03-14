@@ -1,6 +1,8 @@
 package models;
 
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * The type Partie.
@@ -16,6 +18,7 @@ public class Partie {
     private IntegerProperty nombreDeTresors;
     private IntegerProperty maxPlayers;
     private BooleanProperty robots;
+    private ObservableList<String> playersNames = FXCollections.observableArrayList();
 
     /**
      * Instantiates a new Partie.
@@ -263,5 +266,9 @@ public class Partie {
      */
     public void setRobots(boolean robots) {
         this.robots.set(robots);
+    }
+
+    public ObservableList<String> getPlayersNames() {
+        return playersNames;
     }
 }

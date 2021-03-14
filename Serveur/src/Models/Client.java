@@ -1,11 +1,15 @@
 package Models;
 
+import java.util.ArrayList;
+
 /**
  * The type Client.
  */
 public class Client {
     private String username;
     private boolean loggedIn;
+
+    private ArrayList<Integer> joinedGames = new ArrayList<>();
 
     /**
      * Instantiates a new Client.
@@ -46,5 +50,9 @@ public class Client {
      */
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
+    }
+
+    public ArrayList<Integer> getJoinedGames() {
+        return joinedGames;
     }
 }

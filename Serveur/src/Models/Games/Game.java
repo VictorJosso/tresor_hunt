@@ -57,7 +57,11 @@ public abstract class Game {
      * @param client the client
      */
     public void addPlayer(ClientHandler client){
+        broadcast("140 "+client.getClient().getUsername()+" JOINED");
         players.add(client);
+        for (ClientHandler player : this.players){
+            client.send("140 "+player.getClient().getUsername()+" JOINED");
+        }
     }
 
     /**
@@ -66,7 +70,23 @@ public abstract class Game {
      * @param client the client
      */
     public void removePlayer(ClientHandler client){
-        players.remove(client);
+        if (players.remove(client)){
+            broadcastAmeliore("145 "+client.getClient().getUsername()+" LEFT");
+        }
+    }
+
+    private void broadcast(String message){
+        for (ClientHandler client: this.players){
+            client.send(message);
+        }
+    }
+
+    private void broadcastAmeliore(String message){
+        for (ClientHandler player: this.players){
+            if (player.isGoodClient()){
+                player.send(message);
+            }
+        }
     }
 
     /**

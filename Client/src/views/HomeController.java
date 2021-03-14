@@ -85,6 +85,7 @@ public class HomeController {
     private void initialize() {
         // Cette methode est appelée automatiquement par JavaFX lors de la création de la fénêtre.
         // Les instructions permettent d'affecter les propriétés de l'élément Parties à chaque colonne du tableView
+        partiesEnCoursTableView.setPlaceholder(new Label("Aucune partie n'est actuellement disponible"));
         identifiantTableColumn.setCellValueFactory(cellData -> cellData.getValue().identifiantProperty().asObject());
         modeTableColumn.setCellValueFactory(cellData -> cellData.getValue().modeDeJeuProperty());
         createurTableColumn.setCellValueFactory(cellData -> cellData.getValue().createurProperty());

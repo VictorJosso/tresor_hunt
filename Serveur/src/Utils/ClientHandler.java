@@ -87,6 +87,9 @@ public class ClientHandler implements Runnable{
                             if (client.isLoggedIn()){
                                 mainApp.usernamesSet.remove(client.getUsername());
                             }
+                            for (Integer id: client.getJoinedGames()){
+                                mainApp.getAvailableGamesMap().get(id).removePlayer(this);
+                            }
                             send("103 BYE");
                             socket.close();
                         } else {
@@ -121,7 +124,7 @@ public class ClientHandler implements Runnable{
      *
      * @param message the message
      */
-    protected void send(String message){
+    public void send(String message){
         this.printWriter.println(message);
     }
 
@@ -137,6 +140,10 @@ public class ClientHandler implements Runnable{
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public boolean isGoodClient(){
+        return parser.isGoodClient();
     }
 
     public void kill(){

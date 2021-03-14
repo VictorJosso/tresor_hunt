@@ -180,6 +180,24 @@ public class Parser {
                 }
                 break;
 
+            case "130":
+                if (response.length == 3 && response[1].equals("JOIN") && NumberUtils.isNumeric(response[2])){
+                    client.getClient().getJoinedGames().add(Integer.parseInt(response[2]));
+                    client.send("131 MAP "+ response[2]+ " JOINED");
+                    mainHandler.getAvailableGamesMap().get(Integer.parseInt(response[2])).addPlayer(client);
+                } else{
+                    illegalCommand();
+                }
+                break;
+            case "135":
+                if (response.length == 3 && response[1].equals("LEAVE") && NumberUtils.isNumeric(response[2])){
+                    this.mainHandler.getAvailableGamesMap().get(Integer.parseInt(response[2])).removePlayer(client);
+                    this.client.getClient().getJoinedGames().remove(Integer.parseInt(response[2]));
+                    client.send("136 REMOVED");
+                } else {
+                    illegalCommand();
+                }
+                break;
             case "122":
                 mainHandler.getAvailableGamesMap().remove(Integer.parseInt(response[1]));
                 client.send("123 REMOVED");

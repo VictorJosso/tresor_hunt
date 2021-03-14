@@ -4,7 +4,7 @@ set -o allexport
 [[ -f .env ]] && source .env
 set +o allexport
 
-if [ -Z $JAVA_PATH ] || [ -Z $JAVA_FX_PATH ]
+if [ -z $JAVA_PATH ] || [ -z $JAVA_FX_LIB_PATH ]
 then echo "Merci de completer le fichier .env avant d'executer ce script".
 exit 1
 fi
