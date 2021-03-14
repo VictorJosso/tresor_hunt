@@ -38,6 +38,9 @@ public class Parser {
     //Méthodes
     private void illegalCommand(){
         client.send("550 ILLEGAL COMMAND. BYE");
+        for (Integer id : client.getClient().getJoinedGames()){
+            mainHandler.getAvailableGamesMap().get(id).removePlayer(client);
+        }
         client.closeConnection();
         if (client.getClient().isLoggedIn()){
             mainHandler.usernamesSet.remove(client.getClient().getUsername());
