@@ -6,9 +6,9 @@
 
 <AnchorPane prefHeight="409.0" prefWidth="657.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.LobbyController">
     <children>
-      <SplitPane fx:id="split" dividerPositions="0.5083969465648855" prefHeight="363.0" prefWidth="657.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="46.0">
+      <SplitPane fx:id="lobbySplitPane" dividerPositions="0.5083969465648855" prefHeight="363.0" prefWidth="657.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="46.0">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="361.0" prefWidth="190.0">
+          <AnchorPane fx:id="leftAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="361.0" prefWidth="190.0">
                <children>
                   <Label layoutX="6.0" layoutY="1.0" prefHeight="27.0" prefWidth="69.0" text="Joueurs" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="1.0">
                      <font>
@@ -67,7 +67,7 @@
                   <ButtonBar prefHeight="40.0" prefWidth="337.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="6.0">
                     <buttons>
                       <Button fx:id="quitterButton" mnemonicParsing="false" onAction="#handleQuitButtonClick" text="Quitter" />
-                        <Button mnemonicParsing="false" text="Commencer la partie" />
+                        <Button fx:id="lancerPartieButton" mnemonicParsing="false" text="Commencer la partie" />
                     </buttons>
                   </ButtonBar>
                </children>

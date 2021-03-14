@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import models.Partie;
@@ -28,6 +29,9 @@ public class LobbyController extends CallbackInstance {
     private Button quitterButton;
 
     @FXML
+    private Button lancerPartieButton;
+
+    @FXML
     private ListView<String> playersInListView;
 
     @FXML
@@ -43,6 +47,11 @@ public class LobbyController extends CallbackInstance {
     @FXML
     private Label nombreTresorsLabel;
 
+    @FXML
+    private SplitPane lobbySplitPane;
+
+    @FXML
+    private AnchorPane leftAnchorPane;
 
     /**
      * Sets main app.
@@ -70,6 +79,8 @@ public class LobbyController extends CallbackInstance {
     @FXML
     private void initialize() {
         // TODO : changer tableau (type) et remplir la colonne avec les joueurs de la partie
+        playersInListView.setSelectionModel(null);
+
     }
 
     private void populateScreen(){
@@ -78,6 +89,11 @@ public class LobbyController extends CallbackInstance {
         nombreTrousLabel.setText(String.valueOf(this.partie.getNombreDeTrous()));
         nombreTresorsLabel.setText(String.valueOf(this.partie.getNombreDeTresors()));
         playersInListView.setItems(partie.getPlayersNames());
+        lancerPartieButton.requestFocus();
+        leftAnchorPane.maxWidthProperty().bind(lobbySplitPane.widthProperty().multiply(0.25));
+        leftAnchorPane.minWidthProperty().bind(lobbySplitPane.widthProperty().multiply(0.25));
+
+
     }
     @FXML
     private void handleQuitButtonClick(){
