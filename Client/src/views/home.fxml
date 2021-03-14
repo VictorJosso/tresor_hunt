@@ -125,12 +125,12 @@
                               <Font name="Chilanka Regular" size="13.0" />
                            </font>
                         </Label>
-                        <Spinner fx:id="nombreDeJoueursMaxSpinner" prefHeight="30.0" prefWidth="160.0" style="-fx-font-family: Chilanka;" GridPane.columnIndex="1" GridPane.rowIndex="4" >
+                        <Spinner fx:id="nombreDeJoueursMaxSpinner" prefHeight="30.0" prefWidth="160.0" style="-fx-font-family: Chilanka;" GridPane.columnIndex="1" GridPane.rowIndex="4">
                          <valueFactory>
-                             <SpinnerValueFactory.IntegerSpinnerValueFactory max="4" min="0" />
+                             <SpinnerValueFactory.IntegerSpinnerValueFactory max="4" min="2" />
                          </valueFactory>
                         </Spinner>
-                        <Spinner fx:id="nombreDeTresorsSpinner" prefHeight="30.0" prefWidth="160.0" style="-fx-font-family: Chilanka;" GridPane.columnIndex="1" GridPane.rowIndex="3" >
+                        <Spinner fx:id="nombreDeTresorsSpinner" prefHeight="30.0" prefWidth="160.0" style="-fx-font-family: Chilanka;" GridPane.columnIndex="1" GridPane.rowIndex="3">
                          <valueFactory>
                              <SpinnerValueFactory.IntegerSpinnerValueFactory max="6" min="1" />
                          </valueFactory>
@@ -143,7 +143,7 @@
                         <font>
                             <Font name="Chilanka Regular" size="13.0" />
                         </font></Button>
-                        <Button fx:id="creationPartieButton" mnemonicParsing="false" text="Créer la partie">
+                        <Button fx:id="creationPartieButton" mnemonicParsing="false" onAction="#handleCreateGameButtonClick" text="Créer la partie">
                         <font>
                             <Font name="Chilanka Regular" size="13.0" />
                         </font></Button>

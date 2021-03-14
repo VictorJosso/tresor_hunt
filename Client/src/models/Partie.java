@@ -268,6 +268,18 @@ public class Partie {
         this.robots.set(robots);
     }
 
+    public int getMaxPlayers() {
+        return maxPlayers.get();
+    }
+
+    public IntegerProperty maxPlayersProperty() {
+        return maxPlayers;
+    }
+
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers.set(maxPlayers);
+    }
+
     public ObservableList<String> getPlayersNames() {
         return playersNames;
     }

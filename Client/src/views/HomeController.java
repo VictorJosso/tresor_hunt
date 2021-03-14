@@ -1,23 +1,26 @@
 package views;
 
 import Apps.MainApp;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.Partie;
+import utils.CallbackInstance;
 
 import javax.swing.text.LabelView;
 
 /**
  * The type Home controller.
  */
-public class HomeController {
+public class HomeController extends CallbackInstance {
 
     private MainApp mainApp;
     private int dimensionX = 10;
     private int dimensionY = 10;
+    private Partie partieCreated;
 
 
     @FXML
@@ -154,10 +157,10 @@ public class HomeController {
         SpinnerValueFactory.IntegerSpinnerValueFactory trousFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 3*this.dimensionY*dimensionX/25, nombreDeTrousSpinner.getValue() < 3*this.dimensionY*dimensionX/25 ? nombreDeTrousSpinner.getValue() : 3*this.dimensionY*dimensionX/25);
         nombreDeTrousSpinner.setValueFactory(trousFactory);
 
-        SpinnerValueFactory.IntegerSpinnerValueFactory tresorsFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, (int) ((1.5*4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue())/20), nombreDeTresorsSpinner.getValue() < (int) ((1.5*4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue())/20) ? nombreDeTresorsSpinner.getValue() : (int) ((1.5*4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue()))/20);
+        SpinnerValueFactory.IntegerSpinnerValueFactory tresorsFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, (int) ((1.5*4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue())/20), nombreDeTresorsSpinner.getValue() < (int) ((1.5*4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue())/20) ? nombreDeTresorsSpinner.getValue() : (int) ((1.5*4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue()))/20);
         nombreDeTresorsSpinner.setValueFactory(tresorsFactory);
 
-        SpinnerValueFactory.IntegerSpinnerValueFactory nbPlayersFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0,(4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue()-nombreDeTresorsSpinner.getValue())/20, nombreDeJoueursMaxSpinner.getValue() < (4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue()-nombreDeTresorsSpinner.getValue())/20 ? nombreDeJoueursMaxSpinner.getValue() : (4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue()-nombreDeTresorsSpinner.getValue())/20);
+        SpinnerValueFactory.IntegerSpinnerValueFactory nbPlayersFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(2,(4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue()-nombreDeTresorsSpinner.getValue())/20, nombreDeJoueursMaxSpinner.getValue() < (4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue()-nombreDeTresorsSpinner.getValue())/20 ? nombreDeJoueursMaxSpinner.getValue() : (4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue()-nombreDeTresorsSpinner.getValue())/20);
         nombreDeJoueursMaxSpinner.setValueFactory(nbPlayersFactory);
 
     }
@@ -183,5 +186,34 @@ public class HomeController {
         } catch (Exception e1) {
             e1.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleCreateGameButtonClick(){
+        partieCreated = new Partie(-1, mainApp.getServerConfig().getUsername(), modeDeJeuChoiceBox.getValue().equals("Speeding contest") ? "1" : modeDeJeuChoiceBox.getValue().equals("Tour par tour") ? "2" : "3",
+                dimensionsXSpinner.getValue(), dimensionsYSpinner.getValue(), nombreDeTrousSpinner.getValue(), nombreDeTresorsSpinner.getValue(), mainApp.getServerConfig().isServeurAmeliore() ? nombreDeJoueursMaxSpinner.getValue() : -1,
+                mainApp.getServerConfig().isServeurAmeliore() && robotsCheckBox.isSelected());
+
+        mainApp.getConnectionHandler().registerCallback("111", this, CallbackInstance::partieCreationCallback);
+        mainApp.getConnectionHandler().send(String.format("110 CREATE %s SIZE %d %d HOLE %d TRES %d" + (mainApp.getServerConfig().isServeurAmeliore() ? " PLAYERS "+partieCreated.getMaxPlayers()+" ROBOTS "+partieCreated.isRobots() : ""),
+                partieCreated.getModeDeJeu(),
+                partieCreated.getDimensionX(),
+                partieCreated.getDimensionY(),
+                partieCreated.getNombreDeTrous(),
+                partieCreated.getNombreDeTresors()));
+
+
+    }
+
+    @Override
+    public void partieCreationCallback(String s) {
+        this.partieCreated.setIdentifiant(Integer.parseInt(s.split(" ")[3]));
+        Platform.runLater(() -> {
+            try {
+                this.mainApp.joinGameLobby(this.partieCreated);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
     }
 }

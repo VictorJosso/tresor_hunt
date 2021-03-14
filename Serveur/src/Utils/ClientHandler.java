@@ -6,6 +6,7 @@ import Models.Client;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * The type Client handler.
@@ -18,6 +19,8 @@ public class ClientHandler implements Runnable{
     private PrintWriter printWriter;
     private Parser parser;
     private Client client;
+
+    private CopyOnWriteArrayList<Integer> sendingQueue = new CopyOnWriteArrayList<>();
 
     /**
      * Instantiates a new Client handler.
@@ -125,7 +128,11 @@ public class ClientHandler implements Runnable{
      * @param message the message
      */
     public void send(String message){
+        int code = (int) (Math.random() * (9999-1000+1) + 1000);
+        this.sendingQueue.add(code);
+        while (!(this.sendingQueue.get(0) == code)){}
         this.printWriter.println(message);
+        this.sendingQueue.remove((Integer) code);
     }
 
     /**
