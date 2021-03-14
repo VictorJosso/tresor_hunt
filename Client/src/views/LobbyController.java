@@ -48,6 +48,9 @@ public class LobbyController extends CallbackInstance {
     private Label nombreTresorsLabel;
 
     @FXML
+    private Label identifantLabel;
+
+    @FXML
     private SplitPane lobbySplitPane;
 
     @FXML
@@ -92,7 +95,7 @@ public class LobbyController extends CallbackInstance {
         lancerPartieButton.requestFocus();
         leftAnchorPane.maxWidthProperty().bind(lobbySplitPane.widthProperty().multiply(0.25));
         leftAnchorPane.minWidthProperty().bind(lobbySplitPane.widthProperty().multiply(0.25));
-
+        identifantLabel.setText(String.valueOf(this.partie.getIdentifiant()));
 
     }
     @FXML

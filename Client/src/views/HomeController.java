@@ -8,12 +8,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.Partie;
 
+import javax.swing.text.LabelView;
+
 /**
  * The type Home controller.
  */
 public class HomeController {
 
     private MainApp mainApp;
+    private int dimensionX = 10;
+    private int dimensionY = 10;
+
 
     @FXML
     private TableView<Partie> partiesEnCoursTableView;
@@ -43,7 +48,10 @@ public class HomeController {
     private ChoiceBox<String> modeDeJeuChoiceBox;
 
     @FXML
-    private ChoiceBox<String> nombreDeTresorsChoiceBox;
+    private Spinner<Integer> nombreDeTresorsSpinner;
+
+    @FXML
+    private Spinner<Integer> nombreDeJoueursMaxSpinner;
 
     @FXML
     private Spinner<Integer> dimensionsXSpinner;
@@ -63,6 +71,15 @@ public class HomeController {
     @FXML
     private Label creationPartiesLabel;
 
+    @FXML
+    private Label nombreDeJoueursMaxLabel;
+
+    @FXML
+    private Label robotsLabel;
+
+    @FXML
+    private Label notGoodServerWarningLabel;
+
     /**
      * Sets main app, and fills UI with parties list and config
      *
@@ -73,6 +90,27 @@ public class HomeController {
         partiesEnCoursTableView.setItems(mainApp.getPartiesList());
         partiesOuvertesLabel.setText("Parties ouvertes à l'inscription sur "+mainApp.getServerConfig().getAdresseServeur()+":"+mainApp.getServerConfig().getPortServeur());
         creationPartiesLabel.setText("Créer une partie sur " + mainApp.getServerConfig().getAdresseServeur()+":"+mainApp.getServerConfig().getPortServeur());
+
+        if (!mainApp.getServerConfig().isServeurAmeliore()){
+            nombreDeJoueursMaxSpinner.setDisable(true);
+            robotsCheckBox.setDisable(true);
+            nombreDeJoueursMaxLabel.setDisable(true);
+            robotsLabel.setDisable(true);
+
+        } else {
+            notGoodServerWarningLabel.setVisible(false);
+            modeDeJeuChoiceBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue){
+                    if (newValue.equals("Speeding contest")){
+                        robotsCheckBox.setSelected(false);
+                        robotsCheckBox.setDisable(true);
+                    } else {
+                        robotsCheckBox.setDisable(false);
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -90,17 +128,38 @@ public class HomeController {
         modeTableColumn.setCellValueFactory(cellData -> cellData.getValue().modeDeJeuProperty());
         createurTableColumn.setCellValueFactory(cellData -> cellData.getValue().createurProperty());
         dimensionTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDimensionX()+"x"+cellData.getValue().getDimensionY()));
-        modeDeJeuChoiceBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue){
-                if (newValue.equals("Speeding contest")){
-                    robotsCheckBox.setSelected(false);
-                    robotsCheckBox.setDisable(true);
-                } else {
-                    robotsCheckBox.setDisable(false);
-                }
-            }
+
+        dimensionsXSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            this.dimensionX = newValue;
+            updateValueFactories();
+
+
         });
+        dimensionsYSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            this.dimensionY = newValue;
+            updateValueFactories();
+
+        });
+
+        nombreDeTrousSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            updateValueFactories();
+        });
+
+        nombreDeTresorsSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            updateValueFactories();
+        });
+    }
+
+    private void updateValueFactories(){
+        SpinnerValueFactory.IntegerSpinnerValueFactory trousFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 3*this.dimensionY*dimensionX/25, nombreDeTrousSpinner.getValue() < 3*this.dimensionY*dimensionX/25 ? nombreDeTrousSpinner.getValue() : 3*this.dimensionY*dimensionX/25);
+        nombreDeTrousSpinner.setValueFactory(trousFactory);
+
+        SpinnerValueFactory.IntegerSpinnerValueFactory tresorsFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, (int) ((1.5*4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue())/20), nombreDeTresorsSpinner.getValue() < (int) ((1.5*4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue())/20) ? nombreDeTresorsSpinner.getValue() : (int) ((1.5*4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue()))/20);
+        nombreDeTresorsSpinner.setValueFactory(tresorsFactory);
+
+        SpinnerValueFactory.IntegerSpinnerValueFactory nbPlayersFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0,(4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue()-nombreDeTresorsSpinner.getValue())/20, nombreDeJoueursMaxSpinner.getValue() < (4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue()-nombreDeTresorsSpinner.getValue())/20 ? nombreDeJoueursMaxSpinner.getValue() : (4*(dimensionX*dimensionY)/5-nombreDeTrousSpinner.getValue()-nombreDeTresorsSpinner.getValue())/20);
+        nombreDeJoueursMaxSpinner.setValueFactory(nbPlayersFactory);
+
     }
 
     @FXML

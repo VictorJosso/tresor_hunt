@@ -118,14 +118,14 @@ public class Parser {
                     }
 
 
-                    if(nbTres > 1.5 * ((sizeX * sizeY) - nbWalls - nbHoles - nbTres) / 20) {
+                    if(nbTres > 1.5 * ((sizeX * sizeY) - nbWalls - nbHoles) / 20) {
                         client.send("556 TOO MUCH TREASURES");
                         break;
                     }
 
 
-                    if(nbTres < 0) {
-                        client.send("556 TREASURES CAN NOT BE NEGATIVE");
+                    if(nbTres < 1) {
+                        client.send("556 TREASURES CAN NOT BE LESS THAN 1");
                         break;
                     }
                     if(nbPlayers > ((sizeX * sizeY) - nbWalls - nbHoles - nbTres) / 20) {
