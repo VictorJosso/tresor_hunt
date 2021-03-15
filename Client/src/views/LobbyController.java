@@ -97,6 +97,8 @@ public class LobbyController extends CallbackInstance {
         leftAnchorPane.minWidthProperty().bind(lobbySplitPane.widthProperty().multiply(0.25));
         identifantLabel.setText(String.valueOf(this.partie.getIdentifiant()));
 
+        lancerPartieButton.setDisable(!partie.isCreator());
+
     }
     @FXML
     private void handleQuitButtonClick(){

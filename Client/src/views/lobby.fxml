@@ -12,7 +12,7 @@
                <children>
                   <Label layoutX="6.0" layoutY="1.0" prefHeight="27.0" prefWidth="69.0" text="Joueurs" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="1.0">
                      <font>
-                        <Font size="18.0" />
+                        <Font name="Chilanka Regular" size="18.0" />
                      </font>
                   </Label>
                   <ListView fx:id="playersInListView" prefHeight="361.0" prefWidth="329.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0" />
@@ -35,46 +35,66 @@
                             <children>
                                 <Label text="Dimensions" GridPane.rowIndex="2">
                                     <font>
-                                        <Font name="SF Pro" size="14.0" />
+                                        <Font name="Chilanka Regular" size="14.0" />
                                     </font>
                                 </Label>
                                 <Label text="Nombre de trous " GridPane.rowIndex="3">
                                     <font>
-                                        <Font name="SF Pro" size="14.0" />
+                                        <Font name="Chilanka Regular" size="14.0" />
                                     </font>
                                 </Label>
                                 <Label text="Nombre de trésors" GridPane.rowIndex="4">
                                     <font>
-                                        <Font name="SF Pro" size="14.0" />
+                                        <Font name="Chilanka Regular" size="14.0" />
                                     </font>
                                 </Label>
-                                <Label fx:id="dimensionsLabel" prefHeight="17.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                <Label fx:id="nombreTrousLabel" prefHeight="17.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                <Label fx:id="nombreTresorsLabel" prefHeight="17.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                <Label fx:id="dimensionsLabel" prefHeight="17.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <font>
+                              <Font name="Chilanka Regular" size="13.0" />
+                           </font></Label>
+                                <Label fx:id="nombreTrousLabel" prefHeight="17.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <font>
+                              <Font name="Chilanka Regular" size="13.0" />
+                           </font></Label>
+                                <Label fx:id="nombreTresorsLabel" prefHeight="17.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                           <font>
+                              <Font name="Chilanka Regular" size="13.0" />
+                           </font></Label>
                         <Label text="Type de partie" GridPane.rowIndex="1">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Chilanka Regular" size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="modeJeuLabel" prefHeight="17.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="modeJeuLabel" prefHeight="17.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="Chilanka Regular" size="13.0" />
+                           </font></Label>
                         <Label text="IDENTIFIANT">
                            <font>
-                              <Font size="14.0" />
+                              <Font name="Chilanka Regular" size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="identifantLabel" textFill="#2255ee" GridPane.columnIndex="1" />
+                        <Label fx:id="identifantLabel" textFill="#2255ee" GridPane.columnIndex="1">
+                           <font>
+                              <Font name="Chilanka Regular" size="13.0" />
+                           </font></Label>
                             </children>
                         </GridPane>
                   <Label layoutX="8.0" prefHeight="39.0" text="Paramètres du jeu" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="0.0">
                      <font>
-                        <Font size="18.0" />
+                        <Font name="Chilanka Regular" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="155.0" layoutY="100.0" />
                   <ButtonBar prefHeight="40.0" prefWidth="337.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="6.0">
                     <buttons>
-                      <Button fx:id="quitterButton" mnemonicParsing="false" onAction="#handleQuitButtonClick" text="Quitter" />
-                        <Button fx:id="lancerPartieButton" mnemonicParsing="false" text="Commencer la partie" />
+                      <Button fx:id="quitterButton" mnemonicParsing="false" onAction="#handleQuitButtonClick" text="Quitter">
+                           <font>
+                              <Font name="Chilanka Regular" size="13.0" />
+                           </font></Button>
+                        <Button fx:id="lancerPartieButton" mnemonicParsing="false" text="Commencer la partie">
+                           <font>
+                              <Font name="Chilanka Regular" size="13.0" />
+                           </font></Button>
                     </buttons>
                   </ButtonBar>
                </children>
@@ -83,9 +103,12 @@
       </SplitPane>
       <Label layoutX="14.0" layoutY="14.0" prefHeight="23.0" text="TRESOR HUNT" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
          <font>
-            <Font size="18.0" />
+            <Font name="Chilanka Regular" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="statusLabel" layoutX="607.0" layoutY="18.0" text="Connexion en cours..." textFill="RED" AnchorPane.rightAnchor="5.0" />
+      <Label fx:id="statusLabel" layoutX="607.0" layoutY="18.0" text="Connexion en cours..." textFill="RED" AnchorPane.rightAnchor="5.0">
+         <font>
+            <Font name="Chilanka Regular" size="13.0" />
+         </font></Label>
     </children>
 </AnchorPane>

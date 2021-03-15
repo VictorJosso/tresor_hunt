@@ -18,6 +18,7 @@ public class Partie {
     private IntegerProperty nombreDeTresors;
     private IntegerProperty maxPlayers;
     private BooleanProperty robots;
+    private boolean creator = false;
     private ObservableList<String> playersNames = FXCollections.observableArrayList();
 
     /**
@@ -278,6 +279,14 @@ public class Partie {
 
     public void setMaxPlayers(int maxPlayers) {
         this.maxPlayers.set(maxPlayers);
+    }
+
+    public boolean isCreator() {
+        return creator;
+    }
+
+    public void setCreator(boolean creator) {
+        this.creator = creator;
     }
 
     public ObservableList<String> getPlayersNames() {

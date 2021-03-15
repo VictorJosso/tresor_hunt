@@ -193,6 +193,7 @@ public class HomeController extends CallbackInstance {
         partieCreated = new Partie(-1, mainApp.getServerConfig().getUsername(), modeDeJeuChoiceBox.getValue().equals("Speeding contest") ? "1" : modeDeJeuChoiceBox.getValue().equals("Tour par tour") ? "2" : "3",
                 dimensionsXSpinner.getValue(), dimensionsYSpinner.getValue(), nombreDeTrousSpinner.getValue(), nombreDeTresorsSpinner.getValue(), mainApp.getServerConfig().isServeurAmeliore() ? nombreDeJoueursMaxSpinner.getValue() : -1,
                 mainApp.getServerConfig().isServeurAmeliore() && robotsCheckBox.isSelected());
+        partieCreated.setCreator(true);
 
         mainApp.getConnectionHandler().registerCallback("111", this, CallbackInstance::partieCreationCallback);
         mainApp.getConnectionHandler().send(String.format("110 CREATE %s SIZE %d %d HOLE %d TRES %d" + (mainApp.getServerConfig().isServeurAmeliore() ? " PLAYERS "+partieCreated.getMaxPlayers()+" ROBOTS "+partieCreated.isRobots() : ""),
