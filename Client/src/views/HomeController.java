@@ -209,6 +209,7 @@ public class HomeController extends CallbackInstance {
     @Override
     public void partieCreationCallback(String s) {
         this.partieCreated.setIdentifiant(Integer.parseInt(s.split(" ")[3]));
+        this.mainApp.getPartiesList().add(this.partieCreated);
         Platform.runLater(() -> {
             try {
                 this.mainApp.joinGameLobby(this.partieCreated);

@@ -115,12 +115,16 @@ public class LobbyController extends CallbackInstance {
 
     @Override
     public void addPlayer(String s) {
-        this.partie.getPlayersNames().add(s.split(" ")[1]);
+        Platform.runLater(() -> {
+            this.partie.getPlayersNames().add(s.split(" ")[1]);
+        });
     }
 
     @Override
     public void removePlayer(String s) {
-        this.partie.getPlayersNames().remove(s.split(" ")[1]);
+        Platform.runLater(() -> {
+            this.partie.getPlayersNames().remove(s.split(" ")[1]);
+        });
     }
 
     @Override

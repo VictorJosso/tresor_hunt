@@ -46,6 +46,8 @@ public class MainApp extends Application {
 
     private ConnectionHandler connectionHandler;
 
+    private Timer fetchPartiesListTimer;
+
     /**
      * The entry point of application.
      *
@@ -79,7 +81,7 @@ public class MainApp extends Application {
 
     private void fetchPartiesList(){
         connectionHandler.registerCallback("121", new PartiesUpdater(this), (controller, message) -> controller.parse(message));
-        Timer timer = connectionHandler.registerRecurrentServerCall(new RecurrentServerRequest() {
+        fetchPartiesListTimer = connectionHandler.registerRecurrentServerCall(new RecurrentServerRequest() {
             @Override
             public void run() {
                 handler.send("120 GETLIST");
@@ -174,6 +176,7 @@ public class MainApp extends Application {
     }
 
     private void displayLobbyStage(Partie p) throws Exception {
+        fetchPartiesListTimer.cancel();
         this.lobbyStage = new Stage();
         this.lobbyStage.setTitle("Lobby");
         FXMLLoader loader = new FXMLLoader();
