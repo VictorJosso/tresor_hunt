@@ -27,6 +27,7 @@ public class GameApp {
     private Partie partie;
     private Plateau plateau;
     private GraphicsContext gc;
+    private AnimationTimer timer;
 
     public GameApp(MainApp mainApp, Partie partie) {
         this.mainApp = mainApp;
@@ -49,13 +50,14 @@ public class GameApp {
         this.gc = canvas.getGraphicsContext2D();
 
 
-        new AnimationTimer(){
+        timer = new AnimationTimer(){
 
             @Override
             public void handle(long l) {
                 drawGame();
             }
-        }.start();
+        };
+        timer.start();
 
 
         this.gameStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -73,6 +75,7 @@ public class GameApp {
                         windowEvent.consume();
                     }
                     else {
+                        timer.stop();
                         mainApp.gameStageClosed();
                     }
                 }

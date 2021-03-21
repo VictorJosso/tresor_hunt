@@ -6,8 +6,6 @@ import Models.Games.Game;
 import Models.Games.SpeedingContest;
 import Models.Games.TourParTour;
 import Models.Games.WarFog;
-import javafx.util.Pair;
-
 import java.util.ArrayList;
 
 /**
@@ -215,24 +213,25 @@ public class Parser {
                     // PURE RANDOM
                     client.send("421 NUMBER 8");
                     Game partie = mainHandler.getAvailableGamesMap().get(client.getClient().getJoinedGames().get(0));
-                    ArrayList<Pair<Integer, Integer>> coordinates = new ArrayList<>();
+                    ArrayList<Integer> coordinates = new ArrayList<>();
                     for(int i = 0; i < 40; i++){
                         int x =  (int) (Math.random() * (partie.getX()));
                         int y =  (int) (Math.random() * (partie.getY()));
-                        coordinates.add(new Pair<Integer, Integer>(x, y));
+                        coordinates.add(x);
+                        coordinates.add(y);
                     }
                     for(int i = 0; i < 8; i++){
                         client.send(String.format("421 MESS %d POS %d %d %d %d %d %d %d %d %d %d", i,
-                                coordinates.get(5*i).getKey(),
-                                coordinates.get(5*i).getValue(),
-                                coordinates.get(5*i+1).getKey(),
-                                coordinates.get(5*i+1).getValue(),
-                                coordinates.get(5*i+2).getKey(),
-                                coordinates.get(5*i+2).getValue(),
-                                coordinates.get(5*i+3).getKey(),
-                                coordinates.get(5*i+3).getValue(),
-                                coordinates.get(5*i+4).getKey(),
-                                coordinates.get(5*i+4).getValue()));
+                                coordinates.get(10*i),
+                                coordinates.get(10*i+1),
+                                coordinates.get(10*i+2),
+                                coordinates.get(10*i+3),
+                                coordinates.get(10*i+4),
+                                coordinates.get(10*i+5),
+                                coordinates.get(10*i+6),
+                                coordinates.get(10*i+7),
+                                coordinates.get(10*i+8),
+                                coordinates.get(10*i+9)));
                     }
                 }
                 else {
