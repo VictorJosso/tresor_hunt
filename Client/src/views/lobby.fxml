@@ -91,7 +91,7 @@
                            <font>
                               <Font name="Chilanka Regular" size="13.0" />
                            </font></Button>
-                        <Button fx:id="lancerPartieButton" mnemonicParsing="false" text="Commencer la partie">
+                        <Button fx:id="lancerPartieButton" mnemonicParsing="false" onAction="#startGameButtonPressed" text="Commencer la partie">
                            <font>
                               <Font name="Chilanka Regular" size="13.0" />
                            </font></Button>

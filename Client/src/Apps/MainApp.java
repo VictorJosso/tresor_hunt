@@ -194,6 +194,16 @@ public class MainApp extends Application {
         this.configStage.close();
     }
 
+    public void startGame(Partie p){
+        GameApp game = new GameApp(this, p);
+        game.launch();
+        this.lobbyStage.close();
+    }
+
+    public void gameStageClosed(){
+        this.resumeMainStageStartup();
+    }
+
 
     /**
      * Create server connection.

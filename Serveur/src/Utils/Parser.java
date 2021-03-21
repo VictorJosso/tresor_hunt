@@ -2,9 +2,13 @@ package Utils;
 
 
 import Apps.ConnectionHandler;
+import Models.Games.Game;
 import Models.Games.SpeedingContest;
 import Models.Games.TourParTour;
 import Models.Games.WarFog;
+import javafx.util.Pair;
+
+import java.util.ArrayList;
 
 /**
  * This class is used to parse messages from clients,
@@ -204,6 +208,36 @@ public class Parser {
             case "122":
                 mainHandler.getAvailableGamesMap().remove(Integer.parseInt(response[1]));
                 client.send("123 REMOVED");
+                break;
+
+            case "420":
+                if (response.length == 2 && response[1].equals("GETWALLS")){
+                    // PURE RANDOM
+                    client.send("421 NUMBER 8");
+                    Game partie = mainHandler.getAvailableGamesMap().get(client.getClient().getJoinedGames().get(0));
+                    ArrayList<Pair<Integer, Integer>> coordinates = new ArrayList<>();
+                    for(int i = 0; i < 40; i++){
+                        int x =  (int) (Math.random() * (partie.getX()));
+                        int y =  (int) (Math.random() * (partie.getY()));
+                        coordinates.add(new Pair<Integer, Integer>(x, y));
+                    }
+                    for(int i = 0; i < 8; i++){
+                        client.send(String.format("421 MESS %d POS %d %d %d %d %d %d %d %d %d %d", i,
+                                coordinates.get(5*i).getKey(),
+                                coordinates.get(5*i).getValue(),
+                                coordinates.get(5*i+1).getKey(),
+                                coordinates.get(5*i+1).getValue(),
+                                coordinates.get(5*i+2).getKey(),
+                                coordinates.get(5*i+2).getValue(),
+                                coordinates.get(5*i+3).getKey(),
+                                coordinates.get(5*i+3).getValue(),
+                                coordinates.get(5*i+4).getKey(),
+                                coordinates.get(5*i+4).getValue()));
+                    }
+                }
+                else {
+                    illegalCommand();
+                }
                 break;
 
             default:

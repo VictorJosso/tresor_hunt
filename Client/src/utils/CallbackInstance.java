@@ -11,4 +11,5 @@ public class CallbackInstance {
     public void updateConnexionStatus(String s){}
     public void removePlayer(String s){}
     public void partieCreationCallback(String s){};
+    public void getWalls(String s){};
 }

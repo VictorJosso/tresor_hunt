@@ -136,4 +136,9 @@ public class LobbyController extends CallbackInstance {
             });
         }
     }
+
+    @FXML
+    private void startGameButtonPressed(){
+        this.mainApp.startGame(this.partie);
+    }
 }
