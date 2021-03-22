@@ -91,14 +91,14 @@ public class Plateau {
             grille[tmpvert][tmphor]=new CaseTresor(tmpvert,tmphor,val);
         }
 
-        /*for (int i=0; i<nbMurs;i++) {
+        for (int i=0; i<nbMurs;i++) {
             do {
                 tmpvert = (int)(Math.random() * vert-1);
                 tmphor = (int)(Math.random() * hor-1);
             } while (grille[tmpvert][tmphor] instanceof CaseMur
                     ||!(grille[tmpvert][tmphor] instanceof CaseVide));
             grille[tmpvert][tmphor]=new CaseMur(tmpvert,tmphor);
-        }*/
+        }
 
     }
 

@@ -88,7 +88,6 @@ public class LobbyController extends CallbackInstance {
 
     @FXML
     private void initialize() {
-        // TODO : changer tableau (type) et remplir la colonne avec les joueurs de la partie
         playersInListView.setMouseTransparent( true );
         playersInListView.setFocusTraversable( false );
     }
