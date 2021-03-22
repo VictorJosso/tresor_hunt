@@ -1,12 +1,150 @@
 package Models;
 
-import java.util.ArrayList;
-import Models.Cases.Case;
-
+//import java.util.ArrayList;
+import Models.Cases.*;
 import java.util.Random;
 
 public class Plateau {
-    int x;
+
+    // Variables liées aux paramètres de la grille de jeu
+    private int vert;
+    private int hor;
+    private int nbMurs;
+    //private int nbVides; c'est juste le reste des cases
+    private int nbTresors;
+    private int nbTrous;
+    //Case[][] grille;
+    //Case[][] grille2;
+    private Case [][] grille;
+
+
+    //ArrayList<ArrayList<Case>> grille = new ArrayList<>();
+
+    public Plateau(int hor, int vert, int nbTrous, int nbTresors, int nbMurs ) {
+        this.vert=vert;
+        this.hor=hor;
+        this.nbTrous=nbTrous;
+        this.nbTresors=nbTresors;
+        this.nbMurs=nbMurs;
+        grille = new Case[vert][hor];
+
+        do {
+            generate();
+        } while (!parcoursProfondeur());
+
+    }
+
+    public boolean horsLimite (int x, int y) {
+        return x < 0 || x >= vert || y < 0 || y >= hor;
+    }
+
+
+
+    private void desac() {
+        for (int i=0; i<vert;i++) {
+            for (int j=0; j<hor;j++) {
+                grille[i][j].setMarked(false);
+            }
+        }
+    }
+
+
+    // Génère une grille en plaçant des éléments aléatoirement
+    private void generate () {
+        int tmpvert;
+        int tmphor;
+        int k=0;
+        for (int i=0; i<vert; i++) {
+            for (int j=0; j<hor; j++) {
+                if (!(grille[i][j] instanceof CaseTrou) & !(grille[i][j] instanceof CaseTresor)
+                        & !(grille[i][j] instanceof CaseMur)) {
+                    grille[i][j] = new CaseVide(i,j);
+                }
+            }
+        }
+        // Trous --------------------------------------------------
+        for (int i=0; i<nbTrous; i++) {
+            do {
+                tmpvert = (int)(Math.random() * vert-1);
+                tmphor = (int)(Math.random() * hor-1);
+            } while (grille[tmpvert][tmphor] instanceof CaseTrou ||
+                    !(grille[tmpvert][tmphor] instanceof CaseVide));
+            grille[tmpvert][tmphor]=new CaseTrou(tmpvert,tmphor);
+            //System.out.println("trou à vert:"+tmpvert+" hor:"+tmphor);
+
+        }
+        // Trésors --------------------------------------------------------
+        for (int i=0; i<nbTresors;i++) {
+            do {
+                tmpvert = (int)(Math.random() * vert-1);
+                tmphor = (int)(Math.random() * hor-1);
+            } while (grille[tmpvert][tmphor] instanceof CaseTresor
+                    || !(grille[tmpvert][tmphor] instanceof CaseVide));
+            int tmp = (int)(Math.random() * 3);
+            int val = switch (tmp) {
+                case 0 -> 5;
+                case 1 -> 10;
+                case 2 -> 15;
+                case 3 -> 20;
+                default -> 5;
+            };
+            grille[tmpvert][tmphor]=new CaseTresor(tmpvert,tmphor,val);
+        }
+
+        /*for (int i=0; i<nbMurs;i++) {
+            do {
+                tmpvert = (int)(Math.random() * vert-1);
+                tmphor = (int)(Math.random() * hor-1);
+            } while (grille[tmpvert][tmphor] instanceof CaseMur
+                    ||!(grille[tmpvert][tmphor] instanceof CaseVide));
+            grille[tmpvert][tmphor]=new CaseMur(tmpvert,tmphor);
+        }*/
+
+    }
+
+
+
+
+    private boolean estConnexe() {
+
+        for (int i=0; i<vert; i++) {
+            for (int j=0; j<hor;j++) {
+                if (!(grille[i][j].isMarked())) {
+                    System.out.println(i+", "+j+" n'est pas marquée");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // On vérifie à partir de chaque position si la grille est connexe
+    private boolean parcoursProfondeur() {
+        for (int i=0; i<vert; i++) {
+            for (int j=0; j<hor; j++) {
+                if (!grille[i][j].isMarked()) explorer(i,j);
+                if (!estConnexe()) return false;
+                //if (i!=vert-1) desac();
+            }
+        }
+        return true;
+    }
+
+
+
+    private void explorer(int i, int j) {
+        grille[i][j].setMarked(true);
+        if (grille[i][j] instanceof CaseTrou || grille[i][j] instanceof CaseMur) return;
+        if (!horsLimite(i,j+1) && !grille[i][j+1].isMarked()) explorer(i,j+1);
+        if (!horsLimite(i,j-1) && !grille[i][j-1].isMarked()) explorer(i,j-1);
+        if (!horsLimite(i+1,j) && !grille[i+1][j].isMarked()) explorer(i+1,j);
+        if (!horsLimite(i-1,j) && !grille[i-1][j].isMarked()) explorer(i-1,j);
+    }
+
+
+
+
+    /*int x;
     int y;
     int nb_murs;
     int nb_vide;
@@ -26,7 +164,7 @@ public class Plateau {
         for (int i = 0; i < x; i++){
             grille.add(new ArrayList<>());
         }
-    }
+    }*/
 
     /*
     public int caseTrs() {

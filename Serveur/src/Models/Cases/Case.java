@@ -9,6 +9,9 @@ public abstract class Case {
     protected int posHor;
     protected ClientHandler playerOn;
 
+    // Variable de type algorithmique
+    protected boolean isMarked;
+
     public boolean isFree() {
         return isFree;
     }
@@ -17,6 +20,11 @@ public abstract class Case {
         isFree = true;
         playerOn = null;
     }
+
+    public boolean isMarked() { return isMarked;}
+
+    public void setMarked(boolean value) { isMarked=value; }
+
 
     public void setPlayerOn(ClientHandler player){
         if(isFree) {
