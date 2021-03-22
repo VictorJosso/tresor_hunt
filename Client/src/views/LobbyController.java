@@ -56,6 +56,9 @@ public class LobbyController extends CallbackInstance {
     @FXML
     private AnchorPane leftAnchorPane;
 
+    @FXML
+    private CheckBox readyStatusCheckBox;
+
     /**
      * Sets main app.
      *
@@ -70,6 +73,10 @@ public class LobbyController extends CallbackInstance {
         mainApp.getConnectionHandler().registerCallback("140", this, CallbackInstance::addPlayer);
         mainApp.getConnectionHandler().registerCallback("131", this, CallbackInstance::updateConnexionStatus);
         mainApp.getConnectionHandler().registerCallback("145", this, CallbackInstance::removePlayer);
+
+        mainApp.getConnectionHandler().registerCallback("152", this, CallbackInstance::updateStartGameStatus);
+
+        mainApp.getConnectionHandler().registerCallback("153", this, CallbackInstance::gameStart);
 
         mainApp.getConnectionHandler().send("130 JOIN "+partie.getIdentifiant());
 
@@ -98,6 +105,7 @@ public class LobbyController extends CallbackInstance {
         identifantLabel.setText(String.valueOf(this.partie.getIdentifiant()));
 
         lancerPartieButton.setDisable(!partie.isCreator());
+        readyStatusCheckBox.setDisable(partie.isCreator());
 
     }
     @FXML
@@ -140,5 +148,18 @@ public class LobbyController extends CallbackInstance {
     @FXML
     private void startGameButtonPressed(){
         this.mainApp.startGame(this.partie);
+    }
+
+    @Override
+    public void updateStartGameStatus(String s) {
+        this.mainApp.getConnectionHandler().send("152 START "+ ((readyStatusCheckBox.isSelected()) ? "YES" : "NO"));
+    }
+
+    @Override
+    public void gameStart(String s) {
+        Platform.runLater(() -> {
+            this.mainApp.startGame(this.partie);
+        });
+
     }
 }

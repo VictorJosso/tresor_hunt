@@ -1,5 +1,7 @@
 package Models;
 
+import Models.Games.Game;
+
 import java.util.ArrayList;
 
 /**
@@ -8,6 +10,8 @@ import java.util.ArrayList;
 public class Client {
     private String username;
     private boolean loggedIn;
+
+    private Game gameRunning;
 
     private ArrayList<Integer> joinedGames = new ArrayList<>();
 
@@ -54,5 +58,13 @@ public class Client {
 
     public ArrayList<Integer> getJoinedGames() {
         return joinedGames;
+    }
+
+    public Game getGameRunning() {
+        return gameRunning;
+    }
+
+    public void setGameRunning(Game gameRunning) {
+        this.gameRunning = gameRunning;
     }
 }

@@ -187,6 +187,7 @@ public class Parser {
 
             case "130":
                 if (response.length == 3 && response[1].equals("JOIN") && NumberUtils.isNumeric(response[2])){
+                    client.getClient().getJoinedGames().clear();
                     client.getClient().getJoinedGames().add(Integer.parseInt(response[2]));
                     client.send("131 MAP "+ response[2]+ " JOINED");
                     mainHandler.getAvailableGamesMap().get(Integer.parseInt(response[2])).addPlayer(client);
@@ -239,6 +240,23 @@ public class Parser {
                 }
                 break;
 
+            case "150":
+                if (response.length == 3 && response[1].equals("REQUEST") && response[2].equals("START")){
+                    boolean result = mainHandler.getAvailableGamesMap().get(client.getClient().getJoinedGames().get(0)).requestStart(client);
+                    if (!result){
+                        client.send("151 REFUSED");
+                    }
+                } else {
+                    illegalCommand();
+                }
+                break;
+            case "152":
+                if (response.length == 3 && response[1].equals("START") && (response[2].equals("YES") || response[2].equals("NO"))){
+                    mainHandler.getAvailableGamesMap().get(client.getClient().getJoinedGames().get(0)).startRequestStatus(client, response[2].equals("YES"));
+                } else {
+                    illegalCommand();
+                }
+                break;
             default:
                 illegalCommand();
                 break;

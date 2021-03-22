@@ -1,8 +1,10 @@
 package Models.Games;
 
 import Apps.ConnectionHandler;
+import Models.Plateau;
 import Utils.ClientHandler;
 
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -17,8 +19,12 @@ public abstract class Game {
     private final int holes;
     private final int id;
     private final int maxPlayers;
-    private ConnectionHandler mainHandler;
-    private ClientHandler owner;
+    private int playersOkToStart = 0;
+    private CopyOnWriteArrayList<ClientHandler> playersRefusedToStart = new CopyOnWriteArrayList<>();
+    private final ConnectionHandler mainHandler;
+    private final ClientHandler owner;
+
+    private Plateau plateau;
     /**
      * The Mode.
      */
@@ -72,6 +78,41 @@ public abstract class Game {
     public void removePlayer(ClientHandler client){
         if (players.remove(client)){
             broadcastAmeliore("145 "+client.getClient().getUsername()+" LEFT");
+        }
+    }
+
+    public boolean requestStart(ClientHandler requester){
+        if (requester == owner){
+            this.playersOkToStart = 0;
+            this.playersRefusedToStart.clear();
+            broadcast("152 START REQUESTED");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void startRequestStatus(ClientHandler client, boolean status){
+        if (status){
+            playersOkToStart += 1;
+        } else {
+            playersRefusedToStart.add(client);
+        }
+        if (playersOkToStart + playersRefusedToStart.size() == players.size()){
+            if (playersRefusedToStart.size() == 0){
+                plateau = new Plateau(x, y, holes, this.treasures, (int) x*y/5);
+                broadcast("153 GAME STARTED");
+            } else {
+                int nbMesages =(int) Math.ceil(((double) playersRefusedToStart.size())/5);
+                broadcast("154 START ABORTED "+String.valueOf(nbMesages));
+                for (int i = 0; i < nbMesages; i++){
+                    StringBuilder message = new StringBuilder("154 MESS " + String.valueOf(i) + " PLAYER");
+                    for (int j = 0; 5*i+j<playersRefusedToStart.size() && j < 5; j++){
+                        message.append(" ").append(playersRefusedToStart.get(5 * i + j).getClient().getUsername());
+                    }
+                    broadcast(message.toString());
+                }
+            }
         }
     }
 
