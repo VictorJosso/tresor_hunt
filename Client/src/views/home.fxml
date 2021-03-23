@@ -116,25 +116,25 @@
                                 <SpinnerValueFactory.IntegerSpinnerValueFactory max="12" min="0" />
                             </valueFactory>
                         </Spinner>
-                        <CheckBox fx:id="robotsCheckBox" mnemonicParsing="false" text="cocher pour activer" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                           <font>
-                              <Font name="Chilanka Regular" size="13.0" />
-                           </font></CheckBox>
                         <Label fx:id="nombreDeJoueursMaxLabel" text="Nombre de joueurs maximum" GridPane.rowIndex="4">
                            <font>
                               <Font name="Chilanka Regular" size="13.0" />
                            </font>
                         </Label>
-                        <Spinner fx:id="nombreDeJoueursMaxSpinner" prefHeight="30.0" prefWidth="160.0" style="-fx-font-family: Chilanka;" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                         <valueFactory>
-                             <SpinnerValueFactory.IntegerSpinnerValueFactory max="4" min="2" />
-                         </valueFactory>
-                        </Spinner>
                         <Spinner fx:id="nombreDeTresorsSpinner" prefHeight="30.0" prefWidth="160.0" style="-fx-font-family: Chilanka;" GridPane.columnIndex="1" GridPane.rowIndex="3">
                          <valueFactory>
                              <SpinnerValueFactory.IntegerSpinnerValueFactory max="6" min="1" />
                          </valueFactory>
                         </Spinner>
+                        <Spinner fx:id="nombreDeJoueursMaxSpinner" prefHeight="30.0" prefWidth="160.0" style="-fx-font-family: Chilanka;" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                         <valueFactory>
+                             <SpinnerValueFactory.IntegerSpinnerValueFactory max="4" min="2" />
+                         </valueFactory>
+                        </Spinner>
+                        <CheckBox fx:id="robotsCheckBox" mnemonicParsing="false" text="cocher pour activer" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                           <font>
+                              <Font name="Chilanka Regular" size="13.0" />
+                           </font></CheckBox>
                      </children>
                   </GridPane>
                   <ButtonBar prefHeight="40.0" prefWidth="369.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">

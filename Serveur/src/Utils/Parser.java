@@ -210,29 +210,17 @@ public class Parser {
                 break;
 
             case "420":
-                if (response.length == 2 && response[1].equals("GETWALLS")){
+                if (response.length == 2 && response[1].equals("GETWALLS")) {
                     // PURE RANDOM
-                    client.send("421 NUMBER 8");
                     Game partie = mainHandler.getAvailableGamesMap().get(client.getClient().getJoinedGames().get(0));
-                    ArrayList<Integer> coordinates = new ArrayList<>();
-                    for(int i = 0; i < 40; i++){
-                        int x =  (int) (Math.random() * (partie.getX()));
-                        int y =  (int) (Math.random() * (partie.getY()));
-                        coordinates.add(x);
-                        coordinates.add(y);
-                    }
-                    for(int i = 0; i < 8; i++){
-                        client.send(String.format("421 MESS %d POS %d %d %d %d %d %d %d %d %d %d", i,
-                                coordinates.get(10*i),
-                                coordinates.get(10*i+1),
-                                coordinates.get(10*i+2),
-                                coordinates.get(10*i+3),
-                                coordinates.get(10*i+4),
-                                coordinates.get(10*i+5),
-                                coordinates.get(10*i+6),
-                                coordinates.get(10*i+7),
-                                coordinates.get(10*i+8),
-                                coordinates.get(10*i+9)));
+                    ArrayList<Coordinates> coordinates = partie.getPlateau().getCoordinatesMurs();
+                    client.send("421 NUMBER " + (int) Math.ceil((double) coordinates.size() / 5));
+                    for (int i = 0; i < (int) Math.ceil((double) coordinates.size() / 5); i++) {
+                        StringBuilder message = new StringBuilder("421 MESS " + String.valueOf(i) + " POS");
+                        for (int j = 0; 5 * i + j < coordinates.size() && j < 5; j++) {
+                            message.append(" ").append(coordinates.get(5 * i + j).getX()).append(" ").append(coordinates.get(5 * i + j).getY());
+                        }
+                        client.send(message.toString());
                     }
                 }
                 else {

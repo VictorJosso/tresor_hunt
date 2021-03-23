@@ -19,8 +19,8 @@ public abstract class Game {
     private final int holes;
     private final int id;
     private final int maxPlayers;
-    private int playersOkToStart = 0;
     private CopyOnWriteArrayList<ClientHandler> playersRefusedToStart = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<ClientHandler> playersOkToStart = new CopyOnWriteArrayList<>();
     private final ConnectionHandler mainHandler;
     private final ClientHandler owner;
 
@@ -83,7 +83,7 @@ public abstract class Game {
 
     public boolean requestStart(ClientHandler requester){
         if (requester == owner){
-            this.playersOkToStart = 0;
+            this.playersOkToStart.clear();
             this.playersRefusedToStart.clear();
             broadcast("152 START REQUESTED");
             return true;
@@ -93,14 +93,17 @@ public abstract class Game {
     }
 
     public void startRequestStatus(ClientHandler client, boolean status){
+        if (playersOkToStart.contains(client) || playersRefusedToStart.contains(client)){
+            return;
+        }
         if (status){
-            playersOkToStart += 1;
+            playersOkToStart.add(client);
         } else {
             playersRefusedToStart.add(client);
         }
-        if (playersOkToStart + playersRefusedToStart.size() == players.size()){
+        if (playersOkToStart.size() + playersRefusedToStart.size() == players.size()){
             if (playersRefusedToStart.size() == 0){
-                plateau = new Plateau(x, y, holes, this.treasures, (int) x*y/5);
+                this.plateau = new Plateau(x, y, holes, this.treasures, (int) x*y/5);
                 broadcast("153 GAME STARTED");
             } else {
                 int nbMesages =(int) Math.ceil(((double) playersRefusedToStart.size())/5);
@@ -200,6 +203,10 @@ public abstract class Game {
         mainHandler.getAvailableGamesMap().remove(this.id);
     }
 
+    public Plateau getPlateau() {
+        return plateau;
+    }
+
     /**
      * Is robots boolean.
      *
@@ -207,5 +214,7 @@ public abstract class Game {
      */
     public boolean isRobots() {
         return robots;
+
+
     }
 }

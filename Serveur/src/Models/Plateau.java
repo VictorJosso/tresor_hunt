@@ -2,6 +2,9 @@ package Models;
 
 //import java.util.ArrayList;
 import Models.Cases.*;
+import Utils.Coordinates;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Plateau {
@@ -16,6 +19,10 @@ public class Plateau {
     //Case[][] grille;
     //Case[][] grille2;
     private Case [][] grille;
+    private ArrayList<Coordinates> coordinatesMurs = new ArrayList<Coordinates>();
+    private ArrayList<Coordinates> coordinatesTrous = new ArrayList<Coordinates>();
+    private ArrayList<Coordinates> coordinatesTresors = new ArrayList<Coordinates>();
+
 
 
     //ArrayList<ArrayList<Case>> grille = new ArrayList<>();
@@ -28,10 +35,16 @@ public class Plateau {
         this.nbMurs=nbMurs;
         grille = new Case[vert][hor];
 
+        System.out.println("GENERATION DU PLATEAU");
+
         do {
+            coordinatesTrous.clear();
+            coordinatesMurs.clear();
+            coordinatesTresors.clear();
             generate();
         } while (!parcoursProfondeur());
 
+        System.out.println("PLATEAU GENERE");
     }
 
     public boolean horsLimite (int x, int y) {
@@ -70,6 +83,7 @@ public class Plateau {
             } while (grille[tmpvert][tmphor] instanceof CaseTrou ||
                     !(grille[tmpvert][tmphor] instanceof CaseVide));
             grille[tmpvert][tmphor]=new CaseTrou(tmpvert,tmphor);
+            coordinatesTrous.add(new Coordinates(tmpvert, tmphor));
             //System.out.println("trou à vert:"+tmpvert+" hor:"+tmphor);
 
         }
@@ -89,6 +103,7 @@ public class Plateau {
                 default -> 5;
             };
             grille[tmpvert][tmphor]=new CaseTresor(tmpvert,tmphor,val);
+            coordinatesTresors.add(new Coordinates(tmpvert, tmphor, val));
         }
 
         for (int i=0; i<nbMurs;i++) {
@@ -98,6 +113,7 @@ public class Plateau {
             } while (grille[tmpvert][tmphor] instanceof CaseMur
                     ||!(grille[tmpvert][tmphor] instanceof CaseVide));
             grille[tmpvert][tmphor]=new CaseMur(tmpvert,tmphor);
+            coordinatesMurs.add(new Coordinates(tmpvert, tmphor));
         }
 
     }
@@ -141,8 +157,17 @@ public class Plateau {
         if (!horsLimite(i-1,j) && !grille[i-1][j].isMarked()) explorer(i-1,j);
     }
 
+    public ArrayList<Coordinates> getCoordinatesMurs() {
+        return coordinatesMurs;
+    }
 
+    public ArrayList<Coordinates> getCoordinatesTrous() {
+        return coordinatesTrous;
+    }
 
+    public ArrayList<Coordinates> getCoordinatesTresors() {
+        return coordinatesTresors;
+    }
 
     /*int x;
     int y;

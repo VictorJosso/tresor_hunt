@@ -104,6 +104,7 @@ public class LobbyController extends CallbackInstance {
         identifantLabel.setText(String.valueOf(this.partie.getIdentifiant()));
 
         lancerPartieButton.setDisable(!partie.isCreator());
+        readyStatusCheckBox.setSelected(partie.isCreator());
         readyStatusCheckBox.setDisable(partie.isCreator());
 
     }
