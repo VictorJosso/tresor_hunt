@@ -69,10 +69,8 @@ public class Plateau {
         int k=0;
         for (int i=0; i<vert; i++) {
             for (int j=0; j<hor; j++) {
-                if (!(grille[i][j] instanceof CaseTrou) & !(grille[i][j] instanceof CaseTresor)
-                        & !(grille[i][j] instanceof CaseMur)) {
                     grille[i][j] = new CaseVide(i,j);
-                }
+
             }
         }
         // Trous --------------------------------------------------
