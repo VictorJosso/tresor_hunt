@@ -170,6 +170,7 @@ public class LobbyController extends CallbackInstance {
 
     @Override
     public void updateStartGameStatus(String s) {
+        this.hasPressedStartButton = true;
         this.mainApp.getConnectionHandler().send("152 START "+ ((readyStatusCheckBox.isSelected()) ? "YES" : "NO"));
     }
 
@@ -191,7 +192,7 @@ public class LobbyController extends CallbackInstance {
             }
         } else {
             playersRefusedToStartGame.clear();
-            lancerPartieButton.setDisable(false);
+            lancerPartieButton.setDisable(!partie.isCreator());
             Platform.runLater(() -> {
                 statusLabel.setText("Connecté");
                 statusLabel.setTextFill(Color.web("#008000"));
