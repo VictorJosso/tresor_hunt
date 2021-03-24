@@ -3,30 +3,32 @@ package models.Game;
 
 import javafx.scene.image.Image;
 
+import java.util.ArrayList;
+
 public class CaseTresor extends Case {
 
     private int value;
     private boolean secret = false;
 
-    public CaseTresor(int X, int Y, int value, int COEF_IMAGE) {
+    public CaseTresor(int X, int Y, int value, ArrayList<Image> listeImages) {
         super(X, Y);
         this.value = value;
         isFree = true;
         switch (value) {
             case 5:
-                this.imageCase = new Image("trésor BRONZE.png", COEF_IMAGE, COEF_IMAGE, false, false);
+                this.imageCase = listeImages.get(3);
                 break;
             case 10:
-                this.imageCase = new Image("trésor ARGENT.png", COEF_IMAGE, COEF_IMAGE, false, false);
+                this.imageCase = listeImages.get(4);
                 break;
             case 15:
-                this.imageCase = new Image("trésor OR.png", COEF_IMAGE, COEF_IMAGE, false, false);
+                this.imageCase = listeImages.get(5);
                 break;
             case 20:
-                this.imageCase = new Image("trésor DIAMANT.png", COEF_IMAGE, COEF_IMAGE, false, false);
+                this.imageCase = listeImages.get(6);
                 break;
             default:
-                this.imageCase = new Image("trésor MYSTÈRE.png", COEF_IMAGE, COEF_IMAGE, false, false);
+                this.imageCase = listeImages.get(6);
                 break;
 
 

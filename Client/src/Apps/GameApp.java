@@ -37,7 +37,13 @@ public class GameApp {
     public GameApp(MainApp mainApp, Partie partie) {
         this.mainApp = mainApp;
         this.partie = partie;
-        this.plateau = new Plateau(partie.getDimensionX(), partie.getDimensionY());
+        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+        screenHeight = (int) screenBounds.getHeight();
+        screenWidth = (int) screenBounds.getWidth();
+        int sizeX = screenWidth/ partie.getDimensionX();
+        int sizeY = screenHeight/partie.getDimensionY();
+        COEFF_IMAGE = Math.min(sizeX, sizeY);
+        this.plateau = new Plateau(partie.getDimensionX(), partie.getDimensionY(), COEFF_IMAGE);
 
         mainApp.getConnectionHandler().registerCallback("421", plateau, CallbackInstance::getWalls);
         mainApp.getConnectionHandler().send("420 GETWALLS");
@@ -45,13 +51,7 @@ public class GameApp {
         mainApp.getConnectionHandler().send("400 GETHOLES");
         mainApp.getConnectionHandler().registerCallback("411", plateau, CallbackInstance::getTresors);
         mainApp.getConnectionHandler().send("410 GETTREASURES");
-        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-        screenHeight = (int) screenBounds.getHeight();
-        screenWidth = (int) screenBounds.getWidth();
-        int sizeX = screenWidth/ partie.getDimensionX();
-        int sizeY = screenHeight/partie.getDimensionY();
-        COEFF_IMAGE = Math.min(sizeX, sizeY);
-        plateau.setCOEFF_IMAGE(COEFF_IMAGE);
+
 
 
 

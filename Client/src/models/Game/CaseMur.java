@@ -2,14 +2,16 @@ package models.Game;
 
 import javafx.scene.image.Image;
 
+import java.util.ArrayList;
+
 public class CaseMur extends Case{
 
     private int durabilite = 100;
 
-    public CaseMur(int X, int Y, int COEF_IMAGE) {
+    public CaseMur(int X, int Y, ArrayList<Image> listeImages) {
         super(X, Y);
         isFree = false;
-        this.imageCase = new Image("Mur.png", COEF_IMAGE, COEF_IMAGE, false, false);
+        this.imageCase = listeImages.get(0);
     }
 
     @Override
