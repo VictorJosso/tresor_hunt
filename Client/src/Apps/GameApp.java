@@ -19,7 +19,7 @@ import models.Partie;
 import models.Plateau;
 import utils.CallbackInstance;
 
-import java.util.Optional;
+import java.util.*;
 
 public class GameApp {
     private MainApp mainApp;
@@ -95,7 +95,10 @@ public class GameApp {
     protected void drawGame(){
         for(int x = 0; x < partie.getDimensionX(); x++){
             for(int y = 0; y < partie.getDimensionY(); y++){
-                    gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x*20, y*20);
+                //gc.save();
+                //gc.rotate(Arrays.asList(0, 90, 180, 270).get(new Random().nextInt(4)));
+                gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x*20, y*20);
+                //gc.restore();
             }
         }
     }

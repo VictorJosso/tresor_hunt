@@ -5,10 +5,10 @@ import Models.Cases.*;
 import Utils.Coordinates;
 import Utils.Tracker;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 import static java.lang.Math.max;
+import static java.lang.Math.signum;
 
 public class Plateau {
 
@@ -138,19 +138,33 @@ public class Plateau {
             tracker.setStatus(true);
             return;
         }
-        if (!horsLimite(i,j+1) && !tracker.getStatus() && !grille[i][j+1].isMarkedForDestruction()) destroyCloseWall(i,j+1, tracker);
-        if (!horsLimite(i,j-1) && !tracker.getStatus() && !grille[i][j-1].isMarkedForDestruction()) destroyCloseWall(i,j-1, tracker);
-        if (!horsLimite(i+1,j) && !tracker.getStatus() && !grille[i+1][j].isMarkedForDestruction()) destroyCloseWall(i+1,j, tracker);
-        if (!horsLimite(i-1,j) && !tracker.getStatus() && !grille[i-1][j].isMarkedForDestruction()) destroyCloseWall(i-1,j, tracker);
+        ArrayList<Integer> etapes = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
+        Collections.shuffle(etapes);
+        for (int e: etapes){
+            switch (e){
+                case 1:
+                    if (!horsLimite(i,j+1) && !tracker.getStatus() && !grille[i][j+1].isMarkedForDestruction()) destroyCloseWall(i,j+1, tracker);
+                    break;
+                case 2:
+                    if (!horsLimite(i,j-1) && !tracker.getStatus() && !grille[i][j-1].isMarkedForDestruction()) destroyCloseWall(i,j-1, tracker);
+                    break;
+                case 3:
+                    if (!horsLimite(i+1,j) && !tracker.getStatus() && !grille[i+1][j].isMarkedForDestruction()) destroyCloseWall(i+1,j, tracker);
+                    break;
+                case 4:
+                    if (!horsLimite(i-1,j) && !tracker.getStatus() && !grille[i-1][j].isMarkedForDestruction()) destroyCloseWall(i-1,j, tracker);
+                    break;
+            }
+        }
 
     }
 
 
     private boolean estConnexe(int tmphor, int tmpvert) {
-
+        int destroyed = 0;
         for (int i=0; i<hor; i++) {
             for (int j=0; j<vert;j++) {
-                if (!(grille[i][j].isMarked()) && grille[i][j] instanceof CaseVide) {
+                if (!(grille[i][j].isMarked()) && (grille[i][j] instanceof CaseVide || grille[i][j] instanceof CaseTresor)) {
                     System.out.println(i+", "+j+" n'est pas marquée");
                     //return false;
 
@@ -170,6 +184,7 @@ public class Plateau {
                         }
                     }*/
                     destroyCloseWall(i, j ,new Tracker());
+                    destroyed += 1;
                     resetMarked();
                     explorer(tmphor, tmpvert);
                     return estConnexe(tmphor, tmpvert);
@@ -177,6 +192,7 @@ public class Plateau {
                 }
             }
         }
+        System.out.println("Pour valider le plateau, on a du détruire "+destroyed+" murs");
         return true;
     }
 
