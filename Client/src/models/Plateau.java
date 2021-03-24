@@ -9,6 +9,7 @@ public class Plateau extends CallbackInstance {
     public ArrayList<ArrayList<Case>> plateau = new ArrayList<>();
     private int dimX;
     private int dimY;
+    private int COEFF_IMAGE;
 
     public Plateau(int dimX, int dimY) {
         this.dimX = dimX;
@@ -17,7 +18,7 @@ public class Plateau extends CallbackInstance {
         for(int x = 0; x < dimX; x++){
             plateau.add(new ArrayList<Case>());
             for(int y = 0; y < dimY; y++){
-                plateau.get(x).add(new CaseVide(x,y));
+                plateau.get(x).add(new CaseVide(x,y, this.COEFF_IMAGE));
             }
         }
     }
@@ -27,7 +28,7 @@ public class Plateau extends CallbackInstance {
     }
 
     public void setCaseMur(int x, int y){
-        this.plateau.get(x).set(y, new CaseMur(x, y));
+        this.plateau.get(x).set(y, new CaseMur(x, y, this.COEFF_IMAGE));
     }
 
     @Override
@@ -37,7 +38,7 @@ public class Plateau extends CallbackInstance {
             for(int i = 4; i < command.length; i+= 2){
                 int newX = Integer.parseInt(command[i]);
                 int newY = Integer.parseInt(command[i+1]);
-                plateau.get(newX).set(newY, new CaseMur(newX,newY));
+                plateau.get(newX).set(newY, new CaseMur(newX,newY, this.COEFF_IMAGE));
             }
         }
     }
@@ -49,7 +50,7 @@ public class Plateau extends CallbackInstance {
             for(int i = 4; i < command.length; i+= 2){
                 int newX = Integer.parseInt(command[i]);
                 int newY = Integer.parseInt(command[i+1]);
-                plateau.get(newX).set(newY, new CaseTrou(newX,newY));
+                plateau.get(newX).set(newY, new CaseTrou(newX,newY, this.COEFF_IMAGE));
             }
         }
     }
@@ -61,8 +62,16 @@ public class Plateau extends CallbackInstance {
             for(int i = 4; i < command.length; i+= 3){
                 int newX = Integer.parseInt(command[i]);
                 int newY = Integer.parseInt(command[i+1]);
-                plateau.get(newX).set(newY, new CaseTresor(newX,newY, Integer.parseInt(command[i+2])));
+                plateau.get(newX).set(newY, new CaseTresor(newX,newY, Integer.parseInt(command[i+2]), this.COEFF_IMAGE));
             }
         }
+    }
+
+    public int getCOEFF_IMAGE() {
+        return COEFF_IMAGE;
+    }
+
+    public void setCOEFF_IMAGE(int COEFF_IMAGE) {
+        this.COEFF_IMAGE = COEFF_IMAGE;
     }
 }

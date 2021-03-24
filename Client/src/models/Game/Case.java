@@ -9,6 +9,7 @@ public abstract class Case {
     protected int posVert;
     protected int posHor;
     protected Image imageCase;
+    private int COEF_IMAGE;
 
     public boolean isFree() {
         return isFree;
@@ -34,6 +35,7 @@ public abstract class Case {
         this.posVert = Y;
         this.posHor = X;
     }
+
 }
 
     /*
