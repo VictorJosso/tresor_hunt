@@ -1,8 +1,6 @@
 package models;
 
-import models.Game.Case;
-import models.Game.CaseMur;
-import models.Game.CaseVide;
+import models.Game.*;
 import utils.CallbackInstance;
 
 import java.util.ArrayList;
@@ -40,6 +38,30 @@ public class Plateau extends CallbackInstance {
                 int newX = Integer.parseInt(command[i]);
                 int newY = Integer.parseInt(command[i+1]);
                 plateau.get(newX).set(newY, new CaseMur(newX,newY));
+            }
+        }
+    }
+
+    @Override
+    public void getHoles(String s) {
+        String[] command = s.split(" ");
+        if(!command[1].equals("NUMBER")){
+            for(int i = 4; i < command.length; i+= 2){
+                int newX = Integer.parseInt(command[i]);
+                int newY = Integer.parseInt(command[i+1]);
+                plateau.get(newX).set(newY, new CaseTrou(newX,newY));
+            }
+        }
+    }
+
+    @Override
+    public void getTresors(String s) {
+        String[] command = s.split(" ");
+        if(!command[1].equals("NUMBER")){
+            for(int i = 4; i < command.length; i+= 3){
+                int newX = Integer.parseInt(command[i]);
+                int newY = Integer.parseInt(command[i+1]);
+                plateau.get(newX).set(newY, new CaseTresor(newX,newY, Integer.parseInt(command[i+2])));
             }
         }
     }

@@ -209,6 +209,44 @@ public class Parser {
                 client.send("123 REMOVED");
                 break;
 
+            case "400":
+                if (response.length == 2 && response[1].equals("GETHOLES")) {
+                    // PURE RANDOM
+                    Game partie = mainHandler.getAvailableGamesMap().get(client.getClient().getJoinedGames().get(0));
+                    ArrayList<Coordinates> coordinates = partie.getPlateau().getCoordinatesTrous();
+                    client.send("401 NUMBER " + (int) Math.ceil((double) coordinates.size() / 5));
+                    for (int i = 0; i < (int) Math.ceil((double) coordinates.size() / 5); i++) {
+                        StringBuilder message = new StringBuilder("401 MESS " + String.valueOf(i) + " POS");
+                        for (int j = 0; 5 * i + j < coordinates.size() && j < 5; j++) {
+                            message.append(" ").append(coordinates.get(5 * i + j).getX()).append(" ").append(coordinates.get(5 * i + j).getY());
+                        }
+                        client.send(message.toString());
+                    }
+                }
+                else {
+                    illegalCommand();
+                }
+                break;
+
+            case "410":
+                if (response.length == 2 && response[1].equals("GETTREASURES")) {
+                    // PURE RANDOM
+                    Game partie = mainHandler.getAvailableGamesMap().get(client.getClient().getJoinedGames().get(0));
+                    ArrayList<Coordinates> coordinates = partie.getPlateau().getCoordinatesTresors();
+                    client.send("411 NUMBER " + (int) Math.ceil((double) coordinates.size() / 5));
+                    for (int i = 0; i < (int) Math.ceil((double) coordinates.size() / 5); i++) {
+                        StringBuilder message = new StringBuilder("411 MESS " + String.valueOf(i) + " POS");
+                        for (int j = 0; 5 * i + j < coordinates.size() && j < 5; j++) {
+                            message.append(" ").append(coordinates.get(5 * i + j).getX()).append(" ").append(coordinates.get(5 * i + j).getY()).append(" ").append(coordinates.get(5 * i + j).getValue());
+                        }
+                        client.send(message.toString());
+                    }
+                }
+                else {
+                    illegalCommand();
+                }
+                break;
+
             case "420":
                 if (response.length == 2 && response[1].equals("GETWALLS")) {
                     // PURE RANDOM

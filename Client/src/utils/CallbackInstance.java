@@ -12,6 +12,9 @@ public class CallbackInstance {
     public void removePlayer(String s){}
     public void partieCreationCallback(String s){};
     public void getWalls(String s){};
+    public void getHoles(String s){};
+    public void getTresors(String s){};
     public void updateStartGameStatus(String s){};
     public void gameStart(String s){};
+    public void gameStartAborted(String s){};
 }

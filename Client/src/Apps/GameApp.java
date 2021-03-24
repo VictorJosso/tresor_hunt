@@ -36,6 +36,10 @@ public class GameApp {
 
         mainApp.getConnectionHandler().registerCallback("421", plateau, CallbackInstance::getWalls);
         mainApp.getConnectionHandler().send("420 GETWALLS");
+        mainApp.getConnectionHandler().registerCallback("401", plateau, CallbackInstance::getHoles);
+        mainApp.getConnectionHandler().send("400 GETHOLES");
+        mainApp.getConnectionHandler().registerCallback("411", plateau, CallbackInstance::getTresors);
+        mainApp.getConnectionHandler().send("410 GETTREASURES");
     }
 
     public void launch(){

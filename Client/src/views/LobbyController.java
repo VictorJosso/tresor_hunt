@@ -5,12 +5,15 @@ import com.sun.jdi.PrimitiveValue;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.util.Callback;
 import models.Partie;
 import utils.CallbackInstance;
+
+import java.util.ArrayList;
 
 
 /**
@@ -59,6 +62,9 @@ public class LobbyController extends CallbackInstance {
     @FXML
     private CheckBox readyStatusCheckBox;
 
+    private ArrayList<String> playersRefusedToStartGame = new ArrayList<>();
+    private boolean hasPressedStartButton = false;
+
     /**
      * Sets main app.
      *
@@ -77,6 +83,7 @@ public class LobbyController extends CallbackInstance {
         mainApp.getConnectionHandler().registerCallback("152", this, CallbackInstance::updateStartGameStatus);
 
         mainApp.getConnectionHandler().registerCallback("153", this, CallbackInstance::gameStart);
+        mainApp.getConnectionHandler().registerCallback("154", this, CallbackInstance::gameStartAborted);
 
         mainApp.getConnectionHandler().send("130 JOIN "+partie.getIdentifiant());
 
@@ -98,6 +105,12 @@ public class LobbyController extends CallbackInstance {
         nombreTrousLabel.setText(String.valueOf(this.partie.getNombreDeTrous()));
         nombreTresorsLabel.setText(String.valueOf(this.partie.getNombreDeTresors()));
         playersInListView.setItems(partie.getPlayersNames());
+        playersInListView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+            @Override
+            public ListCell<String> call(ListView<String> stringListView) {
+                return new ColoredListCellFormat();
+            }
+        });
         lancerPartieButton.requestFocus();
         leftAnchorPane.maxWidthProperty().bind(lobbySplitPane.widthProperty().multiply(0.25));
         leftAnchorPane.minWidthProperty().bind(lobbySplitPane.widthProperty().multiply(0.25));
@@ -147,7 +160,12 @@ public class LobbyController extends CallbackInstance {
 
     @FXML
     private void startGameButtonPressed(){
-        this.mainApp.startGame(this.partie);
+        hasPressedStartButton = true;
+        this.lancerPartieButton.setDisable(true);
+        statusLabel.setText("En attente de confirmation des autres joueurs...");
+        statusLabel.setTextFill(Color.web("#800000"));
+
+        this.mainApp.getConnectionHandler().send("150 REQUEST START");
     }
 
     @Override
@@ -160,6 +178,39 @@ public class LobbyController extends CallbackInstance {
         Platform.runLater(() -> {
             this.mainApp.startGame(this.partie);
         });
+    }
 
+    @Override
+    public void gameStartAborted(String s) {
+        String[] command = s.split(" ");
+        if(!command[2].equals("ABORTED")) {
+            for (int i = 4; i < command.length; i += 3) {
+                playersRefusedToStartGame.add(command[i]);
+                playersInListView.refresh();
+
+            }
+        } else {
+            playersRefusedToStartGame.clear();
+            lancerPartieButton.setDisable(false);
+            Platform.runLater(() -> {
+                statusLabel.setText("Connecté");
+                statusLabel.setTextFill(Color.web("#008000"));
+            });
+        }
+
+    }
+
+    public class ColoredListCellFormat extends ListCell<String> {
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+            setText(item);
+            if (item == null || !hasPressedStartButton){
+                setStyle("");
+            } else {
+                setStyle("-fx-background-color: "+((playersRefusedToStartGame.contains(item))?"red;":"green;")+" -fx-text-fill: white;");
+            }
+            //setBackground(new Background( new BackgroundFill(playersRefusedToStartGame.contains(item) ? Color.RED:Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
     }
 }
