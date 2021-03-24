@@ -3,9 +3,12 @@ package Models;
 //import java.util.ArrayList;
 import Models.Cases.*;
 import Utils.Coordinates;
+import Utils.Tracker;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import static java.lang.Math.max;
 
 public class Plateau {
 
@@ -19,9 +22,9 @@ public class Plateau {
     //Case[][] grille;
     //Case[][] grille2;
     private Case [][] grille;
-    private ArrayList<Coordinates> coordinatesMurs = new ArrayList<Coordinates>();
-    private ArrayList<Coordinates> coordinatesTrous = new ArrayList<Coordinates>();
-    private ArrayList<Coordinates> coordinatesTresors = new ArrayList<Coordinates>();
+    private ArrayList<Coordinates> coordinatesMurs = new ArrayList<>();
+    private ArrayList<Coordinates> coordinatesTrous = new ArrayList<>();
+    private ArrayList<Coordinates> coordinatesTresors = new ArrayList<>();
 
 
 
@@ -33,7 +36,7 @@ public class Plateau {
         this.nbTrous=nbTrous;
         this.nbTresors=nbTresors;
         this.nbMurs=nbMurs;
-        grille = new Case[vert][hor];
+        grille = new Case[hor][vert];
 
         System.out.println("GENERATION DU PLATEAU");
 
@@ -48,7 +51,7 @@ public class Plateau {
     }
 
     public boolean horsLimite (int x, int y) {
-        return x < 0 || x >= vert || y < 0 || y >= hor;
+        return x < 0 || x >= hor || y < 0 || y >= vert;
     }
 
 
@@ -67,8 +70,8 @@ public class Plateau {
         int tmpvert;
         int tmphor;
         int k=0;
-        for (int i=0; i<vert; i++) {
-            for (int j=0; j<hor; j++) {
+        for (int i=0; i<hor; i++) {
+            for (int j=0; j<vert; j++) {
                     grille[i][j] = new CaseVide(i,j);
 
             }
@@ -76,22 +79,22 @@ public class Plateau {
         // Trous --------------------------------------------------
         for (int i=0; i<nbTrous; i++) {
             do {
-                tmpvert = (int)(Math.random() * vert-1);
-                tmphor = (int)(Math.random() * hor-1);
-            } while (grille[tmpvert][tmphor] instanceof CaseTrou ||
-                    !(grille[tmpvert][tmphor] instanceof CaseVide));
-            grille[tmpvert][tmphor]=new CaseTrou(tmpvert,tmphor);
-            coordinatesTrous.add(new Coordinates(tmpvert, tmphor));
+                tmpvert = (int)(Math.random() * vert);
+                tmphor = (int)(Math.random() * hor);
+            } while (grille[tmphor][tmpvert] instanceof CaseTrou ||
+                    !(grille[tmphor][tmpvert] instanceof CaseVide));
+            grille[tmphor][tmpvert]=new CaseTrou(tmphor, tmpvert);
+            coordinatesTrous.add(new Coordinates(tmphor, tmpvert));
             //System.out.println("trou à vert:"+tmpvert+" hor:"+tmphor);
 
         }
         // Trésors --------------------------------------------------------
         for (int i=0; i<nbTresors;i++) {
             do {
-                tmpvert = (int)(Math.random() * vert-1);
-                tmphor = (int)(Math.random() * hor-1);
-            } while (grille[tmpvert][tmphor] instanceof CaseTresor
-                    || !(grille[tmpvert][tmphor] instanceof CaseVide));
+                tmpvert = (int)(Math.random() * vert);
+                tmphor = (int)(Math.random() * hor);
+            } while (grille[tmphor][tmpvert] instanceof CaseTresor
+                    || !(grille[tmphor][tmpvert] instanceof CaseVide));
             int tmp = (int)(Math.random() * 3);
             int val = switch (tmp) {
                 case 0 -> 5;
@@ -100,32 +103,77 @@ public class Plateau {
                 case 3 -> 20;
                 default -> 5;
             };
-            grille[tmpvert][tmphor]=new CaseTresor(tmpvert,tmphor,val);
-            coordinatesTresors.add(new Coordinates(tmpvert, tmphor, val));
+            grille[tmphor][tmpvert]=new CaseTresor(tmphor,tmpvert,val);
+            coordinatesTresors.add(new Coordinates(tmphor, tmpvert, val));
         }
 
         for (int i=0; i<nbMurs;i++) {
             do {
-                tmpvert = (int)(Math.random() * vert-1);
-                tmphor = (int)(Math.random() * hor-1);
-            } while (grille[tmpvert][tmphor] instanceof CaseMur
-                    ||!(grille[tmpvert][tmphor] instanceof CaseVide));
-            grille[tmpvert][tmphor]=new CaseMur(tmpvert,tmphor);
-            coordinatesMurs.add(new Coordinates(tmpvert, tmphor));
+                tmpvert = (int)(Math.random() * vert);
+                tmphor = (int)(Math.random() * hor);
+            } while (grille[tmphor][tmpvert] instanceof CaseMur
+                    ||!(grille[tmphor][tmpvert] instanceof CaseVide));
+            grille[tmphor][tmpvert]=new CaseMur(tmphor,tmpvert);
+            coordinatesMurs.add(new Coordinates(tmphor, tmpvert));
         }
 
     }
 
 
+    private void resetMarked(){
+        for (int i=0; i<hor; i++) {
+            for (int j=0; j<vert;j++) {
+                grille[i][j].setMarked(false);
+                grille[i][j].setMarkedForDestruction(false);
+            }
+        }
+    }
+
+    private void destroyCloseWall(int i, int j, Tracker tracker){
+        grille[i][j].setMarkedForDestruction(true);
+        if (grille[i][j] instanceof CaseMur && !tracker.getStatus()){
+            System.out.println("ON DETRUIT LE MUR EN POSITION "+i+":"+j);
+            grille[i][j] = new CaseVide(i,j);
+            coordinatesMurs.removeIf(coordinates -> coordinates.getX() == i && coordinates.getY() == j);
+            tracker.setStatus(true);
+            return;
+        }
+        if (!horsLimite(i,j+1) && !tracker.getStatus() && !grille[i][j+1].isMarkedForDestruction()) destroyCloseWall(i,j+1, tracker);
+        if (!horsLimite(i,j-1) && !tracker.getStatus() && !grille[i][j-1].isMarkedForDestruction()) destroyCloseWall(i,j-1, tracker);
+        if (!horsLimite(i+1,j) && !tracker.getStatus() && !grille[i+1][j].isMarkedForDestruction()) destroyCloseWall(i+1,j, tracker);
+        if (!horsLimite(i-1,j) && !tracker.getStatus() && !grille[i-1][j].isMarkedForDestruction()) destroyCloseWall(i-1,j, tracker);
+
+    }
 
 
-    private boolean estConnexe() {
+    private boolean estConnexe(int tmphor, int tmpvert) {
 
-        for (int i=0; i<vert; i++) {
-            for (int j=0; j<hor;j++) {
-                if (!(grille[i][j].isMarked())) {
+        for (int i=0; i<hor; i++) {
+            for (int j=0; j<vert;j++) {
+                if (!(grille[i][j].isMarked()) && grille[i][j] instanceof CaseVide) {
                     System.out.println(i+", "+j+" n'est pas marquée");
-                    return false;
+                    //return false;
+
+                    /*for (int y=j; y<vert; y++){
+                        for(int x=0; x<max(i, hor-i); x++){
+                            if(!horsLimite(i+x,j) && grille[x+i][j] instanceof CaseMur){
+                                grille[x+i][j] = new CaseVide(x+i, j);
+                                resetMarked();
+                                explorer(tmphor, tmpvert);
+                                return estConnexe(tmphor, tmpvert);
+                            } else if(!horsLimite(i-x,j) && grille[i-x][j] instanceof CaseMur){
+                                grille[i-x][j] = new CaseVide(i-x, j);
+                                resetMarked();
+                                explorer(tmphor, tmpvert);
+                                return estConnexe(tmphor, tmpvert);
+                            }
+                        }
+                    }*/
+                    destroyCloseWall(i, j ,new Tracker());
+                    resetMarked();
+                    explorer(tmphor, tmpvert);
+                    return estConnexe(tmphor, tmpvert);
+
                 }
             }
         }
@@ -134,14 +182,24 @@ public class Plateau {
 
     // On vérifie à partir de chaque position si la grille est connexe
     private boolean parcoursProfondeur() {
-        for (int i=0; i<vert; i++) {
+        /*for (int i=0; i<vert; i++) {
             for (int j=0; j<hor; j++) {
                 if (!grille[i][j].isMarked()) explorer(i,j);
-                if (!estConnexe()) return false;
+                if (!estConnexe()) {
+                    return false;
+                }
                 //if (i!=vert-1) desac();
             }
         }
-        return true;
+        return true;*/
+        int tmpvert = (int)(Math.random() * vert);
+        int tmphor = (int)(Math.random() * hor);
+        if (grille[tmphor][tmpvert] instanceof CaseVide){
+            explorer(tmphor, tmpvert);
+            return estConnexe(tmphor, tmpvert);
+        } else {
+            return parcoursProfondeur();
+        }
     }
 
 

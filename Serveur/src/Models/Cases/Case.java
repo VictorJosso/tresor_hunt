@@ -11,6 +11,7 @@ public abstract class Case {
 
     // Variable de type algorithmique
     protected boolean isMarked;
+    protected boolean isMarkedForDestruction;
 
     public boolean isFree() {
         return isFree;
@@ -46,6 +47,14 @@ public abstract class Case {
     public Case(int X, int Y) {
         this.posVert = Y;
         this.posHor = X;
+    }
+
+    public boolean isMarkedForDestruction() {
+        return isMarkedForDestruction;
+    }
+
+    public void setMarkedForDestruction(boolean markedForDestruction) {
+        isMarkedForDestruction = markedForDestruction;
     }
 }
 

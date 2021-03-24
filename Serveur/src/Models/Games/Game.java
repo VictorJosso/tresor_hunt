@@ -103,13 +103,13 @@ public abstract class Game {
         }
         if (playersOkToStart.size() + playersRefusedToStart.size() == players.size()){
             if (playersRefusedToStart.size() == 0){
-                this.plateau = new Plateau(x, y, holes, this.treasures, (int) x*y/5);
+                this.plateau = new Plateau(x, y, holes, this.treasures, (int) (1.5*x*y)/5);
                 broadcast("153 GAME STARTED");
             } else {
                 int nbMesages =(int) Math.ceil(((double) playersRefusedToStart.size())/5);
-                broadcast("154 START ABORTED "+String.valueOf(nbMesages));
+                broadcast("154 START ABORTED "+ nbMesages);
                 for (int i = 0; i < nbMesages; i++){
-                    StringBuilder message = new StringBuilder("154 MESS " + String.valueOf(i) + " PLAYER");
+                    StringBuilder message = new StringBuilder("154 MESS " + i + " PLAYER");
                     for (int j = 0; 5*i+j<playersRefusedToStart.size() && j < 5; j++){
                         message.append(" ").append(playersRefusedToStart.get(5 * i + j).getClient().getUsername());
                     }
