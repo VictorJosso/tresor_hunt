@@ -185,11 +185,12 @@ public class LobbyController extends CallbackInstance {
     public void gameStartAborted(String s) {
         String[] command = s.split(" ");
         if(!command[2].equals("ABORTED")) {
-            for (int i = 4; i < command.length; i += 3) {
+            for (int i = 4; i < command.length; i += 1) {
                 playersRefusedToStartGame.add(command[i]);
                 playersInListView.refresh();
 
             }
+
         } else {
             playersRefusedToStartGame.clear();
             lancerPartieButton.setDisable(!partie.isCreator());
