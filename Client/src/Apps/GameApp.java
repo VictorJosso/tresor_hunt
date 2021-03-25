@@ -170,6 +170,8 @@ public class GameApp {
         for(String name : plateau.getCoordonneesJoueurs().keySet()) {
             if(this.mainApp.getServerConfig().getUsername().equals(name)) {
                 gc.drawImage(plateau.getListeImages().get(7), plateau.getCoordonneesJoueurs().get(name).getX()*COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY()*COEFF_IMAGE);
+            } else {
+                gc.drawImage(plateau.getListeImages().get(8), plateau.getCoordonneesJoueurs().get(name).getX()*COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY()*COEFF_IMAGE);
             }
         }
     }
