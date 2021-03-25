@@ -1,6 +1,7 @@
 package Models.Games;
 
 import Apps.ConnectionHandler;
+import Models.Client;
 import Models.Plateau;
 import Utils.ClientHandler;
 
@@ -116,6 +117,12 @@ public abstract class Game {
                     broadcast(message.toString());
                 }
             }
+        }
+    }
+
+    public void sendPositions(ClientHandler requester){
+        for(ClientHandler c : this.players){
+            requester.send(("510 " + c.getClient().getUsername() + " POS " + c.getCoordonnees().getX() + " "+ c.getCoordonnees().getY()));
         }
     }
 

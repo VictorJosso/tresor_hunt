@@ -51,10 +51,8 @@ public class Plateau {
             generate();
         } while (!parcoursProfondeur());
 
-
         for(ClientHandler client : this.game.getPlayers()) {
             placerJoueurs(client);
-            this.game.broadcast("510 " + client.getClient().getUsername() + " POS " + client.getCoordonnees().getX() + " "+ client.getCoordonnees().getY());
         }
 
         System.out.println("PLATEAU GENERE");

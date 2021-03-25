@@ -115,6 +115,7 @@ public class ConnectionHandler extends Thread{
         }
         while (running && scanner.hasNext()){
             String command = scanner.nextLine();
+            System.err.println("RECU : "+command);
             String[] response = command.split(" ");
             if (callLinks.containsKey(response[0])) {
                 callLinks.get(response[0]).call(callOwners.get(response[0]), command);

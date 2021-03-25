@@ -222,6 +222,7 @@ public class Parser {
                         }
                         client.send(message.toString());
                     }
+                    partie.sendPositions(client);
                 }
                 else {
                     illegalCommand();

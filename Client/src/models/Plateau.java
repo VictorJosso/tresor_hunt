@@ -87,12 +87,14 @@ public class Plateau extends CallbackInstance {
 
     @Override
     public void updatePlayerPosition(String s) {
+        System.out.println("On a recu : "+s);
         String[] command = s.split(" ");
         String name = command[1];
         int x = Integer.parseInt(command[3]);
         int y = Integer.parseInt(command[4]);
         Coordinates c = coordonneesJoueurs.get(name);
         if(c == null) {
+            System.out.println("La hashmap ne contenait pas le nom : "+name);
             coordonneesJoueurs.put(name, new Coordinates(x, y));
         } else {
             c.setX(x);
