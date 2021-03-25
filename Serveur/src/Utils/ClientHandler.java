@@ -19,6 +19,7 @@ public class ClientHandler implements Runnable{
     private PrintWriter printWriter;
     private Parser parser;
     private Client client;
+    private Coordinates coordonnees = new Coordinates(0,0);
 
     private CopyOnWriteArrayList<Integer> sendingQueue = new CopyOnWriteArrayList<>();
 
@@ -135,6 +136,8 @@ public class ClientHandler implements Runnable{
         this.sendingQueue.remove((Integer) code);
     }
 
+
+
     /**
      * Close connection.
      */
@@ -147,6 +150,10 @@ public class ClientHandler implements Runnable{
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public Coordinates getCoordonnees() {
+        return coordonnees;
     }
 
     public boolean isGoodClient(){

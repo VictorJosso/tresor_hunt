@@ -15,6 +15,7 @@ public class Client {
 
     private ArrayList<Integer> joinedGames = new ArrayList<>();
 
+
     /**
      * Instantiates a new Client.
      */
@@ -55,6 +56,9 @@ public class Client {
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
     }
+
+
+
 
     public ArrayList<Integer> getJoinedGames() {
         return joinedGames;

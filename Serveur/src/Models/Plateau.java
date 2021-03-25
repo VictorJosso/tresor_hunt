@@ -2,13 +2,14 @@ package Models;
 
 //import java.util.ArrayList;
 import Models.Cases.*;
+import Models.Games.Game;
+import Utils.ClientHandler;
 import Utils.Coordinates;
 import Utils.Tracker;
 
 import java.util.*;
 
-import static java.lang.Math.max;
-import static java.lang.Math.signum;
+import static java.lang.Math.*;
 
 public class Plateau {
 
@@ -25,18 +26,21 @@ public class Plateau {
     private ArrayList<Coordinates> coordinatesMurs = new ArrayList<>();
     private ArrayList<Coordinates> coordinatesTrous = new ArrayList<>();
     private ArrayList<Coordinates> coordinatesTresors = new ArrayList<>();
+    private Game game;
+
 
 
 
     //ArrayList<ArrayList<Case>> grille = new ArrayList<>();
 
-    public Plateau(int hor, int vert, int nbTrous, int nbTresors, int nbMurs ) {
+    public Plateau(int hor, int vert, int nbTrous, int nbTresors, int nbMurs, Game game ) {
         this.vert=vert;
         this.hor=hor;
         this.nbTrous=nbTrous;
         this.nbTresors=nbTresors;
         this.nbMurs=nbMurs;
         grille = new Case[hor][vert];
+        this.game=game;
 
         System.out.println("GENERATION DU PLATEAU");
 
@@ -46,6 +50,12 @@ public class Plateau {
             coordinatesTresors.clear();
             generate();
         } while (!parcoursProfondeur());
+
+
+        for(ClientHandler client : this.game.getPlayers()) {
+            placerJoueurs(client);
+            this.game.broadcast("510" + client.getClient().getUsername() + " POS " + client.getCoordonnees().getX() + " "+ client.getCoordonnees().getY());
+        }
 
         System.out.println("PLATEAU GENERE");
     }
@@ -64,7 +74,6 @@ public class Plateau {
         }
     }
 
-
     // Génère une grille en plaçant des éléments aléatoirement
     private void generate () {
         int tmpvert;
@@ -73,7 +82,6 @@ public class Plateau {
         for (int i=0; i<hor; i++) {
             for (int j=0; j<vert; j++) {
                     grille[i][j] = new CaseVide(i,j);
-
             }
         }
         // Trous --------------------------------------------------
@@ -119,7 +127,6 @@ public class Plateau {
 
     }
 
-
     private void resetMarked(){
         for (int i=0; i<hor; i++) {
             for (int j=0; j<vert;j++) {
@@ -158,7 +165,6 @@ public class Plateau {
         }
 
     }
-
 
     private boolean estConnexe(int tmphor, int tmpvert) {
         int destroyed = 0;
@@ -218,8 +224,6 @@ public class Plateau {
         }
     }
 
-
-
     private void explorer(int i, int j) {
         grille[i][j].setMarked(true);
         if (grille[i][j] instanceof CaseTrou || grille[i][j] instanceof CaseMur) return;
@@ -228,6 +232,20 @@ public class Plateau {
         if (!horsLimite(i+1,j) && !grille[i+1][j].isMarked()) explorer(i+1,j);
         if (!horsLimite(i-1,j) && !grille[i-1][j].isMarked()) explorer(i-1,j);
     }
+
+    private void placerJoueurs(ClientHandler client) {
+        int x = (int) (Math.random()*hor);
+        int y = (int) (Math.random()*vert);
+        if(this.grille[x][y] instanceof CaseVide && this.grille[x][y].getPlayerOn()==null) {
+            this.grille[x][y].setPlayerOn(client);
+            client.getCoordonnees().setX(x);
+            client.getCoordonnees().setY(y);
+        } else {
+            placerJoueurs(client);
+        }
+    }
+
+
 
     public ArrayList<Coordinates> getCoordinatesMurs() {
         return coordinatesMurs;

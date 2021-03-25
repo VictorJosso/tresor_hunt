@@ -60,6 +60,8 @@ public class GameApp {
         mainApp.getConnectionHandler().send("400 GETHOLES");
         mainApp.getConnectionHandler().registerCallback("411", plateau, CallbackInstance::getTresors);
         mainApp.getConnectionHandler().send("410 GETTREASURES");
+        mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition);
+
 
 
 
@@ -90,6 +92,7 @@ public class GameApp {
             @Override
             public void handle(long l) {
                 drawGame();
+                drawPlayers();
             }
         };
         timer.start();
@@ -163,6 +166,14 @@ public class GameApp {
         }
     }
 
+    protected void drawPlayers() {
+        for(String name : plateau.getCoordonneesJoueurs().keySet()) {
+            if(this.mainApp.getServerConfig().getUsername().equals(name)) {
+                gc.drawImage(plateau.getListeImages().get(7), plateau.getCoordonneesJoueurs().get(name).getX()*COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY()*COEFF_IMAGE);
+            }
+        }
+    }
+
     protected void handleMousePressed(MouseEvent e)
     {
         this.dragOffsetX = e.getScreenX() - this.leaderBoardStage.getX();
@@ -174,5 +185,6 @@ public class GameApp {
         this.leaderBoardStage.setX(e.getScreenX() - this.dragOffsetX);
         this.leaderBoardStage.setY(e.getScreenY() - this.dragOffsetY);
     }
+
 
 }

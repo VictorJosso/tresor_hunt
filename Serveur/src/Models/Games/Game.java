@@ -103,7 +103,7 @@ public abstract class Game {
         }
         if (playersOkToStart.size() + playersRefusedToStart.size() == players.size()){
             if (playersRefusedToStart.size() == 0){
-                this.plateau = new Plateau(x, y, holes, this.treasures, (int) (1.5*x*y)/5);
+                this.plateau = new Plateau(x, y, holes, this.treasures, (int) (1.5*x*y)/5, this);
                 broadcast("153 GAME STARTED");
             } else {
                 int nbMesages =(int) Math.ceil(((double) playersRefusedToStart.size())/5);
@@ -119,13 +119,13 @@ public abstract class Game {
         }
     }
 
-    private void broadcast(String message){
+    public void broadcast(String message){
         for (ClientHandler client: this.players){
             client.send(message);
         }
     }
 
-    private void broadcastAmeliore(String message){
+    public void broadcastAmeliore(String message){
         for (ClientHandler player: this.players){
             if (player.isGoodClient()){
                 player.send(message);
@@ -216,5 +216,10 @@ public abstract class Game {
         return robots;
 
 
+    }
+
+
+    public CopyOnWriteArrayList<ClientHandler> getPlayers() {
+        return players;
     }
 }

@@ -17,4 +17,5 @@ public class CallbackInstance {
     public void updateStartGameStatus(String s){};
     public void gameStart(String s){};
     public void gameStartAborted(String s){};
+    public void updatePlayerPosition(String s){};
 }

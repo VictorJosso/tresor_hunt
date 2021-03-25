@@ -3,9 +3,11 @@ package models;
 import javafx.scene.image.Image;
 import models.Game.*;
 import utils.CallbackInstance;
+import utils.Coordinates;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Plateau extends CallbackInstance {
     public ArrayList<ArrayList<Case>> plateau = new ArrayList<>();
@@ -13,6 +15,7 @@ public class Plateau extends CallbackInstance {
     private int dimY;
     private int COEFF_IMAGE;
     private ArrayList<Image> listeImages;
+    private HashMap<String, Coordinates> coordonneesJoueurs = new HashMap<>();
 
     public Plateau(int dimX, int dimY, int COEFF_IMAGE) {
         this.dimX = dimX;
@@ -25,7 +28,10 @@ public class Plateau extends CallbackInstance {
                 new Image("trésor BRONZE.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image("trésor ARGENT.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image("trésor OR.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
-                new Image("trésor DIAMANT.png", COEFF_IMAGE, COEFF_IMAGE, false, false)));
+                new Image("trésor DIAMANT.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
+                new Image("player.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
+                new Image("player2.png", COEFF_IMAGE, COEFF_IMAGE, false, false)));
+
 
         for(int x = 0; x < dimX; x++){
             plateau.add(new ArrayList<Case>());
@@ -79,11 +85,34 @@ public class Plateau extends CallbackInstance {
         }
     }
 
+    @Override
+    public void updatePlayerPosition(String s) {
+        String[] command = s.split(" ");
+        String name = command[1];
+        int x = Integer.parseInt(command[3]);
+        int y = Integer.parseInt(command[4]);
+        Coordinates c = coordonneesJoueurs.get(name);
+        if(c == null) {
+            coordonneesJoueurs.put(name, new Coordinates(x, y));
+        } else {
+            c.setX(x);
+            c.setY(y);
+        }
+    }
+
     public int getCOEFF_IMAGE() {
         return COEFF_IMAGE;
     }
 
     public void setCOEFF_IMAGE(int COEFF_IMAGE) {
         this.COEFF_IMAGE = COEFF_IMAGE;
+    }
+
+    public HashMap<String, Coordinates> getCoordonneesJoueurs() {
+        return coordonneesJoueurs;
+    }
+
+    public ArrayList<Image> getListeImages() {
+        return listeImages;
     }
 }

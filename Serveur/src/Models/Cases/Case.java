@@ -56,6 +56,11 @@ public abstract class Case {
     public void setMarkedForDestruction(boolean markedForDestruction) {
         isMarkedForDestruction = markedForDestruction;
     }
+
+
+    public ClientHandler getPlayerOn() {
+        return playerOn;
+    }
 }
 
     /*
