@@ -120,6 +120,7 @@ public abstract class Game {
     }
 
     public void broadcast(String message){
+        System.err.println("ON BROADCAST "+message);
         for (ClientHandler client: this.players){
             client.send(message);
         }
