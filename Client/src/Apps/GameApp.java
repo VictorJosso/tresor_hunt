@@ -2,6 +2,7 @@ package Apps;
 
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -10,22 +11,27 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import models.Game.CaseMur;
 import models.Partie;
 import models.Plateau;
 import utils.CallbackInstance;
 
+import java.io.IOException;
 import java.util.*;
 
 public class GameApp {
     private MainApp mainApp;
     private Stage gameStage;
+    private Stage leaderBoardStage;
     private Partie partie;
     private Plateau plateau;
     private GraphicsContext gc;
@@ -34,12 +40,15 @@ public class GameApp {
     private int screenHeight;
     private int COEFF_IMAGE;
 
+    private double dragOffsetX;
+    private double dragOffsetY;
+
     public GameApp(MainApp mainApp, Partie partie) {
         this.mainApp = mainApp;
         this.partie = partie;
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-        screenHeight = (int) screenBounds.getHeight();
-        screenWidth = (int) screenBounds.getWidth();
+        screenHeight = (int) (screenBounds.getHeight()*0.9);
+        screenWidth = (int) (screenBounds.getWidth()*0.85);
         int sizeX = screenWidth/ partie.getDimensionX();
         int sizeY = screenHeight/partie.getDimensionY();
         COEFF_IMAGE = Math.min(sizeX, sizeY);
@@ -59,6 +68,13 @@ public class GameApp {
 
     public void launch(){
         this.gameStage = new Stage();
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+        double x = bounds.getMinX() + 5;
+        double y = bounds.getMinY() + 5;
+        System.out.println("X POS : "+x);
+        System.out.println("Y POS : "+y);
+        this.gameStage.setX(x);
+        this.gameStage.setY(y);
         Group root = new Group();
         Scene gameScene = new Scene(root);
         gameStage.setScene(gameScene);
@@ -95,6 +111,7 @@ public class GameApp {
                     }
                     else {
                         timer.stop();
+                        leaderBoardStage.close();
                         mainApp.gameStageClosed();
                     }
                 }
@@ -102,8 +119,36 @@ public class GameApp {
             }
         });
 
+
+        this.leaderBoardStage = new Stage();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/leaderBoard.fxml"));
+
+        AnchorPane rootPane = null;
+        try {
+            rootPane = loader.load();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        assert rootPane != null;
+        Scene scene = new Scene(rootPane, bounds.getWidth() * 0.15 - 5, partie.getDimensionY() * COEFF_IMAGE);
+
+        this.leaderBoardStage.setScene(scene);
+        this.leaderBoardStage.initStyle(StageStyle.UNDECORATED);
+        this.leaderBoardStage.setX(x + partie.getDimensionX() * COEFF_IMAGE + 5);
+        System.out.println("LEADERBOARD X POS : "+ (x + partie.getDimensionX()*this.COEFF_IMAGE + 5));
+        //this.leaderBoardStage.setX(y);
+        this.leaderBoardStage.setTitle("Leader Board");
+        this.leaderBoardStage.setResizable(false);
+
+        scene.setOnMousePressed(this::handleMousePressed);
+        scene.setOnMouseDragged(this::handleMouseDragged);
+
         this.gameStage.setResizable(false);
         this.gameStage.show();
+        this.leaderBoardStage.show();
+        int enc = (int) (this.gameStage.getHeight() - partie.getDimensionY()*this.COEFF_IMAGE);
+        this.leaderBoardStage.setY(y + enc);
     }
 
 
@@ -116,6 +161,18 @@ public class GameApp {
                 //gc.restore();
             }
         }
+    }
+
+    protected void handleMousePressed(MouseEvent e)
+    {
+        this.dragOffsetX = e.getScreenX() - this.leaderBoardStage.getX();
+        this.dragOffsetY = e.getScreenY() - this.leaderBoardStage.getY();
+    }
+
+    protected void handleMouseDragged(MouseEvent e)
+    {
+        this.leaderBoardStage.setX(e.getScreenX() - this.dragOffsetX);
+        this.leaderBoardStage.setY(e.getScreenY() - this.dragOffsetY);
     }
 
 }

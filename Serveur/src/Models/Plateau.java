@@ -95,7 +95,7 @@ public class Plateau {
                 tmphor = (int)(Math.random() * hor);
             } while (grille[tmphor][tmpvert] instanceof CaseTresor
                     || !(grille[tmphor][tmpvert] instanceof CaseVide));
-            int tmp = (int)(Math.random() * 3);
+            int tmp = (int)(Math.random() * 4);
             int val = switch (tmp) {
                 case 0 -> 5;
                 case 1 -> 10;
