@@ -16,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -53,7 +54,7 @@ public class GameApp {
         int sizeY = screenHeight/partie.getDimensionY();
         COEFF_IMAGE = Math.min(sizeX, sizeY);
         this.plateau = new Plateau(partie.getDimensionX(), partie.getDimensionY(), COEFF_IMAGE);
-
+        mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition);
         mainApp.getConnectionHandler().registerCallback("421", plateau, CallbackInstance::getWalls);
         mainApp.getConnectionHandler().send("420 GETWALLS");
         mainApp.getConnectionHandler().registerCallback("401", plateau, CallbackInstance::getHoles);
@@ -168,11 +169,24 @@ public class GameApp {
 
     protected void drawPlayers() {
         for(String name : plateau.getCoordonneesJoueurs().keySet()) {
+            String nameToDraw;
             if(this.mainApp.getServerConfig().getUsername().equals(name)) {
                 gc.drawImage(plateau.getListeImages().get(7), plateau.getCoordonneesJoueurs().get(name).getX()*COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY()*COEFF_IMAGE);
+                nameToDraw = "Moi";
             } else {
                 gc.drawImage(plateau.getListeImages().get(8), plateau.getCoordonneesJoueurs().get(name).getX()*COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY()*COEFF_IMAGE);
+                nameToDraw = name;
             }
+            gc.setFill(new Color(0,0,0,0.3));
+            Text t = new Text();
+            t.setText(nameToDraw);
+            t.setFont(Font.font("Chilanka Regular", 20));
+            int sizeX = (int) (t.getLayoutBounds().getWidth());
+            int sizeY = (int) (t.getLayoutBounds().getHeight());
+            gc.fillRect((int) ((plateau.getCoordonneesJoueurs().get(name).getX()+0.5)*COEFF_IMAGE - sizeX/2 - 4) , (int) ((plateau.getCoordonneesJoueurs().get(name).getY())*COEFF_IMAGE - (sizeY/2) - 22), sizeX+8, 4+sizeY);
+            gc.setFont(Font.font("Chilanka Regular", 20));
+            gc.setFill(new Color(1,1,1,1));
+            gc.fillText(nameToDraw, (int) ((plateau.getCoordonneesJoueurs().get(name).getX()+0.5)*COEFF_IMAGE - sizeX/2), (int) ((plateau.getCoordonneesJoueurs().get(name).getY())*COEFF_IMAGE) - 18 + 2);
         }
     }
 
