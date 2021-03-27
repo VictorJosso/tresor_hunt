@@ -209,6 +209,29 @@ public class Parser {
                 client.send("123 REMOVED");
                 break;
 
+            case "200":
+                if(response.length == 2 && (response[1].equals("GOUP") || response[1].equals("GODOWN") || response[1].equals("GOLEFT") || response[1].equals("GORIGHT")) && client.getClient().getGameRunning() != null){
+                    int status = client.getClient().getGameRunning().movePlayer(client, response[1]);
+                    switch (status) {
+                        case -1 -> client.send("202 MOVE BLOCKED");
+                        case 0 -> {
+                            client.send("201 MOVE OK");
+                            client.getClient().getGameRunning().broadcast("510 " + client.getClient().getUsername() + " POS " + client.getCoordonnees().getX() + " " + client.getCoordonnees().getY(), client);
+                        }
+                        case 1 -> {
+                            client.send("666 MOVE HOLE DEAD");
+                            client.getClient().getGameRunning().broadcast("520 " + client.getClient().getUsername() + " DIED");
+                        }
+                        default -> {
+                            client.send("203 MOVE OK TRES " + status);
+                            client.getClient().getGameRunning().broadcast("511 " + client.getClient().getUsername() + " POS " + client.getCoordonnees().getX() + " " + client.getCoordonnees().getY() + " TRES " + status, client);
+                        }
+                    }
+                } else {
+                    illegalCommand();
+                }
+                break;
+
             case "400":
                 if (response.length == 2 && response[1].equals("GETHOLES")) {
                     // PURE RANDOM

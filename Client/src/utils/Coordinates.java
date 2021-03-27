@@ -3,12 +3,12 @@ package utils;
 public class Coordinates {
     private int x;
     private int y;
-    private final int value;
+    private int value;
 
     public Coordinates(int x, int y) {
         this.x = x;
         this.y = y;
-        this.value = -1;
+        this.value = 0;
     }
 
     public Coordinates(int x, int y, int value) {
@@ -29,6 +29,10 @@ public class Coordinates {
         return value;
     }
 
+    public void addToValue(int diff){
+        this.value += diff;
+    }
+
 
     public void setX(int x) {
         this.x = x;
@@ -37,5 +41,13 @@ public class Coordinates {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public void addToX(int diff){
+        this.x += diff;
+    }
+
+    public void addToY(int diff){
+        this.y += diff;
     }
 }

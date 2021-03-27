@@ -6,12 +6,15 @@ public class CaseMur extends Case{
 
     public CaseMur(int X, int Y) {
         super(X, Y);
-        isFree = false;
     }
 
     @Override
     public void free() {}
 
+    @Override
+    public boolean isFree() {
+        return false;
+    }
 
     public int damage(int damages){
         durabilite -= damages;

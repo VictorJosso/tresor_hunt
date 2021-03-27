@@ -134,6 +134,10 @@ public class Plateau {
         }
     }
 
+    public Case getCase(int x, int y){
+        return grille[x][y];
+    }
+
     private void destroyCloseWall(int i, int j, Tracker tracker){
         grille[i][j].setMarkedForDestruction(true);
         if (grille[i][j] instanceof CaseMur && !tracker.getStatus()){

@@ -4,7 +4,6 @@ import Utils.ClientHandler;
 
 public abstract class Case {
 
-    protected boolean isFree;
     protected int posVert;
     protected int posHor;
     protected ClientHandler playerOn;
@@ -14,11 +13,10 @@ public abstract class Case {
     protected boolean isMarkedForDestruction;
 
     public boolean isFree() {
-        return isFree;
+        return true;
     }
 
     public void free(){
-        isFree = true;
         playerOn = null;
     }
 
@@ -28,9 +26,8 @@ public abstract class Case {
 
 
     public void setPlayerOn(ClientHandler player){
-        if(isFree) {
+        if(playerOn == null) {
             playerOn = player;
-            isFree = false;
         } else {
             throw new IllegalStateException();
         }

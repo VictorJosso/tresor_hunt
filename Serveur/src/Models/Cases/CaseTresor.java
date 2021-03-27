@@ -11,7 +11,6 @@ public class CaseTresor extends Case {
     public CaseTresor(int X, int Y, int value) {
         super(X, Y);
         this.value = value;
-        isFree = true;
     }
 
     public CaseTresor(int X, int Y, int value, boolean secret) {
@@ -34,5 +33,10 @@ public class CaseTresor extends Case {
 
     public void setOwner(ClientHandler owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public boolean isFree() {
+        return playerOn == null;
     }
 }

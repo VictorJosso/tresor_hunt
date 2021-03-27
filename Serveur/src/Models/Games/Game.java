@@ -25,7 +25,7 @@ public abstract class Game {
     private final ConnectionHandler mainHandler;
     private final ClientHandler owner;
 
-    private Plateau plateau;
+    protected Plateau plateau;
     /**
      * The Mode.
      */
@@ -105,6 +105,9 @@ public abstract class Game {
         if (playersOkToStart.size() + playersRefusedToStart.size() == players.size()){
             if (playersRefusedToStart.size() == 0){
                 this.plateau = new Plateau(x, y, holes, this.treasures, (int) (1.5*x*y)/5, this);
+                for (ClientHandler clientHandler: players){
+                    clientHandler.getClient().setGameRunning(this);
+                }
                 broadcast("153 GAME STARTED");
             } else {
                 int nbMesages =(int) Math.ceil(((double) playersRefusedToStart.size())/5);
@@ -127,9 +130,15 @@ public abstract class Game {
     }
 
     public void broadcast(String message){
+        broadcast(message, null);
+    }
+
+    public void broadcast(String message, ClientHandler except){
         System.err.println("ON BROADCAST "+message);
         for (ClientHandler client: this.players){
-            client.send(message);
+            if(client != except) {
+                client.send(message);
+            }
         }
     }
 
@@ -139,6 +148,10 @@ public abstract class Game {
                 player.send(message);
             }
         }
+    }
+
+    public int movePlayer(ClientHandler client, String direction){
+        return -1;
     }
 
     /**

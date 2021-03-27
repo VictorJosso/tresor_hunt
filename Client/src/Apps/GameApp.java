@@ -11,6 +11,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -21,6 +23,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import models.Config;
 import models.Game.CaseMur;
 import models.Partie;
 import models.Plateau;
@@ -41,6 +44,9 @@ public class GameApp {
     private int screenHeight;
     private int COEFF_IMAGE;
 
+    private final HashMap<KeyCode, Long> keyEvents = new HashMap<>();
+    private final ArrayList<KeyCode> directions = new ArrayList<>();
+
     private double dragOffsetX;
     private double dragOffsetY;
 
@@ -53,7 +59,7 @@ public class GameApp {
         int sizeX = screenWidth/ partie.getDimensionX();
         int sizeY = screenHeight/partie.getDimensionY();
         COEFF_IMAGE = Math.min(sizeX, sizeY);
-        this.plateau = new Plateau(partie.getDimensionX(), partie.getDimensionY(), COEFF_IMAGE);
+        this.plateau = new Plateau(partie.getDimensionX(), partie.getDimensionY(), COEFF_IMAGE, this);
         mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition);
         mainApp.getConnectionHandler().registerCallback("421", plateau, CallbackInstance::getWalls);
         mainApp.getConnectionHandler().send("420 GETWALLS");
@@ -62,6 +68,10 @@ public class GameApp {
         mainApp.getConnectionHandler().registerCallback("411", plateau, CallbackInstance::getTresors);
         mainApp.getConnectionHandler().send("410 GETTREASURES");
         mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition);
+        mainApp.getConnectionHandler().registerCallback("201", plateau, CallbackInstance::handleMoveAllowed);
+        mainApp.getConnectionHandler().registerCallback("202", plateau, CallbackInstance::handleMoveBlocked);
+        mainApp.getConnectionHandler().registerCallback("203", plateau, CallbackInstance::handleMoveTresor);
+        mainApp.getConnectionHandler().registerCallback("666", plateau, CallbackInstance::handleMoveDead);
 
 
 
@@ -84,6 +94,7 @@ public class GameApp {
 
         Canvas canvas = new Canvas(partie.getDimensionX()*this.COEFF_IMAGE, partie.getDimensionY()*this.COEFF_IMAGE);
         root.getChildren().add(canvas);
+        canvas.setFocusTraversable(true);
 
         this.gc = canvas.getGraphicsContext2D();
 
@@ -98,6 +109,11 @@ public class GameApp {
         };
         timer.start();
 
+        if(this.partie.getModeDeJeu().equals("Tour par tour")){
+            root.setOnKeyReleased(this::processKeyEvent);
+        } else {
+            root.setOnKeyPressed(this::handleKeyPressed);
+        }
 
         this.gameStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
@@ -155,6 +171,40 @@ public class GameApp {
         this.leaderBoardStage.setY(y + enc);
     }
 
+    private void processKeyEvent(KeyEvent keyEvent){
+        System.out.println("TOUCHE PRESSEE : " + keyEvent.getCode().getName());
+        this.directions.add(keyEvent.getCode());
+        switch(keyEvent.getCode()){
+            case UP:
+                this.mainApp.getConnectionHandler().send("200 GOUP");
+                break;
+            case DOWN:
+                this.mainApp.getConnectionHandler().send("200 GODOWN");
+                break;
+            case LEFT:
+                this.mainApp.getConnectionHandler().send("200 GOLEFT");
+                break;
+            case RIGHT:
+                this.mainApp.getConnectionHandler().send("200 GORIGHT");
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    private void handleKeyPressed(KeyEvent keyEvent){
+        long currentTime = System.currentTimeMillis();
+        Long lastCall = this.keyEvents.get(keyEvent.getCode());
+        if (lastCall == null || (currentTime - lastCall) > 250){
+            this.keyEvents.put(keyEvent.getCode(), currentTime);
+            this.processKeyEvent(keyEvent);
+        } else {
+            keyEvent.consume();
+        }
+
+    }
+
 
     protected void drawGame(){
         for(int x = 0; x < partie.getDimensionX(); x++){
@@ -202,5 +252,15 @@ public class GameApp {
         this.leaderBoardStage.setY(e.getScreenY() - this.dragOffsetY);
     }
 
+    public HashMap<KeyCode, Long> getKeyEvents() {
+        return keyEvents;
+    }
 
+    public ArrayList<KeyCode> getDirections() {
+        return directions;
+    }
+
+    public Config getServerConfig(){
+        return mainApp.getServerConfig();
+    }
 }

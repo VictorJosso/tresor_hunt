@@ -1,6 +1,9 @@
 package models;
 
+import Apps.GameApp;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import models.Game.*;
 import utils.CallbackInstance;
 import utils.Coordinates;
@@ -16,11 +19,13 @@ public class Plateau extends CallbackInstance {
     private int COEFF_IMAGE;
     private ArrayList<Image> listeImages;
     private HashMap<String, Coordinates> coordonneesJoueurs = new HashMap<>();
+    private GameApp gameApp;
 
-    public Plateau(int dimX, int dimY, int COEFF_IMAGE) {
+    public Plateau(int dimX, int dimY, int COEFF_IMAGE, GameApp gameApp) {
         this.dimX = dimX;
         this.dimY = dimY;
         this.COEFF_IMAGE = COEFF_IMAGE;
+        this.gameApp = gameApp;
 
         listeImages = new ArrayList<>(Arrays.asList(new Image("Mur.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image("Trou.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
@@ -100,6 +105,50 @@ public class Plateau extends CallbackInstance {
             c.setX(x);
             c.setY(y);
         }
+    }
+
+    @Override
+    public void handleMoveAllowed(String s) {
+        //TODO: JOUER UN SON DE MARCHE
+        KeyCode code = this.gameApp.getDirections().get(0);
+        gameApp.getDirections().remove(0);
+        String username = gameApp.getServerConfig().getUsername();
+        switch (code){
+            case UP:
+                this.coordonneesJoueurs.get(username).addToY(-1);
+                break;
+            case DOWN:
+                this.coordonneesJoueurs.get(username).addToY(1);
+                break;
+            case LEFT:
+                this.coordonneesJoueurs.get(username).addToX(-1);
+                break;
+            case RIGHT:
+                this.coordonneesJoueurs.get(username).addToX(1);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void handleMoveBlocked(String s) {
+        //TODO: JOUER UN SON POUR DIRE QU'ON A ETE BLOQUE
+        gameApp.getDirections().remove(0);
+    }
+
+    @Override
+    public void handleMoveTresor(String s) {
+        handleMoveAllowed(s);
+        Coordinates coordinates = this.coordonneesJoueurs.get(this.gameApp.getServerConfig().getUsername());
+        coordinates.addToValue(Integer.parseInt(s.split(" ")[4]));
+        this.plateau.get(coordinates.getX()).set(coordinates.getY(), new CaseVide(coordinates.getX(), coordinates.getY(), listeImages));
+    }
+
+    @Override
+    public void handleMoveDead(String s) {
+        //TODO: AVERTIR DE SA MORT MAIS LE LAISSER OBSERVER LA PARTIE
+
     }
 
     public int getCOEFF_IMAGE() {

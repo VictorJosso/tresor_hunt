@@ -1,5 +1,6 @@
 package utils;
 
+
 /**
  * The type Callback instance.
  */
@@ -18,4 +19,8 @@ public class CallbackInstance {
     public void gameStart(String s){};
     public void gameStartAborted(String s){};
     public void updatePlayerPosition(String s){};
+    public void handleMoveAllowed(String s){};
+    public void handleMoveBlocked(String s){};
+    public void handleMoveTresor(String s){};
+    public void handleMoveDead(String s){};
 }
