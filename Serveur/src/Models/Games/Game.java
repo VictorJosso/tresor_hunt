@@ -108,6 +108,7 @@ public abstract class Game {
                 for (ClientHandler clientHandler: players){
                     clientHandler.getClient().setGameRunning(this);
                 }
+                mainHandler.getAvailableGamesMap().remove(this.id);
                 broadcast("153 GAME STARTED");
             } else {
                 int nbMesages =(int) Math.ceil(((double) playersRefusedToStart.size())/5);

@@ -188,6 +188,9 @@ public class Parser {
             case "130":
                 if (response.length == 3 && response[1].equals("JOIN") && NumberUtils.isNumeric(response[2])){
                     client.getClient().getJoinedGames().clear();
+                    if(client.getClient().getGameRunning() != null){
+                        client.getClient().getGameRunning().removePlayer(client);
+                    }
                     client.getClient().getJoinedGames().add(Integer.parseInt(response[2]));
                     client.send("131 MAP "+ response[2]+ " JOINED");
                     mainHandler.getAvailableGamesMap().get(Integer.parseInt(response[2])).addPlayer(client);
