@@ -75,7 +75,9 @@ public class SpeedingContest extends Game{
         if(currentCase instanceof CaseVide){
             return 0;
         } else if (currentCase instanceof CaseTresor){
-            return ((CaseTresor) currentCase).getValue();
+            int value = ((CaseTresor) currentCase).getValue();
+            plateau.setCase(new CaseVide(currentCase.getX(),currentCase.getY()));
+            return value;
         } else{
             return 1;
         }
