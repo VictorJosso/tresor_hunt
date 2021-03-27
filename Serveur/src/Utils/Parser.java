@@ -242,7 +242,7 @@ public class Parser {
             case "400":
                 if (response.length == 2 && response[1].equals("GETHOLES")) {
                     // PURE RANDOM
-                    Game partie = mainHandler.getAvailableGamesMap().get(client.getClient().getJoinedGames().get(0));
+                    Game partie = client.getClient().getGameRunning();
                     ArrayList<Coordinates> coordinates = partie.getPlateau().getCoordinatesTrous();
                     client.send("401 NUMBER " + (int) Math.ceil((double) coordinates.size() / 5));
                     for (int i = 0; i < (int) Math.ceil((double) coordinates.size() / 5); i++) {
@@ -262,7 +262,7 @@ public class Parser {
             case "410":
                 if (response.length == 2 && response[1].equals("GETTREASURES")) {
                     // PURE RANDOM
-                    Game partie = mainHandler.getAvailableGamesMap().get(client.getClient().getJoinedGames().get(0));
+                    Game partie = client.getClient().getGameRunning();
                     ArrayList<Coordinates> coordinates = partie.getPlateau().getCoordinatesTresors();
                     client.send("411 NUMBER " + (int) Math.ceil((double) coordinates.size() / 5));
                     for (int i = 0; i < (int) Math.ceil((double) coordinates.size() / 5); i++) {
@@ -281,7 +281,7 @@ public class Parser {
             case "420":
                 if (response.length == 2 && response[1].equals("GETWALLS")) {
                     // PURE RANDOM
-                    Game partie = mainHandler.getAvailableGamesMap().get(client.getClient().getJoinedGames().get(0));
+                    Game partie = client.getClient().getGameRunning();
                     ArrayList<Coordinates> coordinates = partie.getPlateau().getCoordinatesMurs();
                     client.send("421 NUMBER " + (int) Math.ceil((double) coordinates.size() / 5));
                     for (int i = 0; i < (int) Math.ceil((double) coordinates.size() / 5); i++) {
