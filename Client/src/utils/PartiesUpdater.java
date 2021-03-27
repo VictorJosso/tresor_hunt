@@ -35,6 +35,9 @@ public class PartiesUpdater extends CallbackInstance {
         if (commande[1].equals("NUMBER")){
             this.totalParties = Integer.parseInt(commande[2]);
             partiesListBrute.clear();
+            if(totalParties == 0){
+                mainApp.updateParties(partiesListBrute);
+            }
         } else if (commande[1].equals("MESS")){
             partiesListBrute.add(message);
             if (Integer.parseInt(commande[2]) == totalParties){
