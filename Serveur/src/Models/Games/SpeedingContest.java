@@ -42,7 +42,6 @@ public class SpeedingContest extends Game{
                     plateau.getCase(c.getX(), c.getY()).free();
                     c.addToY(-1);
                 } else {
-                    System.err.println("MOVE BLOCKED BECAUSE "+plateau.getCase(c.getX(),c.getY()-1).getClass()+" IS NOT FREE ; HORS LIMITES = " + plateau.horsLimite(c.getX(), c.getY()-1));
                     return -1;
                 }
                 break;
@@ -51,8 +50,6 @@ public class SpeedingContest extends Game{
                     plateau.getCase(c.getX(), c.getY()).free();
                     c.addToY(1);
                 } else {
-                    System.err.println("MOVE BLOCKED BECAUSE "+plateau.getCase(c.getX(),c.getY()+1).getClass()+" IS NOT FREE; HORS LIMITES = " + plateau.horsLimite(c.getX(), c.getY()+1));
-
                     return -1;
                 }
                 break;
@@ -61,8 +58,6 @@ public class SpeedingContest extends Game{
                     plateau.getCase(c.getX(), c.getY()).free();
                     c.addToX(-1);
                 } else {
-                    System.err.println("MOVE BLOCKED BECAUSE "+plateau.getCase(c.getX()-1,c.getY()).getClass()+" IS NOT FREE; HORS LIMITES = " + plateau.horsLimite(c.getX()-1, c.getY()));
-
                     return -1;
                 }
                 break;
@@ -71,7 +66,6 @@ public class SpeedingContest extends Game{
                     plateau.getCase(c.getX(), c.getY()).free();
                     c.addToX(1);
                 } else {
-                    System.err.println("MOVE BLOCKED BECAUSE "+plateau.getCase(c.getX()+1,c.getY()).getClass()+" IS NOT FREE; HORS LIMITES = " + plateau.horsLimite(c.getX()+1, c.getY()));
                     return -1;
                 }
                 break;
