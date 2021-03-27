@@ -4,6 +4,7 @@ public class Coordinates {
     private int x;
     private int y;
     private int value;
+    private boolean alive = true;
 
     public Coordinates(int x, int y) {
         this.x = x;
@@ -49,5 +50,13 @@ public class Coordinates {
 
     public void addToY(int diff){
         this.y += diff;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 }

@@ -204,6 +204,10 @@ public class Parser {
                     illegalCommand();
                 }
                 break;
+            case "141":
+            case "411":
+            case "521":
+                break;
             case "122":
                 mainHandler.getAvailableGamesMap().remove(Integer.parseInt(response[1]));
                 client.send("123 REMOVED");

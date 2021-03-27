@@ -139,6 +139,7 @@ public class LobbyController extends CallbackInstance {
         Platform.runLater(() -> {
             this.partie.getPlayersNames().add(s.split(" ")[1]);
         });
+        mainApp.getConnectionHandler().send("141 "+s.split(" ")[1]+" ACK");
     }
 
     @Override

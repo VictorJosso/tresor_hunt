@@ -105,6 +105,19 @@ public class Plateau extends CallbackInstance {
             c.setX(x);
             c.setY(y);
         }
+        gameApp.getConnectionHandler().send("411 "+name+" UPDATED");
+    }
+
+    @Override
+    public void updatePlayerTresor(String s) {
+        coordonneesJoueurs.get(s.split(" ")[1]).addToValue(Integer.parseInt(s.split(" ")[6]));
+        updatePlayerPosition(s);
+    }
+
+    @Override
+    public void declareDead(String s) {
+        coordonneesJoueurs.get(s.split(" ")[1]).setAlive(false);
+        gameApp.getConnectionHandler().send("520 "+s.split(" ")[1]+" UPDATED");
     }
 
     @Override

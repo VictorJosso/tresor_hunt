@@ -28,6 +28,7 @@ import models.Game.CaseMur;
 import models.Partie;
 import models.Plateau;
 import utils.CallbackInstance;
+import utils.ConnectionHandler;
 
 import java.io.IOException;
 import java.util.*;
@@ -60,23 +61,18 @@ public class GameApp {
         int sizeY = screenHeight/partie.getDimensionY();
         COEFF_IMAGE = Math.min(sizeX, sizeY);
         this.plateau = new Plateau(partie.getDimensionX(), partie.getDimensionY(), COEFF_IMAGE, this);
-        mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition);
-        mainApp.getConnectionHandler().registerCallback("421", plateau, CallbackInstance::getWalls);
-        mainApp.getConnectionHandler().send("420 GETWALLS");
-        mainApp.getConnectionHandler().registerCallback("401", plateau, CallbackInstance::getHoles);
-        mainApp.getConnectionHandler().send("400 GETHOLES");
-        mainApp.getConnectionHandler().registerCallback("411", plateau, CallbackInstance::getTresors);
-        mainApp.getConnectionHandler().send("410 GETTREASURES");
-        mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition);
         mainApp.getConnectionHandler().registerCallback("201", plateau, CallbackInstance::handleMoveAllowed);
         mainApp.getConnectionHandler().registerCallback("202", plateau, CallbackInstance::handleMoveBlocked);
         mainApp.getConnectionHandler().registerCallback("203", plateau, CallbackInstance::handleMoveTresor);
+        mainApp.getConnectionHandler().registerCallback("401", plateau, CallbackInstance::getHoles);
+        mainApp.getConnectionHandler().registerCallback("411", plateau, CallbackInstance::getTresors);
+        mainApp.getConnectionHandler().registerCallback("421", plateau, CallbackInstance::getWalls);
+        mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition);
+        mainApp.getConnectionHandler().registerCallback("511", plateau, CallbackInstance::updatePlayerTresor);
         mainApp.getConnectionHandler().registerCallback("666", plateau, CallbackInstance::handleMoveDead);
-
-
-
-
-
+        mainApp.getConnectionHandler().send("410 GETTREASURES");
+        mainApp.getConnectionHandler().send("400 GETHOLES");
+        mainApp.getConnectionHandler().send("420 GETWALLS");
     }
 
     public void launch(){
@@ -262,5 +258,9 @@ public class GameApp {
 
     public Config getServerConfig(){
         return mainApp.getServerConfig();
+    }
+
+    public ConnectionHandler getConnectionHandler(){
+        return mainApp.getConnectionHandler();
     }
 }
