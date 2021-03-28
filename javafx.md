@@ -16,6 +16,6 @@ Cliquer sur "Modifier les configurations", à gauche du bouton d'execution :
 ![Bouton d'édition des configurations](https://i.imgur.com/FP5iPKO.png)  
 Pour chaque profil, effectuer la combinaison de touches `Alt+V`, puis dans le champ "Options de VM" qui vient d'apparaitre, saisir la configuration suivante : 
 ```
---module-path </path/to/javafx/sdk> --add-modules javafx.controls,javafx.fxml
+--module-path </path/to/javafx/sdk> --add-modules javafx.controls,javafx.media,javafx.fxml
 ```
 Remplacer `</path/to/javafx/sdk>` par le chemin d'accès du dossier `lib` précédemment séléctionné à l'étape 3. Cliquer sur `Appliquer` puis `OK`. Le projet est prêt à être compilé.
