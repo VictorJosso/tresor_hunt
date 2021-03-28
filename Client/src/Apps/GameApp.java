@@ -263,7 +263,7 @@ public class GameApp {
     private void drawOnTop(){
         for (ImageCrop i : this.haveToDrawOnTop.keySet()){
             if (this.haveToDrawOnTop.get(i) > System.currentTimeMillis()){
-                gc.drawImage(i.getImage(), i.getCropStartX(), i.getCropStartY(), i.getCropWidth(), i.getHeight(), 0, 0, getScreenWidth(), getScreenHeight());
+                gc.drawImage(i.getImage(), i.getCropStartX(), i.getCropStartY(), i.getCropWidth(), i.getCropHeight(), 0, 0, getScreenWidth(), getScreenHeight());
             } else {
                 this.haveToDrawOnTop.remove(i);
             }
