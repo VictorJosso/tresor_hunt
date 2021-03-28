@@ -10,7 +10,7 @@ public class CaseTrou extends Case{
 
     @Override
     public void setPlayerOn(ClientHandler player) {
-        player.kill();
+        player.getClient().kill();
     }
 
     @Override

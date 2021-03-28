@@ -35,51 +35,6 @@ public class SpeedingContest extends Game{
 
     @Override
     public int movePlayer(ClientHandler client, String direction) {
-        Coordinates c = client.getCoordonnees();
-        switch (direction){
-            case "GOUP":
-                if(!plateau.horsLimite(c.getX(), c.getY()-1) && plateau.getCase(c.getX(),c.getY()-1).isFree()){
-                    plateau.getCase(c.getX(), c.getY()).free();
-                    c.addToY(-1);
-                } else {
-                    return -1;
-                }
-                break;
-            case "GODOWN":
-                if(!plateau.horsLimite(c.getX(), c.getY()+1) && plateau.getCase(c.getX(),c.getY()+1).isFree()){
-                    plateau.getCase(c.getX(), c.getY()).free();
-                    c.addToY(1);
-                } else {
-                    return -1;
-                }
-                break;
-            case "GOLEFT":
-                if(!plateau.horsLimite(c.getX()-1, c.getY()) && plateau.getCase(c.getX()-1,c.getY()).isFree()){
-                    plateau.getCase(c.getX(), c.getY()).free();
-                    c.addToX(-1);
-                } else {
-                    return -1;
-                }
-                break;
-            case "GORIGHT":
-                if(!plateau.horsLimite(c.getX()+1, c.getY()) && plateau.getCase(c.getX()+1,c.getY()).isFree()){
-                    plateau.getCase(c.getX(), c.getY()).free();
-                    c.addToX(1);
-                } else {
-                    return -1;
-                }
-                break;
-        }
-        Case currentCase = plateau.getCase(c.getX(), c.getY());
-        currentCase.setPlayerOn(client);
-        if(currentCase instanceof CaseVide){
-            return 0;
-        } else if (currentCase instanceof CaseTresor){
-            int value = ((CaseTresor) currentCase).getValue();
-            plateau.setCase(new CaseVide(currentCase.getX(),currentCase.getY()));
-            return value;
-        } else{
-            return 1;
-        }
+        return super.movePlayer(client, direction);
     }
 }

@@ -40,12 +40,12 @@ public class Parser {
     //Méthodes
     private void illegalCommand(){
         client.send("550 ILLEGAL COMMAND. BYE");
-        for (Integer id : client.getClient().getJoinedGames()){
+        for (Integer id : client.getJoinedGames()){
             mainHandler.getAvailableGamesMap().get(id).removePlayer(client);
         }
         client.closeConnection();
-        if (client.getClient().isLoggedIn()){
-            mainHandler.usernamesSet.remove(client.getClient().getUsername());
+        if (client.isLoggedIn()){
+            mainHandler.usernamesSet.remove(client.getUsername());
         }
     }
 
@@ -176,7 +176,7 @@ public class Parser {
                                 mainHandler.getAvailableGamesMap().get(gameId).getHoles(),
                                 mainHandler.getAvailableGamesMap().get(gameId).getTreasures(),
                                 mainHandler.getAvailableGamesMap().get(gameId).getMaxPlayers(),
-                                mainHandler.getAvailableGamesMap().get(gameId).getOwner().getClient().getUsername(),
+                                mainHandler.getAvailableGamesMap().get(gameId).getOwner().getUsername(),
                                 mainHandler.getAvailableGamesMap().get(gameId).isRobots()));
                     }
                 }
@@ -187,11 +187,11 @@ public class Parser {
 
             case "130":
                 if (response.length == 3 && response[1].equals("JOIN") && NumberUtils.isNumeric(response[2])){
-                    client.getClient().getJoinedGames().clear();
+                    client.getJoinedGames().clear();
                     if(client.getClient().getGameRunning() != null){
                         client.getClient().getGameRunning().removePlayer(client);
                     }
-                    client.getClient().getJoinedGames().add(Integer.parseInt(response[2]));
+                    client.getJoinedGames().add(Integer.parseInt(response[2]));
                     client.send("131 MAP "+ response[2]+ " JOINED");
                     mainHandler.getAvailableGamesMap().get(Integer.parseInt(response[2])).addPlayer(client);
                 } else{
@@ -201,7 +201,7 @@ public class Parser {
             case "135":
                 if (response.length == 3 && response[1].equals("LEAVE") && NumberUtils.isNumeric(response[2])){
                     this.mainHandler.getAvailableGamesMap().get(Integer.parseInt(response[2])).removePlayer(client);
-                    this.client.getClient().getJoinedGames().remove((Integer) Integer.parseInt(response[2]));
+                    this.client.getJoinedGames().remove((Integer) Integer.parseInt(response[2]));
                     client.send("136 REMOVED");
                 } else {
                     illegalCommand();
@@ -223,15 +223,15 @@ public class Parser {
                         case -1 -> client.send("202 MOVE BLOCKED");
                         case 0 -> {
                             client.send("201 MOVE OK");
-                            client.getClient().getGameRunning().broadcast("510 " + client.getClient().getUsername() + " POS " + client.getCoordonnees().getX() + " " + client.getCoordonnees().getY(), client);
+                            client.getClient().getGameRunning().broadcast("510 " + client.getUsername() + " POS " + client.getClient().getCoordonnees().getX() + " " + client.getClient().getCoordonnees().getY(), client);
                         }
                         case 1 -> {
                             client.send("666 MOVE HOLE DEAD");
-                            client.getClient().getGameRunning().broadcast("520 " + client.getClient().getUsername() + " DIED");
+                            client.getClient().getGameRunning().broadcast("520 " + client.getUsername() + " DIED");
                         }
                         default -> {
                             client.send("203 MOVE OK TRES " + status);
-                            client.getClient().getGameRunning().broadcast("511 " + client.getClient().getUsername() + " POS " + client.getCoordonnees().getX() + " " + client.getCoordonnees().getY() + " TRES " + status, client);
+                            client.getClient().getGameRunning().broadcast("511 " + client.getUsername() + " POS " + client.getClient().getCoordonnees().getX() + " " + client.getClient().getCoordonnees().getY() + " TRES " + status, client);
                         }
                     }
                 } else {
@@ -299,7 +299,7 @@ public class Parser {
 
             case "150":
                 if (response.length == 3 && response[1].equals("REQUEST") && response[2].equals("START")){
-                    boolean result = mainHandler.getAvailableGamesMap().get(client.getClient().getJoinedGames().get(0)).requestStart(client);
+                    boolean result = mainHandler.getAvailableGamesMap().get(client.getJoinedGames().get(0)).requestStart(client);
                     if (!result){
                         client.send("151 REFUSED");
                     }
@@ -309,7 +309,7 @@ public class Parser {
                 break;
             case "152":
                 if (response.length == 3 && response[1].equals("START") && (response[2].equals("YES") || response[2].equals("NO"))){
-                    mainHandler.getAvailableGamesMap().get(client.getClient().getJoinedGames().get(0)).startRequestStatus(client, response[2].equals("YES"));
+                    mainHandler.getAvailableGamesMap().get(client.getJoinedGames().get(0)).startRequestStatus(client, response[2].equals("YES"));
                 } else {
                     illegalCommand();
                 }

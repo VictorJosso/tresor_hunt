@@ -1,6 +1,8 @@
 package models;
 
 import Apps.GameApp;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -19,6 +21,7 @@ public class Plateau extends CallbackInstance {
     private int COEFF_IMAGE;
     private ArrayList<Image> listeImages;
     private HashMap<String, Coordinates> coordonneesJoueurs = new HashMap<>();
+    //private ObservableList<Coordinates>
     private GameApp gameApp;
 
     public Plateau(int dimX, int dimY, int COEFF_IMAGE, GameApp gameApp) {

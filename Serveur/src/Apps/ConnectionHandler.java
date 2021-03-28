@@ -70,4 +70,8 @@ public class ConnectionHandler {
     public Map<Integer, Game> getAvailableGamesMap() {
         return availableGamesMap;
     }
+
+    public Map<Integer, Game> getGamesMap() {
+        return gamesMap;
+    }
 }

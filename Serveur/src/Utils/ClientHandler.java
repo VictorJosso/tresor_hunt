@@ -5,6 +5,7 @@ import Models.Client;
 
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -19,9 +20,13 @@ public class ClientHandler implements Runnable{
     private PrintWriter printWriter;
     private Parser parser;
     private Client client;
-    private Coordinates coordonnees = new Coordinates(0,0);
+    private String username;
+    private boolean loggedIn;
+    private final ArrayList<Integer> joinedGames = new ArrayList<>();
 
-    private CopyOnWriteArrayList<Integer> sendingQueue = new CopyOnWriteArrayList<>();
+
+
+    private final CopyOnWriteArrayList<Integer> sendingQueue = new CopyOnWriteArrayList<>();
 
     /**
      * Instantiates a new Client handler.
@@ -43,8 +48,8 @@ public class ClientHandler implements Runnable{
     private void illegalCommand(){
         send("550 ILLEGAL COMMAND. BYE");
         closeConnection();
-        if (client.isLoggedIn()){
-            mainApp.usernamesSet.remove(client.getUsername());
+        if (loggedIn){
+            mainApp.usernamesSet.remove(username);
         }
     }
 
@@ -78,8 +83,8 @@ public class ClientHandler implements Runnable{
                                 break;
                             }
                             mainApp.usernamesSet.add(command.split(" ")[3]);
-                            client.setUsername(command.split(" ")[3]);
-                            client.setLoggedIn(true);
+                            username = (command.split(" ")[3]);
+                            loggedIn = true;
                             send("101 WELCOME "+command.split(" ")[3]);
                             break;
                         } else {
@@ -88,11 +93,11 @@ public class ClientHandler implements Runnable{
                         }
                     case "102":
                         if (command.split(" ")[1].equals("QUIT")){
-                            if (client.isLoggedIn()){
-                                mainApp.usernamesSet.remove(client.getUsername());
+                            if (loggedIn){
+                                mainApp.usernamesSet.remove(username);
                             }
-                            for (Integer id: client.getJoinedGames()){
-                                mainApp.getAvailableGamesMap().get(id).removePlayer(this);
+                            for (Integer id: joinedGames){
+                                this.mainApp.getGamesMap().get(id).removePlayer(this);
                             }
                             send("103 BYE");
                             socket.close();
@@ -101,7 +106,7 @@ public class ClientHandler implements Runnable{
                         }
                         break;
                     default:
-                        if (client.isLoggedIn()) {
+                        if (loggedIn) {
                             this.parser.parse(command);
                         } else {
                             send("555 UNAUTHORIZED. PLEASE LOG IN");
@@ -121,6 +126,10 @@ public class ClientHandler implements Runnable{
      */
     public Client getClient() {
         return client;
+    }
+
+    public void newClient(){
+        this.client = new Client();
     }
 
     /**
@@ -144,22 +153,36 @@ public class ClientHandler implements Runnable{
     protected void closeConnection(){
         try{
             socket.close();
-            if (client.getUsername() != null) {
-                mainApp.usernamesSet.remove(client.getUsername());
+            if (username != null) {
+                mainApp.usernamesSet.remove(username);
             }
         } catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public Coordinates getCoordonnees() {
-        return coordonnees;
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
+    public ArrayList<Integer> getJoinedGames() {
+        return joinedGames;
     }
 
     public boolean isGoodClient(){
         return parser.isGoodClient();
     }
 
-    public void kill(){
-        }
 }

@@ -1,9 +1,13 @@
 package Models.Games;
 
 import Apps.ConnectionHandler;
+import Models.Cases.Case;
+import Models.Cases.CaseTresor;
+import Models.Cases.CaseVide;
 import Models.Client;
 import Models.Plateau;
 import Utils.ClientHandler;
+import Utils.Coordinates;
 
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -64,10 +68,10 @@ public abstract class Game {
      * @param client the client
      */
     public void addPlayer(ClientHandler client){
-        broadcast("140 "+client.getClient().getUsername()+" JOINED");
+        broadcast("140 "+client.getUsername()+" JOINED");
         players.add(client);
         for (ClientHandler player : this.players){
-            client.send("140 "+player.getClient().getUsername()+" JOINED");
+            client.send("140 "+player.getUsername()+" JOINED");
         }
     }
 
@@ -78,7 +82,7 @@ public abstract class Game {
      */
     public void removePlayer(ClientHandler client){
         if (players.remove(client)){
-            broadcastAmeliore("145 "+client.getClient().getUsername()+" LEFT");
+            broadcastAmeliore("145 "+client.getUsername()+" LEFT");
         }
     }
 
@@ -106,6 +110,7 @@ public abstract class Game {
             if (playersRefusedToStart.size() == 0){
                 this.plateau = new Plateau(x, y, holes, this.treasures, (int) (1.5*x*y)/5, this);
                 for (ClientHandler clientHandler: players){
+                    clientHandler.newClient();
                     clientHandler.getClient().setGameRunning(this);
                 }
                 mainHandler.getAvailableGamesMap().remove(this.id);
@@ -116,7 +121,7 @@ public abstract class Game {
                 for (int i = 0; i < nbMesages; i++){
                     StringBuilder message = new StringBuilder("154 MESS " + i + " PLAYER");
                     for (int j = 0; 5*i+j<playersRefusedToStart.size() && j < 5; j++){
-                        message.append(" ").append(playersRefusedToStart.get(5 * i + j).getClient().getUsername());
+                        message.append(" ").append(playersRefusedToStart.get(5 * i + j).getUsername());
                     }
                     broadcast(message.toString());
                 }
@@ -126,7 +131,7 @@ public abstract class Game {
 
     public void sendPositions(ClientHandler requester){
         for(ClientHandler c : this.players){
-            requester.send(("510 " + c.getClient().getUsername() + " POS " + c.getCoordonnees().getX() + " "+ c.getCoordonnees().getY()));
+            requester.send(("510 " + c.getUsername() + " POS " + c.getClient().getCoordonnees().getX() + " "+ c.getClient().getCoordonnees().getY()));
         }
     }
 
@@ -152,7 +157,55 @@ public abstract class Game {
     }
 
     public int movePlayer(ClientHandler client, String direction){
-        return -1;
+        if (!client.getClient().isAlive()){
+            return -1;
+        }
+        Coordinates c = client.getClient().getCoordonnees();
+        switch (direction){
+            case "GOUP":
+                if(!plateau.horsLimite(c.getX(), c.getY()-1) && plateau.getCase(c.getX(),c.getY()-1).isFree()){
+                    plateau.getCase(c.getX(), c.getY()).free();
+                    c.addToY(-1);
+                } else {
+                    return -1;
+                }
+                break;
+            case "GODOWN":
+                if(!plateau.horsLimite(c.getX(), c.getY()+1) && plateau.getCase(c.getX(),c.getY()+1).isFree()){
+                    plateau.getCase(c.getX(), c.getY()).free();
+                    c.addToY(1);
+                } else {
+                    return -1;
+                }
+                break;
+            case "GOLEFT":
+                if(!plateau.horsLimite(c.getX()-1, c.getY()) && plateau.getCase(c.getX()-1,c.getY()).isFree()){
+                    plateau.getCase(c.getX(), c.getY()).free();
+                    c.addToX(-1);
+                } else {
+                    return -1;
+                }
+                break;
+            case "GORIGHT":
+                if(!plateau.horsLimite(c.getX()+1, c.getY()) && plateau.getCase(c.getX()+1,c.getY()).isFree()){
+                    plateau.getCase(c.getX(), c.getY()).free();
+                    c.addToX(1);
+                } else {
+                    return -1;
+                }
+                break;
+        }
+        Case currentCase = plateau.getCase(c.getX(), c.getY());
+        currentCase.setPlayerOn(client);
+        if(currentCase instanceof CaseVide){
+            return 0;
+        } else if (currentCase instanceof CaseTresor){
+            int value = ((CaseTresor) currentCase).getValue();
+            plateau.setCase(new CaseVide(currentCase.getX(),currentCase.getY()));
+            return value;
+        } else{
+            return 1;
+        }
     }
 
     /**

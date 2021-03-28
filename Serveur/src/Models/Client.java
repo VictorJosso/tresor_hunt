@@ -1,6 +1,7 @@
 package Models;
 
 import Models.Games.Game;
+import Utils.Coordinates;
 
 import java.util.ArrayList;
 
@@ -8,12 +9,11 @@ import java.util.ArrayList;
  * The type Client.
  */
 public class Client {
-    private String username;
-    private boolean loggedIn;
 
     private Game gameRunning;
+    private Coordinates coordonnees = new Coordinates(0,0);
+    private boolean alive = true;
 
-    private ArrayList<Integer> joinedGames = new ArrayList<>();
 
 
     /**
@@ -21,47 +21,12 @@ public class Client {
      */
     public Client(){}
 
-    /**
-     * Gets username.
-     *
-     * @return the username
-     */
-    public String getUsername() {
-        return username;
+    public Coordinates getCoordonnees() {
+        return coordonnees;
     }
 
-    /**
-     * Sets username.
-     *
-     * @param username the username
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /**
-     * Is logged in boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isLoggedIn() {
-        return loggedIn;
-    }
-
-    /**
-     * Sets logged in.
-     *
-     * @param loggedIn the logged in
-     */
-    public void setLoggedIn(boolean loggedIn) {
-        this.loggedIn = loggedIn;
-    }
-
-
-
-
-    public ArrayList<Integer> getJoinedGames() {
-        return joinedGames;
+    public void setCoordonnees(Coordinates coordonnees) {
+        this.coordonnees = coordonnees;
     }
 
     public Game getGameRunning() {
@@ -70,5 +35,13 @@ public class Client {
 
     public void setGameRunning(Game gameRunning) {
         this.gameRunning = gameRunning;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void kill() {
+        this.alive = false;
     }
 }
