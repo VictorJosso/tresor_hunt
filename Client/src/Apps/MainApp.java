@@ -1,11 +1,9 @@
 package Apps;
 
-import com.sun.javafx.binding.StringFormatter;
 import javafx.event.EventHandler;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.WindowEvent;
 import models.Config;
-import utils.CallbackInstance;
 import utils.ConnectionHandler;
 import utils.PartiesUpdater;
 import utils.RecurrentServerRequest;

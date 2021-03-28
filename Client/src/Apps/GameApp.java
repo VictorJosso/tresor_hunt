@@ -25,12 +25,14 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import javafx.util.Pair;
 import models.Config;
 import models.Game.CaseMur;
 import models.Partie;
 import models.Plateau;
 import utils.CallbackInstance;
 import utils.ConnectionHandler;
+import utils.ImageCrop;
 import utils.LeaderBoardItem;
 import views.LeaderBoardController;
 
@@ -58,6 +60,8 @@ public class GameApp {
     private ObservableList<LeaderBoardItem> leaderBoardItems = FXCollections.observableArrayList(LeaderBoardItem.extractor());
 
     private LeaderBoardController leaderBoardController;
+
+    private final Map<ImageCrop, Long> haveToDrawOnTop = new HashMap<>();
 
     public GameApp(MainApp mainApp, Partie partie) {
         this.mainApp = mainApp;
@@ -109,6 +113,7 @@ public class GameApp {
             public void handle(long l) {
                 drawGame();
                 drawPlayers();
+                drawOnTop();
             }
         };
         timer.start();
@@ -226,6 +231,9 @@ public class GameApp {
 
     protected void drawPlayers() {
         for(String name : plateau.getCoordonneesJoueurs().keySet()) {
+            if (!plateau.getCoordonneesJoueurs().get(name).isAlive()){
+                continue;
+            }
             String nameToDraw;
             if(this.mainApp.getServerConfig().getUsername().equals(name)) {
                 gc.drawImage(plateau.getListeImages().get(7), plateau.getCoordonneesJoueurs().get(name).getX()*COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY()*COEFF_IMAGE);
@@ -244,6 +252,21 @@ public class GameApp {
             gc.setFont(Font.font("Chilanka Regular", 20));
             gc.setFill(new Color(1,1,1,1));
             gc.fillText(nameToDraw, (int) ((plateau.getCoordonneesJoueurs().get(name).getX()+0.5)*COEFF_IMAGE - sizeX/2), (int) ((plateau.getCoordonneesJoueurs().get(name).getY())*COEFF_IMAGE) - 18 + 2);
+        }
+    }
+
+    public void registerDrawOnTop(ImageCrop imageCrop, long duration){
+        System.out.println("On enregistre une demande de draw on top jusqua " + (System.currentTimeMillis() + duration) +" actuellement "+System.currentTimeMillis());
+        this.haveToDrawOnTop.put(imageCrop, System.currentTimeMillis() + duration);
+    }
+
+    private void drawOnTop(){
+        for (ImageCrop i : this.haveToDrawOnTop.keySet()){
+            if (this.haveToDrawOnTop.get(i) > System.currentTimeMillis()){
+                gc.drawImage(i.getImage(), i.getCropStartX(), i.getCropStartY(), i.getCropWidth(), i.getHeight(), 0, 0, getScreenWidth(), getScreenHeight());
+            } else {
+                this.haveToDrawOnTop.remove(i);
+            }
         }
     }
 
@@ -277,5 +300,13 @@ public class GameApp {
 
     public ObservableList<LeaderBoardItem> getLeaderBoardItems() {
         return leaderBoardItems;
+    }
+
+    public int getScreenWidth() {
+        return COEFF_IMAGE * partie.getDimensionX();
+    }
+
+    public int getScreenHeight() {
+        return COEFF_IMAGE * partie.getDimensionY();
     }
 }

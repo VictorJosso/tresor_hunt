@@ -7,11 +7,16 @@ import javafx.collections.ObservableMap;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import models.Game.*;
 import utils.CallbackInstance;
 import utils.Coordinates;
+import utils.ImageCrop;
 import utils.LeaderBoardItem;
 
+import java.io.File;
 import java.util.*;
 
 public class Plateau extends CallbackInstance {
@@ -129,7 +134,7 @@ public class Plateau extends CallbackInstance {
 
     @Override
     public void declareDead(String s) {
-        coordonneesJoueurs.get(s.split(" ")[1]).setAlive(false);
+        coordonneesJoueurs.get(s.split(" ")[1]).kill();
         gameApp.getConnectionHandler().send("520 "+s.split(" ")[1]+" UPDATED");
     }
 
@@ -183,6 +188,24 @@ public class Plateau extends CallbackInstance {
     public void handleMoveDead(String s) {
         //TODO: AVERTIR DE SA MORT MAIS LE LAISSER OBSERVER LA PARTIE
         gameApp.getDirections().remove(0);
+        this.coordonneesJoueurs.get(this.gameApp.getServerConfig().getUsername()).kill();
+        AudioClip sound = new AudioClip(getClass().getResource("../screamer.mp3").toExternalForm());
+        double ratio = 1000.0 / 750.0;
+        int py = (int) (gameApp.getScreenWidth() / ratio);
+        int px = (int) (gameApp.getScreenHeight() * ratio);
+        int x, y;
+        if (py < gameApp.getScreenHeight()){
+            x = px;
+            y = gameApp.getScreenHeight();
+        } else {
+            x = gameApp.getScreenWidth();
+            y = py;
+        }
+        Image screamer = new Image("screamer.jpg", x, y, false, false);
+        ImageCrop crop = new ImageCrop(screamer, x, y , (x - gameApp.getScreenWidth()) / 2, (y - gameApp.getScreenHeight()) / 2, gameApp.getScreenWidth(), gameApp.getScreenHeight());
+        gameApp.registerDrawOnTop(crop, 3000);
+        sound.play();
+
     }
 
     private void trierLeaderBoard(){
