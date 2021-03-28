@@ -1,6 +1,7 @@
 package models;
 
 import Apps.GameApp;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.scene.image.Image;
@@ -9,10 +10,9 @@ import javafx.scene.input.KeyEvent;
 import models.Game.*;
 import utils.CallbackInstance;
 import utils.Coordinates;
+import utils.LeaderBoardItem;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 public class Plateau extends CallbackInstance {
     public ArrayList<ArrayList<Case>> plateau = new ArrayList<>();
@@ -21,7 +21,7 @@ public class Plateau extends CallbackInstance {
     private int COEFF_IMAGE;
     private ArrayList<Image> listeImages;
     private HashMap<String, Coordinates> coordonneesJoueurs = new HashMap<>();
-    //private ObservableList<Coordinates>
+
     private GameApp gameApp;
 
     public Plateau(int dimX, int dimY, int COEFF_IMAGE, GameApp gameApp) {
@@ -104,6 +104,7 @@ public class Plateau extends CallbackInstance {
         if(c == null) {
             System.out.println("La hashmap ne contenait pas le nom : "+name);
             coordonneesJoueurs.put(name, new Coordinates(x, y));
+            gameApp.getLeaderBoardItems().add(new LeaderBoardItem(name, "#1", 0));
         } else {
             c.setX(x);
             c.setY(y);
@@ -114,6 +115,12 @@ public class Plateau extends CallbackInstance {
     @Override
     public void updatePlayerTresor(String s) {
         coordonneesJoueurs.get(s.split(" ")[1]).addToValue(Integer.parseInt(s.split(" ")[6]));
+        LeaderBoardItem item = gameApp.getLeaderBoardItems().stream().filter(i -> s.split(" ")[1].equals(i.getUsername())).findAny().orElse(null);
+        assert item != null;
+        Platform.runLater(() -> {
+                    item.setScore(item.getScore() + Integer.parseInt(s.split(" ")[6]));
+                    trierLeaderBoard();
+                });
         updatePlayerPosition(s);
         int x = coordonneesJoueurs.get(s.split(" ")[1]).getX();
         int y = coordonneesJoueurs.get(s.split(" ")[1]).getY();
@@ -161,13 +168,32 @@ public class Plateau extends CallbackInstance {
         handleMoveAllowed(s);
         Coordinates coordinates = this.coordonneesJoueurs.get(this.gameApp.getServerConfig().getUsername());
         coordinates.addToValue(Integer.parseInt(s.split(" ")[4]));
+        LeaderBoardItem item = gameApp.getLeaderBoardItems().stream().filter(i -> this.gameApp.getServerConfig().getUsername().equals(i.getUsername())).findAny().orElse(null);
+        assert item != null;
+        Platform.runLater(() -> {
+                    item.setScore(item.getScore() + Integer.parseInt(s.split(" ")[4]));
+                    trierLeaderBoard();
+                });
+        //gameApp.getLeaderBoardItems().add(null);
+        //gameApp.getLeaderBoardItems().removeIf(Objects::isNull);
         this.plateau.get(coordinates.getX()).set(coordinates.getY(), new CaseVide(coordinates.getX(), coordinates.getY(), listeImages));
     }
 
     @Override
     public void handleMoveDead(String s) {
         //TODO: AVERTIR DE SA MORT MAIS LE LAISSER OBSERVER LA PARTIE
+        gameApp.getDirections().remove(0);
+    }
 
+    private void trierLeaderBoard(){
+        Collections.sort(gameApp.getLeaderBoardItems());
+        for (int i = 0; i < gameApp.getLeaderBoardItems().size(); i++){
+            if (i != 0 && gameApp.getLeaderBoardItems().get(i-1).getScore() == gameApp.getLeaderBoardItems().get(i).getScore()){
+                gameApp.getLeaderBoardItems().get(i).setRank(gameApp.getLeaderBoardItems().get(i-1).getRank());
+            } else {
+                gameApp.getLeaderBoardItems().get(i).setRank("#"+(i+1));
+            }
+        }
     }
 
     public int getCOEFF_IMAGE() {

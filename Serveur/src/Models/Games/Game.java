@@ -108,11 +108,11 @@ public abstract class Game {
         }
         if (playersOkToStart.size() + playersRefusedToStart.size() == players.size()){
             if (playersRefusedToStart.size() == 0){
-                this.plateau = new Plateau(x, y, holes, this.treasures, (int) (1.5*x*y)/5, this);
                 for (ClientHandler clientHandler: players){
                     clientHandler.newClient();
                     clientHandler.getClient().setGameRunning(this);
                 }
+                this.plateau = new Plateau(x, y, holes, this.treasures, (int) (1.5*x*y)/5, this);
                 mainHandler.getAvailableGamesMap().remove(this.id);
                 broadcast("153 GAME STARTED");
             } else {

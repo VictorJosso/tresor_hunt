@@ -1,6 +1,8 @@
 package Apps;
 
 import javafx.animation.AnimationTimer;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -29,6 +31,8 @@ import models.Partie;
 import models.Plateau;
 import utils.CallbackInstance;
 import utils.ConnectionHandler;
+import utils.LeaderBoardItem;
+import views.LeaderBoardController;
 
 import java.io.IOException;
 import java.util.*;
@@ -50,6 +54,10 @@ public class GameApp {
 
     private double dragOffsetX;
     private double dragOffsetY;
+
+    private ObservableList<LeaderBoardItem> leaderBoardItems = FXCollections.observableArrayList(LeaderBoardItem.extractor());
+
+    private LeaderBoardController leaderBoardController;
 
     public GameApp(MainApp mainApp, Partie partie) {
         this.mainApp = mainApp;
@@ -160,6 +168,9 @@ public class GameApp {
         scene.setOnMousePressed(this::handleMousePressed);
         scene.setOnMouseDragged(this::handleMouseDragged);
 
+        leaderBoardController = loader.getController();
+        leaderBoardController.setGameApp(this);
+
         this.gameStage.setResizable(false);
         this.gameStage.show();
         this.leaderBoardStage.show();
@@ -262,5 +273,9 @@ public class GameApp {
 
     public ConnectionHandler getConnectionHandler(){
         return mainApp.getConnectionHandler();
+    }
+
+    public ObservableList<LeaderBoardItem> getLeaderBoardItems() {
+        return leaderBoardItems;
     }
 }

@@ -16,7 +16,7 @@
    <children>
       <AnchorPane>
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" text="Victor" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
+            <Label fx:id="usernameLabel" alignment="CENTER" contentDisplay="CENTER" text="Victor" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font name="Chilanka Regular" size="18.0" />
                </font>
@@ -32,10 +32,10 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="#1" />
+            <Label fx:id="rankLabel" text="#1" />
             <AnchorPane GridPane.columnIndex="1">
                <children>
-                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="155 points" textAlignment="RIGHT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0" />
+                  <Label fx:id="scoreLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="155 points" textAlignment="RIGHT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
          </children>

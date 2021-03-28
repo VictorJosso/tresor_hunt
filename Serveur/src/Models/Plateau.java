@@ -244,14 +244,13 @@ public class Plateau {
         int y = (int) (Math.random()*vert);
         if(this.grille[x][y] instanceof CaseVide && this.grille[x][y].getPlayerOn()==null) {
             this.grille[x][y].setPlayerOn(client);
+            System.out.println("ON AFFECTE LES COORDONEES ("+x+", "+y+") AU CLIENT : "+client.getUsername());
             client.getClient().getCoordonnees().setX(x);
             client.getClient().getCoordonnees().setY(y);
         } else {
             placerJoueurs(client);
         }
     }
-
-
 
     public ArrayList<Coordinates> getCoordinatesMurs() {
         return coordinatesMurs;
