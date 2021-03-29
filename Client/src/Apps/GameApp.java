@@ -63,6 +63,8 @@ public class GameApp {
 
     private final Map<ImageCrop, Long> haveToDrawOnTop = new HashMap<>();
 
+    private final Image flammesImage;
+
     public GameApp(MainApp mainApp, Partie partie) {
         this.mainApp = mainApp;
         this.partie = partie;
@@ -72,6 +74,7 @@ public class GameApp {
         int sizeX = screenWidth/ partie.getDimensionX();
         int sizeY = screenHeight/partie.getDimensionY();
         COEFF_IMAGE = Math.min(sizeX, sizeY);
+        flammesImage = new Image("flammes-scaled.png", COEFF_IMAGE, COEFF_IMAGE, false, false);
         this.plateau = new Plateau(partie.getDimensionX(), partie.getDimensionY(), COEFF_IMAGE, this);
         mainApp.getConnectionHandler().registerCallback("201", plateau, CallbackInstance::handleMoveAllowed);
         mainApp.getConnectionHandler().registerCallback("202", plateau, CallbackInstance::handleMoveBlocked);
@@ -81,6 +84,7 @@ public class GameApp {
         mainApp.getConnectionHandler().registerCallback("421", plateau, CallbackInstance::getWalls);
         mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition);
         mainApp.getConnectionHandler().registerCallback("511", plateau, CallbackInstance::updatePlayerTresor);
+        mainApp.getConnectionHandler().registerCallback("520", plateau, CallbackInstance::declareDead);
         mainApp.getConnectionHandler().registerCallback("666", plateau, CallbackInstance::handleMoveDead);
         mainApp.getConnectionHandler().send("410 GETTREASURES");
         mainApp.getConnectionHandler().send("400 GETHOLES");
@@ -231,16 +235,20 @@ public class GameApp {
 
     protected void drawPlayers() {
         for(String name : plateau.getCoordonneesJoueurs().keySet()) {
+            String nameToDraw = name;
             if (!plateau.getCoordonneesJoueurs().get(name).isAlive()){
-                continue;
-            }
-            String nameToDraw;
-            if(this.mainApp.getServerConfig().getUsername().equals(name)) {
-                gc.drawImage(plateau.getListeImages().get(7), plateau.getCoordonneesJoueurs().get(name).getX()*COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY()*COEFF_IMAGE);
-                nameToDraw = "Moi";
+                if(!name.equals(mainApp.getServerConfig().getUsername()) && plateau.getCoordonneesJoueurs().get(name).getKillDate() + 1000 > System.currentTimeMillis()){
+                    gc.drawImage(flammesImage, plateau.getCoordonneesJoueurs().get(name).getX()*COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY()*COEFF_IMAGE);
+                } else {
+                    continue;
+                }
             } else {
-                gc.drawImage(plateau.getListeImages().get(8), plateau.getCoordonneesJoueurs().get(name).getX()*COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY()*COEFF_IMAGE);
-                nameToDraw = name;
+                if (this.mainApp.getServerConfig().getUsername().equals(name)) {
+                    gc.drawImage(plateau.getListeImages().get(7), plateau.getCoordonneesJoueurs().get(name).getX() * COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY() * COEFF_IMAGE);
+                    nameToDraw = "Moi";
+                } else {
+                    gc.drawImage(plateau.getListeImages().get(8), plateau.getCoordonneesJoueurs().get(name).getX() * COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY() * COEFF_IMAGE);
+                }
             }
             gc.setFill(new Color(0,0,0,0.3));
             Text t = new Text();

@@ -5,6 +5,7 @@ public class Coordinates {
     private int y;
     private int value;
     private boolean alive = true;
+    private long killDate;
 
     public Coordinates(int x, int y) {
         this.x = x;
@@ -57,6 +58,11 @@ public class Coordinates {
     }
 
     public void kill() {
+        this.killDate = System.currentTimeMillis();
         this.alive = false;
+    }
+
+    public long getKillDate(){
+        return killDate;
     }
 }

@@ -227,6 +227,7 @@ public class Parser {
                         }
                         case 1 -> {
                             client.send("666 MOVE HOLE DEAD");
+                            client.getClient().getGameRunning().broadcast("510 " + client.getUsername() + " POS " + client.getClient().getCoordonnees().getX() + " " + client.getClient().getCoordonnees().getY(), client);
                             client.getClient().getGameRunning().broadcast("520 " + client.getUsername() + " DIED");
                         }
                         default -> {

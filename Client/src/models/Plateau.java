@@ -135,7 +135,7 @@ public class Plateau extends CallbackInstance {
     @Override
     public void declareDead(String s) {
         coordonneesJoueurs.get(s.split(" ")[1]).kill();
-        gameApp.getConnectionHandler().send("520 "+s.split(" ")[1]+" UPDATED");
+        gameApp.getConnectionHandler().send("521 "+s.split(" ")[1]+" UPDATED");
     }
 
     @Override
