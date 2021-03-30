@@ -44,12 +44,20 @@ public class Plateau {
 
         System.out.println("GENERATION DU PLATEAU");
 
-        do {
+       /* do {
             coordinatesTrous.clear();
             coordinatesMurs.clear();
             coordinatesTresors.clear();
             generate();
-        } while (!parcoursProfondeur());
+        } while (!parcoursProfondeur());*/
+        coordinatesTrous.clear();
+        coordinatesMurs.clear();
+        coordinatesTresors.clear();
+        generate();
+
+        do {
+            parcours();
+        } while (!parcours());
 
         for(ClientHandler client : this.game.getPlayers()) {
             placerJoueurs(client);
@@ -64,9 +72,9 @@ public class Plateau {
 
 
 
-    private void desac() {
-        for (int i=0; i<vert;i++) {
-            for (int j=0; j<hor;j++) {
+    private void reset() {
+        for (int i=0; i<hor;i++) {
+            for (int j=0; j<vert;j++) {
                 grille[i][j].setMarked(false);
             }
         }
@@ -122,7 +130,379 @@ public class Plateau {
             grille[tmphor][tmpvert]=new CaseMur(tmphor,tmpvert);
             coordinatesMurs.add(new Coordinates(tmphor, tmpvert));
         }
+    }
 
+    private boolean connexe(int mI, int mJ) {
+        //System.out.println("appel connexe()");
+        for (int i=0;i<hor;i++) {
+            for (int j=0;j<vert;j++) {
+                if (!(grille[i][j].isMarked()) && (grille[i][j] instanceof CaseVide || grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseTrou) ) {
+                    System.out.println(i+" "+j+" pas connexe");
+                    if (!chercheConnexe(i,j)) {
+                        smartSuppr(i, j, mI, mJ);
+                        //suppr(i,j,mI,mJ);
+                    }
+                    return false;
+                    //trouve(i,j);
+                    //return false;
+                }
+            }
+        }
+        //System.out.println("est enfin connexe");
+        return true;
+    }
+
+
+
+    private boolean parcours() {
+        reset();
+        int tmpvert;
+        int tmphor;
+        do {
+            tmpvert = (int)(Math.random() * vert);
+            tmphor = (int)(Math.random() * hor);
+        } while (!(grille[tmphor][tmpvert] instanceof CaseVide));
+        System.out.println("on teste i="+tmphor+ " j="+tmpvert);
+        explore(tmphor, tmpvert);
+        return connexe(tmphor,tmpvert);
+
+        //if (!connexe()) parcours();
+
+        //if (!connexe()) parcours();
+        /*for (int i=0; i<hor; i++) {
+            for (int j=0; j<vert;j++) {
+                if (!grille[i][j].isMarked()) {
+                    chercheConnexe(i,j);
+                    parcours();
+                }
+            }
+        }*/
+    }
+
+    private void supprime(int initI, int initJ, int finI, int finJ) {
+        int i=initI;
+        int j=initJ;
+        if(finJ>initJ) {
+
+            while (j<finJ) {
+
+                System.out.println("supprime "+i+" "+j);
+
+                supprime(i, j);
+
+                j++;
+            }
+            //return;
+        }
+        if(finJ<initJ) {
+
+            while (j>finJ) {
+
+                System.out.println("supprime "+i+" "+j);
+
+                supprime(i, j);
+
+
+                j--;
+            }
+            //return;
+        }
+        if(finI>initI) {
+
+            while (i<finI) {
+                System.out.println("supprime "+i+" "+j);
+
+                supprime(i, j);
+
+                i++;
+            }
+            ///return;
+        }
+        if(finI<initI) {
+
+            while (i>finI) {
+                System.out.println("supprime "+i+" "+j);
+                supprime(i, j);
+
+                i--;
+            }
+            //return;
+        }
+    }
+
+    private boolean chercheConnexe(int i, int j) {
+       // System.out.println("appel chercheConnexe()");
+
+        int h = j;
+        int b = j;
+        int d = i;
+        int g = i;
+        while (d < hor || b < vert || g >= 0 || h >= 0) {
+            //System.out.println("boucle");
+            d++;
+            b++;
+            g--;
+            h--;
+            if (!horsLimite(d,j) && grille[d][j].isMarked() && (grille[d][j] instanceof CaseVide || grille[d][j] instanceof CaseTresor)) {
+                System.out.println(i+" "+j+"est marquee");
+                supprime(i, j, d, j);
+                return true;
+            }
+            if (!horsLimite(g,j) &&  grille[g][j].isMarked() && (grille[g][j] instanceof CaseVide || grille[g][j] instanceof CaseTresor)) {
+                //System.out.println("gauche");
+                supprime(i, j, g, j);
+                return true ;
+            }
+            if (!horsLimite(i,h) && grille[i][h].isMarked() && (grille[i][h] instanceof CaseVide || grille[i][h] instanceof CaseTresor)) {
+                //System.out.println("haut");
+
+                supprime(i, j, i, h);
+                return true;
+            }
+            if (!horsLimite(i,b) && grille[i][b].isMarked() && (grille[i][b] instanceof CaseVide || grille[i][b] instanceof CaseTresor)) {
+                //System.out.println("bas");
+
+                supprime(i, j, i, b);
+                return true;
+            }
+
+        }
+        System.out.println("pas trouvé "+i+ " "+j);
+        return false;
+
+
+    }
+
+
+
+
+    private void supprime(int i, int j) {
+        System.out.println("suppr i:"+i+" j:"+j);
+        if (grille[i][j] instanceof CaseMur) {
+            coordinatesMurs.removeIf(coordinates -> coordinates.getX() == i && coordinates.getY() == j);
+        }
+        if (grille[i][j] instanceof CaseTrou) {
+            coordinatesTrous.removeIf(coordinates -> coordinates.getX() == i && coordinates.getY() == j);
+        }
+        grille[i][j]=new CaseVide(i,j);
+
+    }
+
+    private void smartSuppr(int initI, int initJ, int finI, int finJ) {
+        System.out.println("appel smart de ");
+        int i=initI;
+        int j=initJ;
+        if (initI<=finI && initJ<=finJ) {
+            while ( i<finI || j<finJ) {
+                if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                    System.out.println("finito");
+                    return;
+                }
+                if (i!=finI && j!=finJ) {
+                    i++;
+                    supprime(i,j);
+                    if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                        System.out.println("finito");
+                        return;
+                    }
+                    j++;
+                    supprime(i,j);
+                    if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                        System.out.println("finito");
+                        return;
+                    }
+                }
+                if (i==finI) {
+                    j++;
+                    supprime(i,j);
+                    if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                        System.out.println("finito");
+                        return;
+                    }
+                } else {
+                    if (j==finJ) {
+                        i++;
+                        supprime(i,j);
+                        if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                            System.out.println("finito");
+                            return;
+                        }
+                    }
+                }
+            }
+            return;
+        }
+        if (initI>=finI && initJ>=finJ) {
+            while ((i>finI || j>finJ)) {
+                if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                    System.out.println("finito");
+
+                    return;
+                }
+                if (i!=finI && j!=finJ) {
+
+                    i--;
+                    supprime(i, j);
+                    if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                        System.out.println("finito");
+                        return;
+                    }
+                    j--;
+                    supprime(i, j);
+                    if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                        System.out.println("finito");
+                        return;
+                    }
+                }
+                if (i==finI) {
+                    j--;
+                    supprime(i,j);
+                    if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                        System.out.println("finito");
+                        return;
+                    }
+                } else {
+                    if (j==finJ) {
+                        i--;
+                        supprime(i,j);
+                        if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                            System.out.println("finito");
+                            return;
+                        }
+                    }
+                }
+
+            }
+            return;
+        }
+        if (initI<=finI && initJ>=finJ) {
+            while ( (i<finI || j>finJ)) {
+                if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                    System.out.println("finito");
+
+                    return;
+                }
+                if (i!=finI && j!=finJ) {
+                    i++;
+                    supprime(i,j);
+                    if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                        System.out.println("finito");
+                        return;
+                    }
+                    j--;
+                    supprime(i,j);
+                    if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                        System.out.println("finito");
+                        return;
+                    }
+                }
+                if (i==finI) {
+                    j--;
+                    supprime(i,j);
+                    if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                        System.out.println("finito");
+                        return;
+                    }
+                } else {
+                    if (j==finJ) {
+                        i++;
+                        supprime(i,j);
+                        if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                            System.out.println("finito");
+                            return;
+                        }
+                    }
+                }
+
+            }
+            return;
+        }
+        if (initI>=finI && initJ<=finJ) {
+            while ((i>finI || j<finJ)) {
+                if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                    System.out.println("finito");
+
+                    return;
+                }
+                if (i!=finI && j!=finJ) {
+                    i--;
+                    supprime(i,j);
+                    if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                        System.out.println("finito");
+                        return;
+                    }
+                    j++;
+                    supprime(i,j);
+                    if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                        System.out.println("finito");
+                        return;
+                    }
+                }
+                if (i==finI) {
+                    j++;
+                    supprime(i,j);
+                    if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                        System.out.println("finito");
+                        return;
+                    }
+                } else {
+                    if (j==finJ) {
+                        i--;
+                        supprime(i,j);
+                        if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
+                            System.out.println("finito");
+                            return;
+                        }
+                    }
+                }
+
+
+            }
+
+        }
+    }
+
+    private void suppr (int initI, int initJ, int finI, int finJ) {
+        System.out.println("appel suppr");
+        int i=initI;
+        int j=initJ;
+        if (finI < initI) {
+            while (!horsLimite(i,initJ) && i>=finI) {
+                supprime(i, initJ);
+                i--;
+            }
+
+        }
+        if (finI > initI) {
+            while (i<=finI) {
+                supprime(i,initJ);
+                i++;
+            }
+
+        }
+        if (finJ < initJ) {
+            while ( j>=finJ) {
+                supprime(finI, j);
+                j--;
+            }
+        }
+        if (finJ > initJ) {
+            while (j<=finJ) {
+                supprime(finI,j);
+                j++;
+            }
+        }
+
+    }
+
+    private void explore(int i, int j) {
+        grille[i][j].setMarked(true);
+        if (grille[i][j] instanceof CaseTrou || grille[i][j] instanceof CaseMur) return;
+
+        if (!horsLimite(i,j+1) && !grille[i][j+1].isMarked()) explore(i,j+1);
+        if (!horsLimite(i,j-1) && !grille[i][j-1].isMarked()) explore(i,j-1);
+        if (!horsLimite(i+1,j) && !grille[i+1][j].isMarked()) explore(i+1,j);
+        if (!horsLimite(i-1,j) && !grille[i-1][j].isMarked()) explore(i-1,j);
     }
 
     private void resetMarked(){
