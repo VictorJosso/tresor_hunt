@@ -112,7 +112,6 @@ public class GameApp {
 
 
         timer = new AnimationTimer(){
-
             @Override
             public void handle(long l) {
                 drawGame();
