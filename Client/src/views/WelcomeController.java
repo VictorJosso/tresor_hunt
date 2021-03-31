@@ -16,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Config;
 import utils.CallbackInstance;
+import java.util.ArrayList;
 
 /**
  * The type Welcome controller.
@@ -25,6 +26,7 @@ public class WelcomeController extends CallbackInstance {
     private MainApp mainApp;
     private Config config = new Config();
     private Stage paramStage;
+    private ArrayList<String> allName = new ArrayList<String>();
 
     @FXML
     private TextField usernameTextField;
@@ -51,9 +53,10 @@ public class WelcomeController extends CallbackInstance {
     }
 
     private void validateUsername(String username){
-        if (username.equals("Kevin")){
+        if (username.length()<4 || allName.contains(username)){
             this.resumeConnectionCallback(false);
         } else {
+            allName.add(username);
             mainApp.getConnectionHandler().registerCallback("101", this, (controller, message) -> controller.resumeConnectionCallback(true));
             mainApp.getConnectionHandler().registerCallback("901", this, (controller, message) -> controller.resumeConnectionCallback(false));
             mainApp.getConnectionHandler().send("100 HELLO PLAYER " + username);
