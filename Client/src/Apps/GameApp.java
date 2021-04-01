@@ -40,12 +40,12 @@ import java.io.IOException;
 import java.util.*;
 
 public class GameApp {
-    private MainApp mainApp;
+    public MainApp mainApp;
     private Stage gameStage;
     private Stage leaderBoardStage;
     private Partie partie;
     private Plateau plateau;
-    private GraphicsContext gc;
+    public GraphicsContext gc;
     private AnimationTimer timer;
     private int screenWidth;
     private int screenHeight;
