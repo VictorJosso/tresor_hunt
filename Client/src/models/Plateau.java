@@ -136,11 +136,18 @@ public class Plateau extends CallbackInstance {
     public void declareDead(String s) {
         coordonneesJoueurs.get(s.split(" ")[1]).kill();
         gameApp.getConnectionHandler().send("521 "+s.split(" ")[1]+" UPDATED");
+        LeaderBoardItem item = gameApp.getLeaderBoardItems().stream().filter(i -> s.split(" ")[1].equals(i.getUsername())).findAny().orElse(null);
+        Platform.runLater(() -> {
+            assert item != null;
+            item.kill();
+            trierLeaderBoard();
+        });
     }
 
     @Override
     public void handleMoveAllowed(String s) {
         //TODO: JOUER UN SON DE MARCHE
+        System.err.println("LA FONCTION HANDLEMOVEALLOWED A ETE APPELÉE AVEC LA CHAINE "+s+" ET LES DIRECTIONS : "+this.gameApp.getDirections());
         KeyCode code = this.gameApp.getDirections().get(0);
         gameApp.getDirections().remove(0);
         String username = gameApp.getServerConfig().getUsername();
@@ -158,6 +165,7 @@ public class Plateau extends CallbackInstance {
                 this.coordonneesJoueurs.get(username).addToX(1);
                 break;
             default:
+                handleMoveAllowed(s);
                 break;
         }
     }
@@ -205,6 +213,12 @@ public class Plateau extends CallbackInstance {
         ImageCrop crop = new ImageCrop(screamer, x, y , (x - gameApp.getScreenWidth()) / 2, (y - gameApp.getScreenHeight()) / 2, gameApp.getScreenWidth(), gameApp.getScreenHeight());
         gameApp.registerDrawOnTop(crop, 3000);
         sound.play();
+        LeaderBoardItem item = gameApp.getLeaderBoardItems().stream().filter(i -> this.gameApp.getServerConfig().getUsername().equals(i.getUsername())).findAny().orElse(null);
+        Platform.runLater(() -> {
+            assert item != null;
+            item.kill();
+            trierLeaderBoard();
+        });
 
     }
 

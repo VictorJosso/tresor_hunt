@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
@@ -20,6 +21,12 @@ public class PlayersListViewCell extends ListCell<LeaderBoardItem> {
 
     @FXML
     private GridPane gridPane;
+
+    @FXML
+    private AnchorPane anchorPane;
+
+    @FXML
+    private Label estMort;
 
     private FXMLLoader mLLoader;
 
@@ -44,9 +51,20 @@ public class PlayersListViewCell extends ListCell<LeaderBoardItem> {
             usernameLabel.setText(leaderBoardItem.getUsername());
             rankLabel.setText(leaderBoardItem.getRank());
             scoreLabel.setText(String.valueOf(leaderBoardItem.getScore()));
+            if(leaderBoardItem.isAlive()){
+                estMort.setVisible(false);
+                usernameLabel.setDisable(false);
+                rankLabel.setDisable(false);
+                scoreLabel.setDisable(false);
+            } else {
+                estMort.setVisible(true);
+                usernameLabel.setDisable(false);
+                rankLabel.setDisable(true);
+                scoreLabel.setDisable(true);
+            }
 
             setText(null);
-            setGraphic(gridPane);
+            setGraphic(anchorPane);
         }
     }
 }
