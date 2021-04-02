@@ -113,30 +113,6 @@ public class Plateau extends CallbackInstance {
             coordonneesJoueurs.put(name, new Coordinates(x, y));
             gameApp.getLeaderBoardItems().add(new LeaderBoardItem(name, "#1", 0));
         } else {
-
-            //Si même joueur
-            if(name.equals(this.gameApp.mainApp.getServerConfig().getUsername().equals(name))) {
-
-                if (x < c.getX()) {
-                    this.gameApp.gc.drawImage(listeImages.get(7), x * COEFF_IMAGE, y * COEFF_IMAGE);
-                }
-
-                else if (x > c.getX()) {
-                    this.gameApp.gc.drawImage(listeImages.get(8), x * COEFF_IMAGE, y * COEFF_IMAGE);
-                }
-            }
-            //Si joueur différent
-            else {
-                if (x < c.getX()) {
-                    this.gameApp.gc.drawImage(listeImages.get(9), x * COEFF_IMAGE, y * COEFF_IMAGE);
-                }
-
-                else if (x > c.getX()) {
-                    this.gameApp.gc.drawImage(listeImages.get(10), x * COEFF_IMAGE, y * COEFF_IMAGE);
-                }
-            }
-
-
             c.setX(x);
             c.setY(y);
         }
