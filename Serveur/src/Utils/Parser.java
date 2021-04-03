@@ -220,6 +220,7 @@ public class Parser {
                 if(response.length == 2 && (response[1].equals("GOUP") || response[1].equals("GODOWN") || response[1].equals("GOLEFT") || response[1].equals("GORIGHT")) && client.getClient().getGameRunning() != null){
                     int status = client.getClient().getGameRunning().movePlayer(client, response[1]);
                     switch (status) {
+                        case -2 -> client.send("902 NOT YOUR TURN");
                         case -1 -> client.send("202 MOVE BLOCKED");
                         case 0 -> {
                             client.send("201 MOVE OK");

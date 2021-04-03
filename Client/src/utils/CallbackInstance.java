@@ -25,4 +25,6 @@ public class CallbackInstance {
     public void handleMoveTresor(String s){};
     public void handleMoveDead(String s){};
     public void declareDead(String s){};
+    public void handleNotYourTurn(String s){};
+    public void handleTurnChanged(String s){};
 }

@@ -51,7 +51,7 @@ public class WelcomeController extends CallbackInstance {
     }
 
     private void validateUsername(String username){
-        if (username.length() < 4 || username.equals("Kevin") || username.equals("Victor")){
+        if (username.length() < 4 || username.equals("Kevin")){
             this.resumeConnectionCallback(false);
         } else {
             mainApp.getConnectionHandler().registerCallback("101", this, (controller, message) -> controller.resumeConnectionCallback(true));

@@ -34,7 +34,7 @@ public abstract class Game {
      * The Mode.
      */
     public int mode;
-    private CopyOnWriteArrayList<ClientHandler> players = new CopyOnWriteArrayList<>();
+    protected CopyOnWriteArrayList<ClientHandler> players = new CopyOnWriteArrayList<>();
     private final boolean robots;
 
 
@@ -115,6 +115,7 @@ public abstract class Game {
                 this.plateau = new Plateau(x, y, holes, this.treasures, (int) (1.5*x*y)/5, this);
                 mainHandler.getAvailableGamesMap().remove(this.id);
                 broadcast("153 GAME STARTED");
+                this.startGame();
             } else {
                 int nbMesages =(int) Math.ceil(((double) playersRefusedToStart.size())/5);
                 broadcast("154 START ABORTED "+ nbMesages);
@@ -133,6 +134,10 @@ public abstract class Game {
         for(ClientHandler c : this.players){
             requester.send(("510 " + c.getUsername() + " POS " + c.getClient().getCoordonnees().getX() + " "+ c.getClient().getCoordonnees().getY()));
         }
+    }
+
+    protected void startGame(){
+
     }
 
     public void broadcast(String message){

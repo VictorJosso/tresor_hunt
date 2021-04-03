@@ -153,29 +153,29 @@ public class Plateau extends CallbackInstance {
         KeyCode code = this.gameApp.getDirections().get(0);
         gameApp.getDirections().remove(0);
         String username = gameApp.getServerConfig().getUsername();
-        switch (code){
-            case UP:
-                this.coordonneesJoueurs.get(username).addToY(-1);
-                break;
-            case DOWN:
-                this.coordonneesJoueurs.get(username).addToY(1);
-                break;
-            case LEFT:
-                this.coordonneesJoueurs.get(username).addToX(-1);
-                break;
-            case RIGHT:
-                this.coordonneesJoueurs.get(username).addToX(1);
-                break;
-            default:
-                handleMoveAllowed(s);
-                break;
+        switch (code) {
+            case UP -> this.coordonneesJoueurs.get(username).addToY(-1);
+            case DOWN -> this.coordonneesJoueurs.get(username).addToY(1);
+            case LEFT -> this.coordonneesJoueurs.get(username).addToX(-1);
+            case RIGHT -> this.coordonneesJoueurs.get(username).addToX(1);
+            default -> handleMoveAllowed(s);
         }
     }
 
     @Override
     public void handleMoveBlocked(String s) {
         //TODO: JOUER UN SON POUR DIRE QU'ON A ETE BLOQUE
+        KeyCode code = gameApp.getDirections().get(0);
         gameApp.getDirections().remove(0);
+        switch(code){
+            case UP:
+            case DOWN:
+            case LEFT:
+            case RIGHT:
+                break;
+            default:
+                handleMoveBlocked(s);
+        }
     }
 
     @Override
@@ -233,6 +233,16 @@ public class Plateau extends CallbackInstance {
                 gameApp.getLeaderBoardItems().get(i).setRank("#"+(i+1));
             }
         }
+    }
+
+    @Override
+    public void handleNotYourTurn(String s) {
+        handleMoveBlocked(s);
+    }
+
+    @Override
+    public void handleTurnChanged(String s) {
+        this.gameApp.setPlayerTurnUsername(s.split(" ")[1]);
     }
 
     public int getCOEFF_IMAGE() {
