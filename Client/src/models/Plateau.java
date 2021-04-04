@@ -189,8 +189,6 @@ public class Plateau extends CallbackInstance {
                     item.setScore(item.getScore() + Integer.parseInt(s.split(" ")[4]));
                     trierLeaderBoard();
                 });
-        //gameApp.getLeaderBoardItems().add(null);
-        //gameApp.getLeaderBoardItems().removeIf(Objects::isNull);
         this.plateau.get(coordinates.getX()).set(coordinates.getY(), new CaseVide(coordinates.getX(), coordinates.getY(), listeImages));
     }
 
