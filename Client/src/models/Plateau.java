@@ -116,7 +116,7 @@ public class Plateau extends CallbackInstance {
             c.setX(x);
             c.setY(y);
         }
-        gameApp.getConnectionHandler().send("411 "+name+" UPDATED");
+        gameApp.getConnectionHandler().send("512 "+name+" UPDATED");
     }
 
     @Override
