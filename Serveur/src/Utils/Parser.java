@@ -155,7 +155,10 @@ public class Parser {
                         client.send("111 MAP CREATED " + partie.getId());
 
                     }
-
+                    if(nbPlayers==1 || nbTres==0){
+                        client.send("530" + client.getUsername()+" WINS");
+                        break;
+                    }
 
                 }
                 else {
