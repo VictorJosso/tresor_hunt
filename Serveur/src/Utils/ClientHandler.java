@@ -74,7 +74,7 @@ public class ClientHandler implements Runnable{
                     //On attend -> 100 HELLO PLAYER username
                     case "100":
                         if (command.split(" ").length == 4 && command.split(" ")[1].equals("HELLO") && command.split(" ")[2].equals("PLAYER")){
-                            if (mainApp.usernamesSet.contains(command.split(" ")[3]) || command.split(" ")[3].matches(".*[victorVICTOR].*")){
+                            if (mainApp.usernamesSet.contains(command.split(" ")[3]) || command.split(" ")[3].equals("Kevin")){
                                 send("901 THIS NAME IS ALREADY USED");
                                 break;
                             }
