@@ -42,8 +42,10 @@ public class Plateau extends CallbackInstance {
                 new Image("trésor ARGENT.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image("trésor OR.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image("trésor DIAMANT.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
-                new Image("player.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
-                new Image("player2.png", COEFF_IMAGE, COEFF_IMAGE, false, false)));
+                new Image("player_1_left.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
+                new Image("player_1_right.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
+                new Image("player_2_left.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
+                new Image("player_2_right.png", COEFF_IMAGE, COEFF_IMAGE, false, false)));
 
 
         for(int x = 0; x < dimX; x++){
@@ -114,7 +116,7 @@ public class Plateau extends CallbackInstance {
             c.setX(x);
             c.setY(y);
         }
-        gameApp.getConnectionHandler().send("411 "+name+" UPDATED");
+        gameApp.getConnectionHandler().send("512 "+name+" UPDATED");
     }
 
     @Override
@@ -136,36 +138,44 @@ public class Plateau extends CallbackInstance {
     public void declareDead(String s) {
         coordonneesJoueurs.get(s.split(" ")[1]).kill();
         gameApp.getConnectionHandler().send("521 "+s.split(" ")[1]+" UPDATED");
+        LeaderBoardItem item = gameApp.getLeaderBoardItems().stream().filter(i -> s.split(" ")[1].equals(i.getUsername())).findAny().orElse(null);
+        Platform.runLater(() -> {
+            assert item != null;
+            item.kill();
+            trierLeaderBoard();
+        });
     }
 
     @Override
     public void handleMoveAllowed(String s) {
         //TODO: JOUER UN SON DE MARCHE
+        System.err.println("LA FONCTION HANDLEMOVEALLOWED A ETE APPELÉE AVEC LA CHAINE "+s+" ET LES DIRECTIONS : "+this.gameApp.getDirections());
         KeyCode code = this.gameApp.getDirections().get(0);
         gameApp.getDirections().remove(0);
         String username = gameApp.getServerConfig().getUsername();
-        switch (code){
-            case UP:
-                this.coordonneesJoueurs.get(username).addToY(-1);
-                break;
-            case DOWN:
-                this.coordonneesJoueurs.get(username).addToY(1);
-                break;
-            case LEFT:
-                this.coordonneesJoueurs.get(username).addToX(-1);
-                break;
-            case RIGHT:
-                this.coordonneesJoueurs.get(username).addToX(1);
-                break;
-            default:
-                break;
+        switch (code) {
+            case UP -> this.coordonneesJoueurs.get(username).addToY(-1);
+            case DOWN -> this.coordonneesJoueurs.get(username).addToY(1);
+            case LEFT -> this.coordonneesJoueurs.get(username).addToX(-1);
+            case RIGHT -> this.coordonneesJoueurs.get(username).addToX(1);
+            default -> handleMoveAllowed(s);
         }
     }
 
     @Override
     public void handleMoveBlocked(String s) {
         //TODO: JOUER UN SON POUR DIRE QU'ON A ETE BLOQUE
+        KeyCode code = gameApp.getDirections().get(0);
         gameApp.getDirections().remove(0);
+        switch(code){
+            case UP:
+            case DOWN:
+            case LEFT:
+            case RIGHT:
+                break;
+            default:
+                handleMoveBlocked(s);
+        }
     }
 
     @Override
@@ -179,8 +189,6 @@ public class Plateau extends CallbackInstance {
                     item.setScore(item.getScore() + Integer.parseInt(s.split(" ")[4]));
                     trierLeaderBoard();
                 });
-        //gameApp.getLeaderBoardItems().add(null);
-        //gameApp.getLeaderBoardItems().removeIf(Objects::isNull);
         this.plateau.get(coordinates.getX()).set(coordinates.getY(), new CaseVide(coordinates.getX(), coordinates.getY(), listeImages));
     }
 
@@ -205,6 +213,12 @@ public class Plateau extends CallbackInstance {
         ImageCrop crop = new ImageCrop(screamer, x, y , (x - gameApp.getScreenWidth()) / 2, (y - gameApp.getScreenHeight()) / 2, gameApp.getScreenWidth(), gameApp.getScreenHeight());
         gameApp.registerDrawOnTop(crop, 3000);
         sound.play();
+        LeaderBoardItem item = gameApp.getLeaderBoardItems().stream().filter(i -> this.gameApp.getServerConfig().getUsername().equals(i.getUsername())).findAny().orElse(null);
+        Platform.runLater(() -> {
+            assert item != null;
+            item.kill();
+            trierLeaderBoard();
+        });
 
     }
 
@@ -217,6 +231,16 @@ public class Plateau extends CallbackInstance {
                 gameApp.getLeaderBoardItems().get(i).setRank("#"+(i+1));
             }
         }
+    }
+
+    @Override
+    public void handleNotYourTurn(String s) {
+        handleMoveBlocked(s);
+    }
+
+    @Override
+    public void handleTurnChanged(String s) {
+        this.gameApp.setPlayerTurnUsername(s.split(" ")[1]);
     }
 
     public int getCOEFF_IMAGE() {

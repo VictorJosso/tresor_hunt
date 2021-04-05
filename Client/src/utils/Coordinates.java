@@ -1,11 +1,19 @@
 package utils;
 
 public class Coordinates {
+    enum Orientation {
+        NORD,
+        SUD,
+        EST,
+        OUEST
+        }
     private int x;
     private int y;
     private int value;
     private boolean alive = true;
     private long killDate;
+
+    private Orientation orientation;
 
     public Coordinates(int x, int y) {
         this.x = x;
@@ -37,19 +45,39 @@ public class Coordinates {
 
 
     public void setX(int x) {
+        if(x - this.x > 0){
+            orientation = Orientation.EST;
+        } else {
+            orientation = Orientation.OUEST;
+        }
         this.x = x;
     }
 
 
     public void setY(int y) {
+        if (y - this.y > 0){
+            orientation = Orientation.SUD;
+        } else {
+            orientation = Orientation.NORD;
+        }
         this.y = y;
     }
 
     public void addToX(int diff){
+        if (diff > 0){
+            orientation = Orientation.EST;
+        } else {
+            orientation = Orientation.OUEST;
+        }
         this.x += diff;
     }
 
     public void addToY(int diff){
+        if (diff > 0) {
+            orientation = Orientation.SUD;
+        } else {
+            orientation = Orientation.NORD;
+        }
         this.y += diff;
     }
 

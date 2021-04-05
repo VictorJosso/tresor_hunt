@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.WindowEvent;
 import models.Config;
+import utils.CallbackInstance;
 import utils.ConnectionHandler;
 import utils.PartiesUpdater;
 import utils.RecurrentServerRequest;
@@ -78,7 +79,7 @@ public class MainApp extends Application {
     }
 
     private void fetchPartiesList(){
-        connectionHandler.registerCallback("121", new PartiesUpdater(this), (controller, message) -> controller.parse(message));
+        connectionHandler.registerCallback("121", new PartiesUpdater(this), CallbackInstance::parse);
         fetchPartiesListTimer = connectionHandler.registerRecurrentServerCall(new RecurrentServerRequest() {
             @Override
             public void run() {

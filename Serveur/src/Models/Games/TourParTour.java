@@ -3,10 +3,17 @@ package Models.Games;
 import Apps.ConnectionHandler;
 import Utils.ClientHandler;
 
+import java.util.Collections;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 /**
  * The type Tour par tour.
  */
 public class TourParTour extends Game{
+
+    private int currentPlayerIndex;
+    private CopyOnWriteArrayList<ClientHandler> stillAlivePlayers;
+
 
     //Attributs
 
@@ -27,5 +34,31 @@ public class TourParTour extends Game{
     public TourParTour(int x, int y, int tres, int holes, int maxPlayers, boolean robots, ClientHandler owner, ConnectionHandler mainHandler) {
         super(x, y, tres, holes, maxPlayers, robots, owner, mainHandler);
         this.mode = 2;
+    }
+
+    @Override
+    protected void startGame() {
+        this.stillAlivePlayers = new CopyOnWriteArrayList<>(this.players);
+        Collections.shuffle(this.stillAlivePlayers);
+        currentPlayerIndex = (int) (Math.random() * this.stillAlivePlayers.size());
+        broadcast("500 " + this.stillAlivePlayers.get(currentPlayerIndex).getUsername() + " TURN");
+    }
+
+    @Override
+    public int movePlayer(ClientHandler client, String direction) {
+        if (client == this.stillAlivePlayers.get(currentPlayerIndex)){
+            int res = super.movePlayer(client, direction);
+            if (res == 1) {
+                this.stillAlivePlayers.remove(client);
+            }
+            if (res != -1) {
+                currentPlayerIndex += 1;
+                currentPlayerIndex %= this.stillAlivePlayers.size();
+                broadcast("500 " + this.stillAlivePlayers.get(currentPlayerIndex).getUsername() + " TURN");
+            }
+            return res;
+        } else {
+            return -2;
+        }
     }
 }

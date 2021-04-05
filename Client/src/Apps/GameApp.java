@@ -3,7 +3,6 @@ package Apps;
 import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
@@ -19,15 +18,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
-import javafx.util.Pair;
 import models.Config;
-import models.Game.CaseMur;
 import models.Partie;
 import models.Plateau;
 import utils.CallbackInstance;
@@ -40,16 +35,16 @@ import java.io.IOException;
 import java.util.*;
 
 public class GameApp {
-    private MainApp mainApp;
+    public MainApp mainApp;
     private Stage gameStage;
     private Stage leaderBoardStage;
-    private Partie partie;
-    private Plateau plateau;
-    private GraphicsContext gc;
+    private final Partie partie;
+    private final Plateau plateau;
+    public GraphicsContext gc;
     private AnimationTimer timer;
-    private int screenWidth;
-    private int screenHeight;
-    private int COEFF_IMAGE;
+    private final int screenWidth;
+    private final int screenHeight;
+    private final int COEFF_IMAGE;
 
     private final HashMap<KeyCode, Long> keyEvents = new HashMap<>();
     private final ArrayList<KeyCode> directions = new ArrayList<>();
@@ -57,13 +52,14 @@ public class GameApp {
     private double dragOffsetX;
     private double dragOffsetY;
 
-    private ObservableList<LeaderBoardItem> leaderBoardItems = FXCollections.observableArrayList(LeaderBoardItem.extractor());
+    private final ObservableList<LeaderBoardItem> leaderBoardItems = FXCollections.observableArrayList(LeaderBoardItem.extractor());
 
     private LeaderBoardController leaderBoardController;
 
     private final Map<ImageCrop, Long> haveToDrawOnTop = new HashMap<>();
 
     private final Image flammesImage;
+    private String playerTurnUsername;
 
     public GameApp(MainApp mainApp, Partie partie) {
         this.mainApp = mainApp;
@@ -82,10 +78,12 @@ public class GameApp {
         mainApp.getConnectionHandler().registerCallback("401", plateau, CallbackInstance::getHoles);
         mainApp.getConnectionHandler().registerCallback("411", plateau, CallbackInstance::getTresors);
         mainApp.getConnectionHandler().registerCallback("421", plateau, CallbackInstance::getWalls);
+        mainApp.getConnectionHandler().registerCallback("500", plateau, CallbackInstance::handleTurnChanged, true);
         mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition);
         mainApp.getConnectionHandler().registerCallback("511", plateau, CallbackInstance::updatePlayerTresor);
         mainApp.getConnectionHandler().registerCallback("520", plateau, CallbackInstance::declareDead);
         mainApp.getConnectionHandler().registerCallback("666", plateau, CallbackInstance::handleMoveDead);
+        mainApp.getConnectionHandler().registerCallback("902", plateau, CallbackInstance::handleNotYourTurn);
         mainApp.getConnectionHandler().send("410 GETTREASURES");
         mainApp.getConnectionHandler().send("400 GETHOLES");
         mainApp.getConnectionHandler().send("420 GETWALLS");
@@ -112,7 +110,6 @@ public class GameApp {
 
 
         timer = new AnimationTimer(){
-
             @Override
             public void handle(long l) {
                 drawGame();
@@ -128,28 +125,26 @@ public class GameApp {
             root.setOnKeyPressed(this::handleKeyPressed);
         }
 
-        this.gameStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent windowEvent) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Quitter la partie ?");
-                alert.setContentText("Une partie est en cours. Es-tu sûr de vouloir abandonner ?");
-                alert.initOwner(gameStage.getOwner());
-                alert.setHeaderText(null);
-                Optional<ButtonType> res = alert.showAndWait();
+        this.gameStage.setOnCloseRequest(windowEvent -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Quitter la partie ?");
+            alert.setContentText("Une partie est en cours. Es-tu sûr de vouloir abandonner ?");
+            alert.initOwner(gameStage.getOwner());
+            alert.setHeaderText(null);
+            Optional<ButtonType> res = alert.showAndWait();
 
-                if (res.isPresent()){
-                    if (res.get().equals(ButtonType.CANCEL)){
-                        windowEvent.consume();
-                    }
-                    else {
-                        timer.stop();
-                        leaderBoardStage.close();
-                        mainApp.gameStageClosed();
-                    }
+            if (res.isPresent()){
+                if (res.get().equals(ButtonType.CANCEL)){
+                    windowEvent.consume();
                 }
-
+                else {
+                    timer.stop();
+                    leaderBoardStage.close();
+                    this.releaseAllCallbacks();
+                    mainApp.gameStageClosed();
+                }
             }
+
         });
 
 
@@ -185,6 +180,21 @@ public class GameApp {
         this.leaderBoardStage.show();
         int enc = (int) (this.gameStage.getHeight() - partie.getDimensionY()*this.COEFF_IMAGE);
         this.leaderBoardStage.setY(y + enc);
+    }
+
+    private void releaseAllCallbacks(){
+        this.mainApp.getConnectionHandler().releaseCallback("201");
+        this.mainApp.getConnectionHandler().releaseCallback("202");
+        this.mainApp.getConnectionHandler().releaseCallback("203");
+        this.mainApp.getConnectionHandler().releaseCallback("401");
+        this.mainApp.getConnectionHandler().releaseCallback("411");
+        this.mainApp.getConnectionHandler().releaseCallback("421");
+        this.mainApp.getConnectionHandler().releaseCallback("500");
+        this.mainApp.getConnectionHandler().releaseCallback("510");
+        this.mainApp.getConnectionHandler().releaseCallback("511");
+        this.mainApp.getConnectionHandler().releaseCallback("520");
+        this.mainApp.getConnectionHandler().releaseCallback("666");
+        this.mainApp.getConnectionHandler().releaseCallback("902");
     }
 
     private void processKeyEvent(KeyEvent keyEvent){
@@ -225,10 +235,7 @@ public class GameApp {
     protected void drawGame(){
         for(int x = 0; x < partie.getDimensionX(); x++){
             for(int y = 0; y < partie.getDimensionY(); y++){
-                //gc.save();
-                //gc.rotate(Arrays.asList(0, 90, 180, 270).get(new Random().nextInt(4)));
                 gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x*this.COEFF_IMAGE, y*this.COEFF_IMAGE);
-                //gc.restore();
             }
         }
     }
@@ -247,7 +254,12 @@ public class GameApp {
                     gc.drawImage(plateau.getListeImages().get(7), plateau.getCoordonneesJoueurs().get(name).getX() * COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY() * COEFF_IMAGE);
                     nameToDraw = "Moi";
                 } else {
-                    gc.drawImage(plateau.getListeImages().get(8), plateau.getCoordonneesJoueurs().get(name).getX() * COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY() * COEFF_IMAGE);
+                    gc.drawImage(plateau.getListeImages().get(9), plateau.getCoordonneesJoueurs().get(name).getX() * COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY() * COEFF_IMAGE);
+                }
+                if (name.equals(this.playerTurnUsername)){
+                    gc.setStroke(Color.GREEN);
+                    gc.setLineWidth(2);
+                    gc.strokeOval((plateau.getCoordonneesJoueurs().get(name).getX() + 0.5 - Math.sqrt(2)/2) * COEFF_IMAGE, (plateau.getCoordonneesJoueurs().get(name).getY() + 0.5 - Math.sqrt(2)/2) * COEFF_IMAGE, COEFF_IMAGE*Math.sqrt(2), COEFF_IMAGE*Math.sqrt(2));
                 }
             }
             gc.setFill(new Color(0,0,0,0.3));
@@ -256,10 +268,10 @@ public class GameApp {
             t.setFont(Font.font("Chilanka Regular", 20));
             int sizeX = (int) (t.getLayoutBounds().getWidth());
             int sizeY = (int) (t.getLayoutBounds().getHeight());
-            gc.fillRect((int) ((plateau.getCoordonneesJoueurs().get(name).getX()+0.5)*COEFF_IMAGE - sizeX/2 - 4) , (int) ((plateau.getCoordonneesJoueurs().get(name).getY())*COEFF_IMAGE - (sizeY/2) - 22), sizeX+8, 4+sizeY);
+            gc.fillRect((int) ((plateau.getCoordonneesJoueurs().get(name).getX()+0.5)*COEFF_IMAGE - sizeX/2 - 4) , (int) ((plateau.getCoordonneesJoueurs().get(name).getY())*COEFF_IMAGE - (sizeY/2.) - 22), sizeX+8, 4+sizeY);
             gc.setFont(Font.font("Chilanka Regular", 20));
             gc.setFill(new Color(1,1,1,1));
-            gc.fillText(nameToDraw, (int) ((plateau.getCoordonneesJoueurs().get(name).getX()+0.5)*COEFF_IMAGE - sizeX/2), (int) ((plateau.getCoordonneesJoueurs().get(name).getY())*COEFF_IMAGE) - 18 + 2);
+            gc.fillText(nameToDraw, (int) ((plateau.getCoordonneesJoueurs().get(name).getX()+0.5)*COEFF_IMAGE - sizeX/2), ((plateau.getCoordonneesJoueurs().get(name).getY())*COEFF_IMAGE) - 18 + 2);
         }
     }
 
@@ -290,10 +302,6 @@ public class GameApp {
         this.leaderBoardStage.setY(e.getScreenY() - this.dragOffsetY);
     }
 
-    public HashMap<KeyCode, Long> getKeyEvents() {
-        return keyEvents;
-    }
-
     public ArrayList<KeyCode> getDirections() {
         return directions;
     }
@@ -316,5 +324,9 @@ public class GameApp {
 
     public int getScreenHeight() {
         return COEFF_IMAGE * partie.getDimensionY();
+    }
+
+    public void setPlayerTurnUsername(String playerTurnUsername) {
+        this.playerTurnUsername = playerTurnUsername;
     }
 }

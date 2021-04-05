@@ -5,10 +5,7 @@ import models.Config;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Timer;
+import java.util.*;
 
 /**
  * The type Connection handler.
@@ -21,6 +18,7 @@ public class ConnectionHandler extends Thread{
     private Socket socket;
     private Map<String, CallbackServer> callLinks = new HashMap<>();
     private Map<String, CallbackInstance> callOwners = new HashMap<>();
+    private Map<String, ArrayList<String>> buffers = new HashMap<>();
 
     /**
      * Instantiates a new Connection handler.
@@ -70,6 +68,18 @@ public class ConnectionHandler extends Thread{
     public void registerCallback(String code, CallbackInstance controller, CallbackServer callback){
         callLinks.put(code, callback);
         callOwners.put(code, controller);
+        if(buffers.get(code) != null){
+            buffers.get(code).clear();
+        }
+    }
+
+    public void registerCallback(String code, CallbackInstance controller, CallbackServer callback, boolean processBuffers){
+        if (processBuffers) {
+            for (String command : buffers.get(code)) {
+                callback.call(controller, command);
+            }
+        }
+        registerCallback(code, controller, callback);
     }
 
     /**
@@ -121,6 +131,8 @@ public class ConnectionHandler extends Thread{
                 callLinks.get(response[0]).call(callOwners.get(response[0]), command);
             } else {
                 //TODO: TRAITER L'INFORMATION DU SERVEUR
+                buffers.computeIfAbsent(response[0], k -> new ArrayList<>());
+                buffers.get(response[0]).add(command);
             }
         }
 
