@@ -45,7 +45,8 @@ public class Plateau extends CallbackInstance {
                 new Image("player_1_left.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image("player_1_right.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image("player_2_left.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
-                new Image("player_2_right.png", COEFF_IMAGE, COEFF_IMAGE, false, false)));
+                new Image("player_2_right.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
+                new Image ("black.jpg", COEFF_IMAGE, COEFF_IMAGE, false, false)));
 
 
         for(int x = 0; x < dimX; x++){
@@ -132,6 +133,10 @@ public class Plateau extends CallbackInstance {
         int x = coordonneesJoueurs.get(s.split(" ")[1]).getX();
         int y = coordonneesJoueurs.get(s.split(" ")[1]).getY();
         plateau.get(x).set(y, new CaseVide(x, y, listeImages));
+    }
+
+    @Override
+    public void updatePlayerScore(String s) {
     }
 
     @Override

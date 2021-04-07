@@ -219,7 +219,7 @@ public class GameApp {
     }
 
 
-    private void handleKeyPressed(KeyEvent keyEvent){
+    private void handleKeyPressed(KeyEvent keyEvent) {
         long currentTime = System.currentTimeMillis();
         Long lastCall = this.keyEvents.get(keyEvent.getCode());
         if (lastCall == null || (currentTime - lastCall) > 250){
@@ -228,16 +228,38 @@ public class GameApp {
         } else {
             keyEvent.consume();
         }
-
     }
 
 
-    protected void drawGame(){
-        for(int x = 0; x < partie.getDimensionX(); x++){
-            for(int y = 0; y < partie.getDimensionY(); y++){
-                gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x*this.COEFF_IMAGE, y*this.COEFF_IMAGE);
+    protected void drawGame() {
+        for (int x = 0; x < partie.getDimensionX(); x++) {
+            for (int y = 0; y < partie.getDimensionY(); y++) {
+                gc.drawImage(plateau.getListeImages().get(11), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
             }
         }
+        if(this.partie.getModeDeJeu().equals("Tour par tour")) {
+
+            for (int x = 0; x < partie.getDimensionX(); x++) {
+                for (int y = 0; y < partie.getDimensionY(); y++) {
+                    gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
+                }
+            }
+        }
+        /*if (this.partie.getModeDeJeu().equals("Brouillard de guerre")) {
+            System.out.println("FOOOOOG---------------------------");
+            // ça va être fait dans le serveur...
+            for (int x = 0; x < partie.getDimensionX(); x++) {
+                for (int y = 0; y < partie.getDimensionY(); y++) {
+                    gc.drawImage(plateau.getListeImages().get(11), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
+                }
+            }
+        } else {
+            for (int x = 0; x < partie.getDimensionX(); x++) {
+                for (int y = 0; y < partie.getDimensionY(); y++) {
+                    gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
+                }
+            }
+        }*/
     }
 
     protected void drawPlayers() {
