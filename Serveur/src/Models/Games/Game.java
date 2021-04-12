@@ -28,6 +28,9 @@ public abstract class Game {
     private CopyOnWriteArrayList<ClientHandler> playersOkToStart = new CopyOnWriteArrayList<>();
     private final ConnectionHandler mainHandler;
     private final ClientHandler owner;
+    private int treasuresLeft;
+    private int playersLeft;
+    private boolean finie=false;
 
     protected Plateau plateau;
     /**
@@ -60,6 +63,7 @@ public abstract class Game {
         this.mainHandler = mainHandler;
         this.id = mainHandler.registerGameId(this);
         this.robots = robots;
+        this.treasuresLeft=tres;
     }
 
     /**
@@ -137,7 +141,7 @@ public abstract class Game {
     }
 
     protected void startGame(){
-
+        this.playersLeft=players.size();
     }
 
     public void broadcast(String message){
@@ -162,7 +166,7 @@ public abstract class Game {
     }
 
     public int movePlayer(ClientHandler client, String direction){
-        if (!client.getClient().isAlive()){
+        if (!client.getClient().isAlive() || finie){
             return -1;
         }
         Coordinates c = client.getClient().getCoordonnees();
@@ -200,6 +204,7 @@ public abstract class Game {
                 }
                 break;
         }
+
         Case currentCase = plateau.getCase(c.getX(), c.getY());
         currentCase.setPlayerOn(client);
         if(currentCase instanceof CaseVide){
@@ -207,8 +212,12 @@ public abstract class Game {
         } else if (currentCase instanceof CaseTresor){
             int value = ((CaseTresor) currentCase).getValue();
             plateau.setCase(new CaseVide(currentCase.getX(),currentCase.getY()));
+            treasuresLeft--;
+            isFini(client);
             return value;
         } else{
+            playersLeft--;
+            isFini(client);
             return 1;
         }
     }
@@ -287,6 +296,10 @@ public abstract class Game {
         return plateau;
     }
 
+    public void setPlayersLeft(int playersLeft) {
+        this.playersLeft = playersLeft;
+    }
+
     /**
      * Is robots boolean.
      *
@@ -298,6 +311,14 @@ public abstract class Game {
 
     }
 
+
+
+    private void isFini(ClientHandler client){
+        if (playersLeft==1 || treasuresLeft==0){
+            broadcast("530 " +client.getUsername()+ " WINS");
+            finie=true;
+        }
+    }
 
     public CopyOnWriteArrayList<ClientHandler> getPlayers() {
         return players;

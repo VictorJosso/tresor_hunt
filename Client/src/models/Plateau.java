@@ -243,6 +243,24 @@ public class Plateau extends CallbackInstance {
         this.gameApp.setPlayerTurnUsername(s.split(" ")[1]);
     }
 
+    @Override
+    public void partieFinie(String s) {
+        String gagnant = s.split(" ")[1];
+        timer.stop();
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("NOUS AVONS UN VAINQUEUR");
+            alert.setContentText("Et le vainqueur est ... " +gagnant+"!");
+            alert.initOwner(gameStage.getOwner());
+            alert.setHeaderText(null);
+            alert.showAndWait();
+
+            leaderBoardStage.close();
+            releaseAllCallbacks();
+            mainApp.gameStageClosed();
+        });
+    }
+
     public int getCOEFF_IMAGE() {
         return COEFF_IMAGE;
     }
