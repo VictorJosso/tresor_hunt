@@ -82,6 +82,7 @@ public class GameApp {
         mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition);
         mainApp.getConnectionHandler().registerCallback("511", plateau, CallbackInstance::updatePlayerTresor);
         mainApp.getConnectionHandler().registerCallback("520", plateau, CallbackInstance::declareDead);
+        mainApp.getConnectionHandler().registerCallback("530", plateau, CallbackInstance::partieFinie);
         mainApp.getConnectionHandler().registerCallback("666", plateau, CallbackInstance::handleMoveDead);
         mainApp.getConnectionHandler().registerCallback("902", plateau, CallbackInstance::handleNotYourTurn);
         mainApp.getConnectionHandler().send("410 GETTREASURES");
@@ -193,6 +194,7 @@ public class GameApp {
         this.mainApp.getConnectionHandler().releaseCallback("510");
         this.mainApp.getConnectionHandler().releaseCallback("511");
         this.mainApp.getConnectionHandler().releaseCallback("520");
+        this.mainApp.getConnectionHandler().releaseCallback("530");
         this.mainApp.getConnectionHandler().releaseCallback("666");
         this.mainApp.getConnectionHandler().releaseCallback("902");
     }
