@@ -13,6 +13,7 @@ public class Client {
     private Game gameRunning;
     private Coordinates coordonnees = new Coordinates(0,0);
     private boolean alive = true;
+    private int score = 0;
 
 
 
@@ -43,5 +44,13 @@ public class Client {
 
     public void kill() {
         this.alive = false;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void addScore(int diff) {
+        this.score += score;
     }
 }

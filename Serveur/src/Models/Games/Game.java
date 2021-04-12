@@ -141,6 +141,7 @@ public abstract class Game {
     }
 
     protected void startGame(){
+        System.out.println("NOMBRE DE JOUEURS : "+players.size());
         this.playersLeft=players.size();
     }
 
@@ -212,12 +213,14 @@ public abstract class Game {
         } else if (currentCase instanceof CaseTresor){
             int value = ((CaseTresor) currentCase).getValue();
             plateau.setCase(new CaseVide(currentCase.getX(),currentCase.getY()));
+            client.getClient().addScore(value);
             treasuresLeft--;
-            isFini(client);
+            isFini();
             return value;
         } else{
             playersLeft--;
-            isFini(client);
+            System.out.println("Nombre de joueurs : "+playersLeft);
+            isFini();
             return 1;
         }
     }
@@ -313,9 +316,15 @@ public abstract class Game {
 
 
 
-    private void isFini(ClientHandler client){
+    private void isFini(){
         if (playersLeft==1 || treasuresLeft==0){
-            broadcast("530 " +client.getUsername()+ " WINS");
+            ClientHandler best_player = players.get(0);
+            for (ClientHandler client : this.players){
+                if(client.getClient().getScore() > best_player.getClient().getScore()){
+                    best_player = client;
+                }
+            }
+            broadcast("530 " +best_player.getUsername()+ " WINS");
             finie=true;
         }
     }
