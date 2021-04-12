@@ -38,6 +38,7 @@ public class TourParTour extends Game{
 
     @Override
     protected void startGame() {
+        super.startGame();
         this.stillAlivePlayers = new CopyOnWriteArrayList<>(this.players);
         Collections.shuffle(this.stillAlivePlayers);
         currentPlayerIndex = (int) (Math.random() * this.stillAlivePlayers.size());

@@ -299,10 +299,6 @@ public abstract class Game {
         return plateau;
     }
 
-    public void setPlayersLeft(int playersLeft) {
-        this.playersLeft = playersLeft;
-    }
-
     /**
      * Is robots boolean.
      *
