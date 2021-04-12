@@ -342,6 +342,7 @@ public class GameApp {
 
     public void endGame(){
         leaderBoardStage.close();
+        gameStage.close();
         releaseAllCallbacks();
         mainApp.gameStageClosed();
     }
