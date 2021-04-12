@@ -4,6 +4,7 @@ import Apps.GameApp;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -246,18 +247,16 @@ public class Plateau extends CallbackInstance {
     @Override
     public void partieFinie(String s) {
         String gagnant = s.split(" ")[1];
-        timer.stop();
+        gameApp.getTimer().stop();
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("NOUS AVONS UN VAINQUEUR");
             alert.setContentText("Et le vainqueur est ... " +gagnant+"!");
-            alert.initOwner(gameStage.getOwner());
+            alert.initOwner(gameApp.getGameStage().getOwner());
             alert.setHeaderText(null);
             alert.showAndWait();
 
-            leaderBoardStage.close();
-            releaseAllCallbacks();
-            mainApp.gameStageClosed();
+            gameApp.endGame();
         });
     }
 

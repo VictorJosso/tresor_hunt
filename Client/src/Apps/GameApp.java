@@ -329,4 +329,18 @@ public class GameApp {
     public void setPlayerTurnUsername(String playerTurnUsername) {
         this.playerTurnUsername = playerTurnUsername;
     }
+
+    public AnimationTimer getTimer() {
+        return timer;
+    }
+
+    public Stage getGameStage() {
+        return gameStage;
+    }
+
+    public void endGame(){
+        leaderBoardStage.close();
+        releaseAllCallbacks();
+        mainApp.gameStageClosed();
+    }
 }
