@@ -316,6 +316,15 @@ public class Parser {
                     illegalCommand();
                 }
                 break;
+            case "300":
+                // définir prix : fixé à 20 pour l'instant
+                if (client.getClient().getCoordonnees().getValue() >= 20) {
+                    client.getClient().getCoordonnees().decreaseValue(20);
+                    client.send("301 PAYMENT VALIDATED");
+                } else {
+                    client.send("905 Not enough point");
+                }
+                break;
             default:
                 illegalCommand();
                 break;

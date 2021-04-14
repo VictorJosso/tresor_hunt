@@ -46,7 +46,7 @@ public class Plateau extends CallbackInstance {
                 new Image("player_1_right.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image("player_2_left.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image("player_2_right.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
-                new Image ("black.jpg", COEFF_IMAGE, COEFF_IMAGE, false, false)));
+                new Image ("war.png", COEFF_IMAGE, COEFF_IMAGE, false, false)));
 
 
         for(int x = 0; x < dimX; x++){
@@ -55,6 +55,12 @@ public class Plateau extends CallbackInstance {
                 plateau.get(x).add(new CaseVide(x,y, listeImages));
             }
         }
+    }
+
+
+
+    public boolean horsLimite (int x, int y) {
+        return x < 0 || x >= dimX || y < 0 || y >= dimY;
     }
 
     public ArrayList<ArrayList<Case>> getPlateau() {
@@ -103,6 +109,7 @@ public class Plateau extends CallbackInstance {
 
     @Override
     public void updatePlayerPosition(String s) {
+
         System.out.println("On a recu : "+s);
         String[] command = s.split(" ");
         String name = command[1];
@@ -118,6 +125,8 @@ public class Plateau extends CallbackInstance {
             c.setY(y);
         }
         gameApp.getConnectionHandler().send("512 "+name+" UPDATED");
+
+
     }
 
     @Override
@@ -136,7 +145,11 @@ public class Plateau extends CallbackInstance {
     }
 
     @Override
-    public void updatePlayerScore(String s) {
+    public void updatePlayerPayment(String s) {
+        // pb : username dans la commande
+        // nombre de tours
+        //LeaderBoardItem item = gameApp.getLeaderBoardItems().stream().filter(i -> s.split(" ")[1].equals(i.getUsername())).findAny().orElse(null);
+
     }
 
     @Override
@@ -236,6 +249,20 @@ public class Plateau extends CallbackInstance {
                 gameApp.getLeaderBoardItems().get(i).setRank("#"+(i+1));
             }
         }
+    }
+
+    public int trousRayonUn() {
+        int x= coordonneesJoueurs.get(this.gameApp.getServerConfig().getUsername()).getX();
+        int y= coordonneesJoueurs.get(this.gameApp.getServerConfig().getUsername()).getY();
+        int ctrTrous=0;
+        for (int i=x-1;i<=x+1;i++) {
+            for (int j=y-1; j<=y+1;j++) {
+                if (!(horsLimite(i,j)) && plateau.get(i).get(j) instanceof CaseTrou) {
+                    ctrTrous++;
+                }
+            }
+        }
+        return ctrTrous;
     }
 
     @Override
