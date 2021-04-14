@@ -74,7 +74,7 @@ public class ConnectionHandler extends Thread{
     }
 
     public void registerCallback(String code, CallbackInstance controller, CallbackServer callback, boolean processBuffers){
-        if (processBuffers) {
+        if (processBuffers && buffers.get(code) != null) {
             for (String command : buffers.get(code)) {
                 callback.call(controller, command);
             }
