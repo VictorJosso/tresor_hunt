@@ -7,6 +7,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import utils.LeaderBoardItem;
 import utils.PlayersListViewCell;
+import javafx.scene.control.*;
+
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,6 +19,9 @@ public class LeaderBoardController implements Initializable {
 
     private GameApp gameApp;
     private SortedList<LeaderBoardItem> sortedList;
+
+    @FXML
+    private Button revealHoleButton;
 
     public LeaderBoardController() {
     }
@@ -31,5 +36,10 @@ public class LeaderBoardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+    }
+
+    @FXML
+    private void handleRevealHoleClick() {
+        gameApp.mainApp.getConnectionHandler().send("300 REVEAL HOLE");
     }
 }

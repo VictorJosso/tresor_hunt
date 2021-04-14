@@ -23,6 +23,9 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.Config;
+import models.Game.CaseMur;
+import models.Game.CaseTresor;
+import models.Game.CaseTrou;
 import models.Partie;
 import models.Plateau;
 import utils.CallbackInstance;
@@ -231,40 +234,55 @@ public class GameApp {
     }
 
 
-    protected void drawGame() {
-        for (int x = 0; x < partie.getDimensionX(); x++) {
-            for (int y = 0; y < partie.getDimensionY(); y++) {
-                gc.drawImage(plateau.getListeImages().get(11), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
-            }
-        }
-        if(this.partie.getModeDeJeu().equals("Tour par tour")) {
 
+
+
+
+
+    protected void drawGame() {
+
+        // pb : pas très modulaire tout ça...
+        if(this.partie.getModeDeJeu().equals("3")){
+            // condition marche pas -------------------------------------
             for (int x = 0; x < partie.getDimensionX(); x++) {
                 for (int y = 0; y < partie.getDimensionY(); y++) {
-                    gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
+                    if (plateau.getPlateau().get(x).get(y) instanceof CaseTresor) {
+                        gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
+                    } else {
+                        gc.drawImage(plateau.getListeImages().get(11), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
+                    }
                 }
             }
-        }
-        /*if (this.partie.getModeDeJeu().equals("Brouillard de guerre")) {
-            System.out.println("FOOOOOG---------------------------");
-            // ça va être fait dans le serveur...
-            for (int x = 0; x < partie.getDimensionX(); x++) {
-                for (int y = 0; y < partie.getDimensionY(); y++) {
-                    gc.drawImage(plateau.getListeImages().get(11), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
+            int x = plateau.getCoordonneesJoueurs().get(playerTurnUsername).getX();
+            int y = plateau.getCoordonneesJoueurs().get(playerTurnUsername).getY();
+
+            for (int i = x-2; i <= x+2; i++) {
+                for (int j = y-2; j <= y+2; j++) {
+                    if (!plateau.horsLimite(i,j)) {
+                        if (plateau.getPlateau().get(i).get(j) instanceof CaseMur || (i==x && j==y)) {
+                            gc.drawImage(plateau.getPlateau().get(i).get(j).getImageCase(), i * this.COEFF_IMAGE, j * this.COEFF_IMAGE);
+                        }
+                    }
                 }
             }
         } else {
+
             for (int x = 0; x < partie.getDimensionX(); x++) {
                 for (int y = 0; y < partie.getDimensionY(); y++) {
-                    gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
+                        gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
                 }
             }
-        }*/
+        }
     }
 
     protected void drawPlayers() {
         for(String name : plateau.getCoordonneesJoueurs().keySet()) {
-            String nameToDraw = name;
+            String nameToDraw;
+            if (this.partie.getModeDeJeu().equals("3")) {
+                nameToDraw = name;
+            } else {
+                nameToDraw= name +" | "+plateau.trousRayonUn()+ " trous";
+            }
             if (!plateau.getCoordonneesJoueurs().get(name).isAlive()){
                 if(!name.equals(mainApp.getServerConfig().getUsername()) && plateau.getCoordonneesJoueurs().get(name).getKillDate() + 1000 > System.currentTimeMillis()){
                     gc.drawImage(flammesImage, plateau.getCoordonneesJoueurs().get(name).getX()*COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY()*COEFF_IMAGE);
@@ -274,7 +292,11 @@ public class GameApp {
             } else {
                 if (this.mainApp.getServerConfig().getUsername().equals(name)) {
                     gc.drawImage(plateau.getListeImages().get(7), plateau.getCoordonneesJoueurs().get(name).getX() * COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY() * COEFF_IMAGE);
-                    nameToDraw = "Moi";
+                    if (this.partie.getModeDeJeu().equals("3")) {
+                        nameToDraw = "Moi"+" | "+plateau.trousRayonUn()+ " trous";
+                    } else {
+                        nameToDraw = "Moi";
+                    }
                 } else {
                     gc.drawImage(plateau.getListeImages().get(9), plateau.getCoordonneesJoueurs().get(name).getX() * COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY() * COEFF_IMAGE);
                 }

@@ -27,4 +27,6 @@ public class CallbackInstance {
     public void declareDead(String s){};
     public void handleNotYourTurn(String s){};
     public void handleTurnChanged(String s){};
+    public void updatePlayerPayment(String s) {};
+
 }
