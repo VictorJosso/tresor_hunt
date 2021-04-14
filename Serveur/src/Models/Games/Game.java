@@ -6,6 +6,7 @@ import Models.Cases.CaseTresor;
 import Models.Cases.CaseVide;
 import Models.Client;
 import Models.Plateau;
+import Utils.Bot.Bot;
 import Utils.ClientHandler;
 import Utils.Coordinates;
 
@@ -64,6 +65,10 @@ public abstract class Game {
         this.id = mainHandler.registerGameId(this);
         this.robots = robots;
         this.treasuresLeft=tres;
+
+        // Pour ajouter un bot à la partie :
+        // this.addPlayer(new Bot(mainHandler, this.id, x, y));
+        // this.addPlayer(new Bot(mainHandler, this.id, x, y));
     }
 
     /**
