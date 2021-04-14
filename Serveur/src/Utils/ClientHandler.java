@@ -44,6 +44,10 @@ public class ClientHandler implements Runnable{
         this.client = new Client();
 
     }
+    
+    public ClientHandler(){
+
+    }
 
     private void illegalCommand(){
         send("550 ILLEGAL COMMAND. BYE");
