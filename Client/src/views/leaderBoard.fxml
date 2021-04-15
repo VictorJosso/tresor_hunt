@@ -6,13 +6,13 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.LeaderBoardController">
    <children>
-      <Label text="Leader Board" textAlignment="CENTER" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+      <Label prefHeight="70.0" prefWidth="590.0" text="Leader Board" textAlignment="CENTER" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
          <font>
             <Font name="Chilanka Regular" size="18.0" />
          </font>
       </Label>
-      <ListView fx:id="leaderBoardListView" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
-      <Button fx:id="revealHole" layoutX="428.0" layoutY="1.0" mnemonicParsing="false" onAction="#handleRevealHoleClick" text="Reveal hole" />
-      <Button layoutX="509.0" layoutY="1.0" mnemonicParsing="false" text="Reveal map" />
+      <ListView fx:id="leaderBoardListView" layoutY="88.0" prefHeight="312.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="88.0" />
+      <Button fx:id="revealHole" layoutX="117.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleRevealHoleClick" prefHeight="27.0" prefWidth="82.0" text="Reveal hole" />
+      <Button layoutX="117.0" layoutY="49.0" mnemonicParsing="false" text="Reveal map" />
    </children>
 </AnchorPane>
