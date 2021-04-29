@@ -9,4 +9,9 @@ public class CaseVide extends Case{
     public boolean isFree() {
         return playerOn == null;
     }
+
+    @Override
+    public String toString() {
+        return " ";
+    }
 }

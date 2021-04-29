@@ -39,4 +39,9 @@ public class CaseTresor extends Case {
     public boolean isFree() {
         return playerOn == null;
     }
+
+    @Override
+    public String toString() {
+        return "T";
+    }
 }

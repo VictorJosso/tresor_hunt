@@ -17,4 +17,9 @@ public class CaseTrou extends Case{
     public boolean isFree() {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "H";
+    }
 }

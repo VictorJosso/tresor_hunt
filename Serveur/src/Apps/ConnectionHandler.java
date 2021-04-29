@@ -62,6 +62,26 @@ public class ConnectionHandler {
         }
     }
 
+    public boolean hideGame(int id){
+        if (this.availableGamesMap.containsKey(id)){
+            this.availableGamesMap.remove(id);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean showGame(int id){
+        if (this.availableGamesMap.containsKey(id)){
+            return false;
+        }
+        else{
+            this.availableGamesMap.put(id, this.gamesMap.get(id));
+            return true;
+        }
+    }
+
     /**
      * Gets available games map.
      *

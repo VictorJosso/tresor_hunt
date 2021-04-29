@@ -20,4 +20,9 @@ public class CaseMur extends Case{
         durabilite -= damages;
         return Math.max(durabilite, 0);
     }
+
+    @Override
+    public String toString() {
+        return "M";
+    }
 }
