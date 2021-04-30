@@ -156,7 +156,6 @@ public class Parser {
 
                     }
 
-
                 }
                 else {
                     illegalCommand();
@@ -209,7 +208,11 @@ public class Parser {
                 break;
             case "141":
             case "512":
+
             case "521":
+            case "321":
+            case "331":
+            case "341":
                 break;
             case "122":
                 mainHandler.getAvailableGamesMap().remove(Integer.parseInt(response[1]));
@@ -225,6 +228,12 @@ public class Parser {
                         case 0 -> {
                             client.send("201 MOVE OK");
                             client.getClient().getGameRunning().broadcast("510 " + client.getUsername() + " POS " + client.getClient().getCoordonnees().getX() + " " + client.getClient().getCoordonnees().getY(), client);
+                            client.getClient().getGameRunning().sendHoles();
+                            client.getClient().getGameRunning().sendWalls();
+                            //client.getClient().getGameRunning().sendTres();
+                            //client.getClient().getGameRunning().sendPositions();
+
+
                         }
                         case 1 -> {
                             client.send("666 MOVE HOLE DEAD");
@@ -234,6 +243,7 @@ public class Parser {
                         default -> {
                             client.send("203 MOVE OK TRES " + status);
                             client.getClient().getGameRunning().broadcast("511 " + client.getUsername() + " POS " + client.getClient().getCoordonnees().getX() + " " + client.getClient().getCoordonnees().getY() + " TRES " + status, client);
+                            client.getClient().getGameRunning().getPlateau();
                         }
                     }
                 } else {
@@ -317,13 +327,39 @@ public class Parser {
                 }
                 break;
             case "300":
-                // définir prix : fixé à 20 pour l'instant
-                if (client.getClient().getCoordonnees().getValue() >= 20) {
-                    client.getClient().getCoordonnees().decreaseValue(20);
+                if (response.length == 3 && response[1].equals("REVEAL") && response[2].equals("HOLE")) {
+                    // définir prix : fixé à 20 pour l'instant
                     client.send("301 PAYMENT VALIDATED");
+                    int x = client.getClient().getCoordonnees().getX();
+                    int y = client.getClient().getCoordonnees().getY();
+                    // envoyer les trous :
+                    Game partie = client.getClient().getGameRunning();
+                    ArrayList<Coordinates> coordinates = partie.getPlateau().getCoordinatesTrous();
+                    ArrayList<Coordinates> holes = new ArrayList<>();
+                    client.send("320 SENDING HOLES");
+
+                    for (Coordinates c: coordinates) {
+                        for (int i=x-1;i<x+1;i++) {
+                            for (int j=y-1;j<y+1;j++) {
+                                if (c.getX()==i && c.getY()==j) {
+                                    holes.add(c);
+                                }
+                            }
+                        }
+                    }
+                    client.send("320 NUMBER " + (int) Math.ceil((double) holes.size() / 5));
+                    for (int i = 0; i < (int) Math.ceil((double) holes.size() / 5); i++) {
+                        StringBuilder message = new StringBuilder("320 MESS " + String.valueOf(i) + " POS");
+                        for (int j = 0; 5 * i + j < holes.size() && j < 5; j++) {
+                            message.append(" ").append(holes.get(5 * i + j).getX()).append(" ").append(holes.get(5 * i + j).getY());
+                        }
+                        client.send(message.toString());
+                    }
+                    // envoi position joueurs ?
                 } else {
-                    client.send("905 Not enough point");
+                    illegalCommand();
                 }
+
                 break;
             default:
                 illegalCommand();

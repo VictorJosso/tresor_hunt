@@ -26,6 +26,7 @@ import models.Config;
 import models.Game.CaseMur;
 import models.Game.CaseTresor;
 import models.Game.CaseTrou;
+import models.Game.CaseVide;
 import models.Partie;
 import models.Plateau;
 import utils.CallbackInstance;
@@ -63,6 +64,7 @@ public class GameApp {
 
     private final Image flammesImage;
     private String playerTurnUsername;
+    // ajouter méthode d'initialisation du compte tours et ajouter update dans drawgame suivant la valeur du comptetour
 
     public GameApp(MainApp mainApp, Partie partie) {
         this.mainApp = mainApp;
@@ -82,14 +84,39 @@ public class GameApp {
         mainApp.getConnectionHandler().registerCallback("411", plateau, CallbackInstance::getTresors);
         mainApp.getConnectionHandler().registerCallback("421", plateau, CallbackInstance::getWalls);
         mainApp.getConnectionHandler().registerCallback("500", plateau, CallbackInstance::handleTurnChanged, true);
-        mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition);
+        mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition, true);
         mainApp.getConnectionHandler().registerCallback("511", plateau, CallbackInstance::updatePlayerTresor);
         mainApp.getConnectionHandler().registerCallback("520", plateau, CallbackInstance::declareDead);
         mainApp.getConnectionHandler().registerCallback("666", plateau, CallbackInstance::handleMoveDead);
         mainApp.getConnectionHandler().registerCallback("902", plateau, CallbackInstance::handleNotYourTurn);
-        mainApp.getConnectionHandler().send("410 GETTREASURES");
-        mainApp.getConnectionHandler().send("400 GETHOLES");
-        mainApp.getConnectionHandler().send("420 GETWALLS");
+
+        mainApp.getConnectionHandler().registerCallback("301", plateau, CallbackInstance::updateRevealHole);
+        mainApp.getConnectionHandler().registerCallback("320", plateau, CallbackInstance::getNearHoles, true);
+        mainApp.getConnectionHandler().registerCallback("330", plateau, CallbackInstance::getNearWall,true);
+        mainApp.getConnectionHandler().registerCallback("340", plateau, CallbackInstance::getTresors, true);
+
+
+
+
+
+
+        if (partie.getModeDeJeu().equals("3")) {
+            //mainApp.getConnectionHandler().send("410 GETTREASURES");
+            //mainApp.getConnectionHandler().send("420 GETWALLS");
+            //mainApp.getConnectionHandler().send("400 GETHOLES");
+
+
+            // pb: broadcast des joueurs : utiliser 400,410,420 ?
+
+        } else {
+            mainApp.getConnectionHandler().send("410 GETTREASURES");
+            mainApp.getConnectionHandler().send("400 GETHOLES");
+            mainApp.getConnectionHandler().send("420 GETWALLS");
+        }
+
+
+
+
     }
 
     public void launch(){
@@ -105,11 +132,17 @@ public class GameApp {
         Scene gameScene = new Scene(root);
         gameStage.setScene(gameScene);
 
+        if (partie.getModeDeJeu().equals("3")) {
+            //gameScene.setFill(plateau.getListeImages().get(11));
+        }
+
         Canvas canvas = new Canvas(partie.getDimensionX()*this.COEFF_IMAGE, partie.getDimensionY()*this.COEFF_IMAGE);
         root.getChildren().add(canvas);
         canvas.setFocusTraversable(true);
 
         this.gc = canvas.getGraphicsContext2D();
+        gc.drawImage(new Image ("war.png", screenHeight, screenWidth, false, false), 0, 0);
+
 
 
         timer = new AnimationTimer(){
@@ -154,7 +187,6 @@ public class GameApp {
         this.leaderBoardStage = new Stage();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/views/leaderBoard.fxml"));
-
         AnchorPane rootPane = null;
         try {
             rootPane = loader.load();
@@ -198,6 +230,11 @@ public class GameApp {
         this.mainApp.getConnectionHandler().releaseCallback("520");
         this.mainApp.getConnectionHandler().releaseCallback("666");
         this.mainApp.getConnectionHandler().releaseCallback("902");
+
+        this.mainApp.getConnectionHandler().releaseCallback("301");
+        this.mainApp.getConnectionHandler().releaseCallback("320");
+        this.mainApp.getConnectionHandler().releaseCallback("330");
+        this.mainApp.getConnectionHandler().releaseCallback("340");
     }
 
     private void processKeyEvent(KeyEvent keyEvent){
@@ -239,21 +276,37 @@ public class GameApp {
 
 
 
-    protected void drawGame() {
 
-        // pb : pas très modulaire tout ça...
-        if(this.partie.getModeDeJeu().equals("3")){
-            // condition marche pas -------------------------------------
+    protected void drawGame() {
+        if(this.partie.getModeDeJeu().equals("3")) {
+            gc.drawImage(plateau.getListeImages().get(11), 0, 0);
             for (int x = 0; x < partie.getDimensionX(); x++) {
                 for (int y = 0; y < partie.getDimensionY(); y++) {
-                    if (plateau.getPlateau().get(x).get(y) instanceof CaseTresor) {
+                    if (!(plateau.getPlateau().get(x).get(y) instanceof CaseVide)) {
+                        //System.out.println("draw !");
                         gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
                     } else {
-                        gc.drawImage(plateau.getListeImages().get(11), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
+                        if( plateau.getPlateau().get(x).get(y).isVisitee()) {
+                            //System.out.println("visiteeeee");
+                            gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
+                        }
                     }
                 }
             }
-            int x = plateau.getCoordonneesJoueurs().get(playerTurnUsername).getX();
+
+           /* for (int x = 0; x < partie.getDimensionX(); x++) {
+                for (int y = 0; y < partie.getDimensionY(); y++) {
+                    if (plateau.getPlateau().get(x).get(x) instanceof  CaseTresor) {
+                        gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
+                    }
+                }
+            }*/
+            if (plateau.getCompteToursRevealHole()>0) {
+                System.out.println("reveal hole----------------------------------------");
+                plateau.updateCompteToursRevealHole();
+            }
+
+         /*   int x = plateau.getCoordonneesJoueurs().get(playerTurnUsername).getX(); // non : on veut pas ça, mais le client seul...
             int y = plateau.getCoordonneesJoueurs().get(playerTurnUsername).getY();
 
             for (int i = x-2; i <= x+2; i++) {
@@ -264,9 +317,26 @@ public class GameApp {
                         }
                     }
                 }
-            }
-        } else {
+            }*/
 
+
+
+
+            /*for(String name : plateau.getCoordonneesJoueurs().keySet()) {
+                if (name.equals(playerTurnUsername) && plateau.getCompteToursRevealHole()>0) {
+                    System.out.println("tour : "+plateau.getCompteToursRevealHole());
+                    for (int i=x-1;i<=x+1;i++) {
+                        for (int j=y-1;j<=y+1;j++) {
+                            if  (plateau.getPlateau().get(i).get(j) instanceof CaseTrou) {
+                                gc.drawImage(plateau.getPlateau().get(i).get(j).getImageCase(), i * this.COEFF_IMAGE, j * this.COEFF_IMAGE);
+                            }
+                        }
+                    }
+                    plateau.updateCompteToursRevealHole();
+                }
+            }*/
+
+        } else {
             for (int x = 0; x < partie.getDimensionX(); x++) {
                 for (int y = 0; y < partie.getDimensionY(); y++) {
                         gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
@@ -278,10 +348,10 @@ public class GameApp {
     protected void drawPlayers() {
         for(String name : plateau.getCoordonneesJoueurs().keySet()) {
             String nameToDraw;
-            if (this.partie.getModeDeJeu().equals("3")) {
+            if (!(this.partie.getModeDeJeu().equals("3"))) {
                 nameToDraw = name;
             } else {
-                nameToDraw= name +" | "+plateau.trousRayonUn()+ " trous";
+                nameToDraw= name +" | "+plateau.getTrousRayon1()+ " trou(s)";
             }
             if (!plateau.getCoordonneesJoueurs().get(name).isAlive()){
                 if(!name.equals(mainApp.getServerConfig().getUsername()) && plateau.getCoordonneesJoueurs().get(name).getKillDate() + 1000 > System.currentTimeMillis()){
@@ -293,7 +363,7 @@ public class GameApp {
                 if (this.mainApp.getServerConfig().getUsername().equals(name)) {
                     gc.drawImage(plateau.getListeImages().get(7), plateau.getCoordonneesJoueurs().get(name).getX() * COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY() * COEFF_IMAGE);
                     if (this.partie.getModeDeJeu().equals("3")) {
-                        nameToDraw = "Moi"+" | "+plateau.trousRayonUn()+ " trous";
+                        nameToDraw = "Moi"+" | "+plateau.getTrousRayon1()+ " trous";
                     } else {
                         nameToDraw = "Moi";
                     }
@@ -373,4 +443,14 @@ public class GameApp {
     public void setPlayerTurnUsername(String playerTurnUsername) {
         this.playerTurnUsername = playerTurnUsername;
     }
+
+    public Partie getPartie() {
+        return partie;
+    }
+
+    public String getplayerTurnUsername() {
+        return playerTurnUsername;
+    }
+
+
 }

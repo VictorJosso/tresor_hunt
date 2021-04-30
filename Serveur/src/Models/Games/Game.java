@@ -213,11 +213,14 @@ public abstract class Game {
         }
     }
 
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
+    public void sendTres() {}
+    public void sendHoles( ){}
+    public void sendWalls() {}
+        /**
+         * Gets id.
+         *
+         * @return the id
+         */
     public int getId() {
         return id;
     }

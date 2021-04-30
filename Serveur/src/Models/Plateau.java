@@ -280,12 +280,12 @@ public class Plateau {
         System.out.println("suppr i:"+i+" j:"+j);
         if (grille[i][j] instanceof CaseMur) {
             coordinatesMurs.removeIf(coordinates -> coordinates.getX() == i && coordinates.getY() == j);
+            grille[i][j]=new CaseVide(i,j);
         }
         if (grille[i][j] instanceof CaseTrou) {
             coordinatesTrous.removeIf(coordinates -> coordinates.getX() == i && coordinates.getY() == j);
+            grille[i][j]=new CaseVide(i,j);
         }
-        grille[i][j]=new CaseVide(i,j);
-
     }
 
     private void smartSuppr(int initI, int initJ, int finI, int finJ) {

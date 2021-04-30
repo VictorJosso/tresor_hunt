@@ -32,10 +32,20 @@ public class LeaderBoardController implements Initializable {
         sortedList = new SortedList<>(app.getLeaderBoardItems());
         leaderBoardListView.setCellFactory(playersListView -> new PlayersListViewCell());
         leaderBoardListView.setItems(sortedList);
+
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+    }
+
+    private void disableButton() {
+        if (gameApp.getPartie().getModeDeJeu().equals("3")) {
+            revealHoleButton.setDisable(false);
+        } else {
+            revealHoleButton.setDisable(true);
+        }
+
     }
 
     @FXML
