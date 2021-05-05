@@ -52,4 +52,14 @@ public class LeaderBoardController implements Initializable {
     private void handleRevealHoleClick() {
         gameApp.mainApp.getConnectionHandler().send("300 REVEAL HOLE");
     }
+
+
+    @FXML
+    private void handleRevealMapClick() {
+        int x = this.gameApp.getPlateau().getCoordonneesJoueurs().get(this.gameApp.getPlayerTurnUsername()).getX();
+        int y = this.gameApp.getPlateau().getCoordonneesJoueurs().get(this.gameApp.getPlayerTurnUsername()).getY();
+        gameApp.mainApp.getConnectionHandler().send("310 REVEAL MAP "+x+" "+y);
+
+        System.out.println("310 REVEAL MAP "+x+" "+y);
+    }
 }

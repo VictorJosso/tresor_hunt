@@ -448,9 +448,11 @@ public class GameApp {
         return partie;
     }
 
-    public String getplayerTurnUsername() {
+    public String getPlayerTurnUsername() {
         return playerTurnUsername;
     }
 
-
+    public Plateau getPlateau() {
+        return plateau;
+    }
 }

@@ -361,6 +361,21 @@ public class Parser {
                 }
 
                 break;
+
+
+
+            case "310":
+                if (response.length == 5 && response[1].equals("REVEAL") && response[2].equals("MAP")) {
+                    client.send("311 PAYMENT VALIDATED");
+                    int x = Integer.parseInt(response[3]);
+                    int y = Integer.parseInt(response[4]);
+                } else {
+                    client.send("c pas bon ?");
+                    illegalCommand();
+                }
+                break;
+
+
             default:
                 illegalCommand();
                 break;

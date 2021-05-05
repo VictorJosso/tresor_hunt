@@ -49,8 +49,8 @@ public class Plateau extends CallbackInstance {
                 new Image("player_1_right.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image("player_2_left.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image("player_2_right.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
-                new Image ("war.png", gameApp.getScreenHeight(), gameApp.getScreenHeight(), false, false),
-                new Image("Visitee.png", COEFF_IMAGE, COEFF_IMAGE, false, false)));
+                new Image("war.png", gameApp.getScreenHeight(), gameApp.getScreenHeight(), false, false)/*,
+                new Image("Visitee.png", COEFF_IMAGE, COEFF_IMAGE, false, false)*/));
 
 
 
@@ -195,7 +195,7 @@ public class Plateau extends CallbackInstance {
         compteToursRevealHole=5;
         System.out.println("appel update RevealHole");
         // nombre de tours
-        LeaderBoardItem item = gameApp.getLeaderBoardItems().stream().filter(i -> gameApp.getplayerTurnUsername().equals(i.getUsername())).findAny().orElse(null);
+        LeaderBoardItem item = gameApp.getLeaderBoardItems().stream().filter(i -> gameApp.getPlayerTurnUsername().equals(i.getUsername())).findAny().orElse(null);
         assert item!=null;
         if (item.getScore()-20>=0) {
             Platform.runLater(() -> {
@@ -230,13 +230,13 @@ public class Plateau extends CallbackInstance {
 
 
     public boolean updateCompteToursRevealHole() {
-        if (coordonneesJoueurs.keySet().equals(gameApp.getplayerTurnUsername()) && compteToursRevealHole > 0) {
+        if (coordonneesJoueurs.keySet().equals(gameApp.getPlayerTurnUsername()) && compteToursRevealHole > 0) {
             System.out.println("tour : "+compteToursRevealHole);
             compteToursRevealHole--;
             return true;
         } else {
-            int x=coordonneesJoueurs.get(gameApp.getplayerTurnUsername()).getX();
-            int y=coordonneesJoueurs.get(gameApp.getplayerTurnUsername()).getY();
+            int x=coordonneesJoueurs.get(gameApp.getPlayerTurnUsername()).getX();
+            int y=coordonneesJoueurs.get(gameApp.getPlayerTurnUsername()).getY();
             plateau.remove(x); // TODO: verifier
         }
         return false;
