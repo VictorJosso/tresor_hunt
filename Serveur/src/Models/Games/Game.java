@@ -6,6 +6,7 @@ import Models.Cases.CaseTresor;
 import Models.Cases.CaseVide;
 import Models.Client;
 import Models.Plateau;
+import Utils.Bot.Bot;
 import Utils.ClientHandler;
 import Utils.Coordinates;
 
@@ -64,8 +65,22 @@ public abstract class Game {
         this.id = mainHandler.registerGameId(this);
         this.robots = robots;
         this.treasuresLeft=tres;
+
+        // Pour ajouter un bot à la partie :
+        // Bot bot = new Bot(mainHandler, this.id, x, y);
+        // bot.register(this);
+
     }
 
+
+    public boolean askForName_BOT(String name){
+        for (ClientHandler client: this.players){
+            if (client.getUsername().equals(name)){
+                return false;
+            }
+        }
+        return true;
+    }
     /**
      * Add player.
      *
@@ -74,6 +89,9 @@ public abstract class Game {
     public void addPlayer(ClientHandler client){
         broadcast("140 "+client.getUsername()+" JOINED");
         players.add(client);
+        if(players.size() == this.maxPlayers){
+            mainHandler.hideGame(this.id);
+        }
         for (ClientHandler player : this.players){
             client.send("140 "+player.getUsername()+" JOINED");
         }
@@ -87,6 +105,9 @@ public abstract class Game {
     public void removePlayer(ClientHandler client){
         if (players.remove(client)){
             broadcastAmeliore("145 "+client.getUsername()+" LEFT");
+        }
+        if (players.size() == this.maxPlayers -1){
+            mainHandler.showGame(this.id);
         }
     }
 
@@ -116,6 +137,17 @@ public abstract class Game {
                     clientHandler.newClient();
                     clientHandler.getClient().setGameRunning(this);
                 }
+                if (this.maxPlayers != -1 && this.robots){
+                    for (int i = this.players.size(); i < this.maxPlayers; i++){
+                        (new Bot(mainHandler, this.id, x, y)).register(this);
+                    }
+                    try {
+                        Thread.sleep(1500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 this.plateau = new Plateau(x, y, holes, this.treasures, (int) (1.5*x*y)/5, this);
                 mainHandler.getAvailableGamesMap().remove(this.id);
                 broadcast("153 GAME STARTED");

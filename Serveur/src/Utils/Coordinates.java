@@ -17,6 +17,16 @@ public class Coordinates {
         this.value = value;
     }
 
+    public Coordinates(Coordinates original){
+        this.x = original.x;
+        this.y = original.y;
+        this.value = original.value;
+    }
+
+    public Coordinates copy(){
+        return new Coordinates(this);
+    }
+
     public int getX() {
         return x;
     }
@@ -45,11 +55,11 @@ public class Coordinates {
 
     public void addToX(int diff){
         this.x += diff;
-        System.out.println("Nouvelles coordonnées : ("+x+", "+y+")");
+        //System.out.println("Nouvelles coordonnées : ("+x+", "+y+")");
     }
 
     public void addToY(int diff){
         this.y += diff;
-        System.out.println("Nouvelles coordonnées : ("+x+", "+y+")");
+        //System.out.println("Nouvelles coordonnées : ("+x+", "+y+")");
     }
 }

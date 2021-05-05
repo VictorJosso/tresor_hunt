@@ -8,6 +8,11 @@ public class CaseMur extends Case{
         super(X, Y);
     }
 
+    public CaseMur(CaseMur original){
+        super(original);
+        this.durabilite = original.durabilite;
+    }
+
     @Override
     public void free() {}
 
@@ -19,5 +24,14 @@ public class CaseMur extends Case{
     public int damage(int damages){
         durabilite -= damages;
         return Math.max(durabilite, 0);
+    }
+
+    public CaseMur copy(){
+        return new CaseMur(this);
+    }
+
+    @Override
+    public String toString() {
+        return "M";
     }
 }

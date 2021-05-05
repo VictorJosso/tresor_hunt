@@ -63,7 +63,7 @@ public class Parser {
      * @param response_text the response text
      */
 //Méthode principale qui lit la commande envoyée par l'utilisateur et agit en fonction
-    protected void parse(String response_text){
+    public void parse(String response_text){
         System.out.println("PROCESSING COMMAND : "+ response_text);
         String[] response = response_text.split(" ");
         switch (response[0]){
@@ -200,7 +200,7 @@ public class Parser {
                 break;
             case "135":
                 if (response.length == 3 && response[1].equals("LEAVE") && NumberUtils.isNumeric(response[2])){
-                    this.mainHandler.getAvailableGamesMap().get(Integer.parseInt(response[2])).removePlayer(client);
+                    this.mainHandler.getGamesMap().get(Integer.parseInt(response[2])).removePlayer(client);
                     this.client.getJoinedGames().remove((Integer) Integer.parseInt(response[2]));
                     client.send("136 REMOVED");
                 } else {

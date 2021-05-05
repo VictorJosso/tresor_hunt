@@ -5,8 +5,21 @@ public class CaseVide extends Case{
         super(X, Y);
     }
 
+    public CaseVide(CaseVide original){
+        super(original);
+    }
+
+    public CaseVide copy(){
+        return new CaseVide(this);
+    }
+
     @Override
     public boolean isFree() {
         return playerOn == null;
+    }
+
+    @Override
+    public String toString() {
+        return " ";
     }
 }
