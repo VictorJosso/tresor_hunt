@@ -8,6 +8,14 @@ public class CaseTrou extends Case{
 
     }
 
+    public CaseTrou(CaseTrou original){
+        super(original);
+    }
+
+    public CaseTrou copy(){
+        return new CaseTrou(this);
+    }
+
     @Override
     public void setPlayerOn(ClientHandler player) {
         player.getClient().kill();

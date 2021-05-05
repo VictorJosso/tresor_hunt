@@ -46,6 +46,18 @@ public abstract class Case {
         this.posHor = X;
     }
 
+    public Case(Case original){
+        this.posVert = original.posVert;
+        this.posHor = original.posHor;
+        this.playerOn = original.playerOn;
+        this.isMarked = original.isMarked;
+        this.isMarkedForDestruction = original.isMarkedForDestruction;
+    }
+
+    public Case copy(){
+        return null;
+    }
+
     public boolean isMarkedForDestruction() {
         return isMarkedForDestruction;
     }

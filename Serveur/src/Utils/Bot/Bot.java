@@ -82,12 +82,18 @@ public class Bot extends ClientHandler {
 
     private void think(){
         String player = selectPlayerForFocus();
-        Thread t = new Thread(new Decision(this, plateauBot, player));
+        Thread t = new Thread(new Decision(this, plateauBot, this.username, player));
         t.start();
     }
 
     public void iAmDone(String result){
         System.out.println("|| [BOT] || : PENSE = "+result);
+        switch (result){
+            case "UP" -> this.plateauBot.getPlayerPosition(this.username).addToY(-1);
+            case "DOWN" -> this.plateauBot.getPlayerPosition(this.username).addToY(1);
+            case "LEFT" -> this.plateauBot.getPlayerPosition(this.username).addToX(-1);
+            case "RIGHT" -> this.plateauBot.getPlayerPosition(this.username).addToX(1);
+        }
         this.parser.parse("200 GO"+result);
     }
 
@@ -142,11 +148,11 @@ public class Bot extends ClientHandler {
                 }
                 break;
             case "203":
-                this.plateauBot.treasureFound(this.username, Integer.parseInt(commande[4]));
+                this.plateauBot.treasureFound(this.username, Integer.parseInt(commande[4]), this.plateauBot.getPlayerPosition(this.username).getX(), this.plateauBot.getPlayerPosition(this.username).getY());
                 break;
             case "511":
                 plateauBot.setPosition(commande[1], Integer.parseInt(commande[3]), Integer.parseInt(commande[4]));
-                this.plateauBot.treasureFound(commande[1], Integer.parseInt(commande[6]));
+                this.plateauBot.treasureFound(commande[1], Integer.parseInt(commande[6]), Integer.parseInt(commande[3]), Integer.parseInt(commande[4]));
                 if (!this.lastMoveSaved){
                     lastMoveSaved = true;
                     this.think();

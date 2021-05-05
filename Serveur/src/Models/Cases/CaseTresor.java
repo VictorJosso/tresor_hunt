@@ -19,6 +19,17 @@ public class CaseTresor extends Case {
         this.secret = secret;
     }
 
+    public CaseTresor(CaseTresor original){
+        super(original);
+        this.value = original.value;
+        this.secret = original.secret;
+        this.owner = original.owner;
+    }
+
+    public CaseTresor copy(){
+        return new CaseTresor(this);
+    }
+
     public boolean isSecret() {
         return secret;
     }
