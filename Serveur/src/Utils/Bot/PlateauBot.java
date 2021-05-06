@@ -96,6 +96,14 @@ public class PlateauBot {
         System.out.println(sep);
     }
 
+    public boolean isThereAPlayerThere(int posX, int posY){
+        for (Coordinates c: this.coordinatesHashMap.values()){
+            if (c.getX() == posX && c.getY() == posY){
+                return true;
+            }
+        }
+        return false;
+    }
     public Coordinates getPlayerPosition(String username){
         return this.coordinatesHashMap.get(username);
     }

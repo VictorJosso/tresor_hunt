@@ -138,7 +138,7 @@ public class Decision implements Runnable {
         ArrayList<Coordinates> complementaire = new ArrayList<>();
         for (int x = 0; x < plateau.getDim_x(); x++){
             for (int y = 0; y < plateau.getDim_y(); y++){
-                if (plateau.getGrille()[x][y] instanceof CaseVide || plateau.getGrille()[x][y] instanceof CaseTresor){
+                if ((plateau.getGrille()[x][y] instanceof CaseVide || plateau.getGrille()[x][y] instanceof CaseTresor) && (!plateau.isThereAPlayerThere(x, y) || (plateau.getPlayerPosition(this.me).getX() == x && plateau.getPlayerPosition(this.me).getY() == y))){
                     complementaire.add(new Coordinates(x, y));
                 }
             }
@@ -159,7 +159,8 @@ public class Decision implements Runnable {
     private double poids(PlateauBot plateau, Coordinates s1, Coordinates s2){
         if ((Math.abs(s1.getX()-s2.getX()) == 1 && s1.getY() - s2.getY() == 0) || (Math.abs(s1.getY()-s2.getY()) == 1 && s1.getX() - s2.getX() == 0)){
             if (plateau.getGrille()[s1.getX()][s1.getY()] instanceof CaseMur || plateau.getGrille()[s2.getX()][s2.getY()] instanceof CaseMur ||
-                    plateau.getGrille()[s1.getX()][s1.getY()] instanceof CaseTrou || plateau.getGrille()[s2.getX()][s2.getY()] instanceof CaseTrou){
+                    plateau.getGrille()[s1.getX()][s1.getY()] instanceof CaseTrou || plateau.getGrille()[s2.getX()][s2.getY()] instanceof CaseTrou ||
+                    (plateau.isThereAPlayerThere(s2.getX(), s2.getY()) && Math.abs(s1.getY() + s1.getX() - s2.getY() - s2.getX()) == 1)){
                 return Double.POSITIVE_INFINITY;
             } else {
                 return 1;
@@ -188,14 +189,18 @@ public class Decision implements Runnable {
         }
     }
 
-    private Solution dijkstra(PlateauBot plateau, int targetX, int targetY){
+    private DijkstraMap dijkstra(PlateauBot plateau) {
         double[][] distances = initDistances(plateau);
         ArrayList<Coordinates> complementaire = initComplementaire(plateau);
         Coordinates[][] predecesseurs = initPredecesseurs(plateau);
-        while (!complementaire.isEmpty()){
+        while (!complementaire.isEmpty()) {
             Coordinates s1 = findClosest(complementaire, distances);
+            if (s1 == null) {
+                complementaire.clear();
+                continue;
+            }
             complementaire.remove(s1);
-            for (String direction: directions){
+            for (String direction : directions) {
                 Coordinates s2 = s1.copy();
                 switch (direction) {
                     case "UP" -> s2.addToY(-1);
@@ -203,28 +208,54 @@ public class Decision implements Runnable {
                     case "LEFT" -> s2.addToX(-1);
                     case "RIGHT" -> s2.addToX(1);
                 }
-                if (s2.getX() < 0 || s2.getX() >= plateau.getDim_x() || s2.getY() < 0 || s2.getY() >= plateau.getDim_y()){
+                if (s2.getX() < 0 || s2.getX() >= plateau.getDim_x() || s2.getY() < 0 || s2.getY() >= plateau.getDim_y()) {
                     continue;
                 }
                 updateDistances(plateau, distances, predecesseurs, s1, s2);
             }
         }
+        return new DijkstraMap(distances, predecesseurs);
+    }
+
+    private Solution findPath(PlateauBot plateau, DijkstraMap map, int targetX, int targetY){
+        double[][] distances = map.getDistances();
+        Coordinates[][] predecesseurs = map.getPredecesseurs();
         ArrayList<Coordinates> chemin = new ArrayList<>();
         Coordinates s = new Coordinates(targetX, targetY);
         while (s.getX() != plateau.getPlayerPosition(this.me).getX() || s.getY() != plateau.getPlayerPosition(this.me).getY()){
             chemin.add(s);
             s = predecesseurs[s.getX()][s.getY()];
+            if (s == null){
+                System.out.println("Erreur dans la matrice #2");
+                return new Solution(new Coordinates(-1, -1), Double.POSITIVE_INFINITY);
+            }
         }
         return new Solution(chemin.get(chemin.size() - 1), distances[targetX][targetY]);
     }
 
+    private Solution randomSol(PlateauBot plateau, int dir){
+        int[][] movs = new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        Coordinates s2 = plateau.getPlayerPosition(this.me);
+        s2.addToX(movs[dir][0]);
+        s2.addToY(movs[dir][1]);
+        if (poids(plateau, plateau.getPlayerPosition(this.me), s2) == 1){
+            return new Solution(s2, 1);
+        } else {
+            return randomSol(plateau, (dir+1)%4);
+        }
+    }
+
     private Solution pasOuf(PlateauBot plateau){
         Solution bestSolution = new Solution(null, Double.POSITIVE_INFINITY);
+        DijkstraMap map = dijkstra(plateau);
         for (Coordinates c: plateau.getTreasuresList()){
-            Solution s = dijkstra(plateau, c.getX(), c.getY());
+            Solution s = findPath(plateau, map, c.getX(), c.getY());
             if (s.getScore() < bestSolution.getScore()){
                 bestSolution = s;
             }
+        }
+        if (bestSolution.getCoordinates() == null){
+            return randomSol(plateau, 0);
         }
         return bestSolution;
     }
