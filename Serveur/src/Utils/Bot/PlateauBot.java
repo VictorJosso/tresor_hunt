@@ -43,13 +43,15 @@ public class PlateauBot {
             }
         }
         HashMap<String, Coordinates> coordinatesHashMap_copy = new HashMap<>();
-        for (String name: coordinatesHashMap.keySet()){
-            coordinatesHashMap_copy.put(name, coordinatesHashMap.get(name).copy());
-        }
+        coordinatesHashMap.forEach((key, value) -> coordinatesHashMap_copy.put(key, value.copy()));
+        //for (String name: coordinatesHashMap.keySet()){
+        //    coordinatesHashMap_copy.put(name, coordinatesHashMap.get(name).copy());
+        //}
         ArrayList<Coordinates> treasureList_copy = new ArrayList<>();
-        for (Coordinates c: this.treasuresList){
-            treasureList_copy.add(c.copy());
-        }
+        treasuresList.forEach(value -> treasureList_copy.add(value.copy()));
+        //for (Coordinates c: this.treasuresList){
+        //    treasureList_copy.add(c.copy());
+        //}
         PlateauBot cop = new PlateauBot(grille_copy, this.players, coordinatesHashMap_copy, treasureList_copy, this.dim_x, this.dim_y);
         //System.out.println("\n\n\n\n\n/////////////// COPIE DE GRILLE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
         //affichePlateau();

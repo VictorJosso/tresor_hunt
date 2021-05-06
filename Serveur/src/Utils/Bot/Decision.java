@@ -235,10 +235,10 @@ public class Decision implements Runnable {
 
     private Solution randomSol(PlateauBot plateau, int dir){
         int[][] movs = new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-        Coordinates s2 = plateau.getPlayerPosition(this.me);
+        Coordinates s2 = plateau.getPlayerPosition(this.me).copy();
         s2.addToX(movs[dir][0]);
         s2.addToY(movs[dir][1]);
-        if (poids(plateau, plateau.getPlayerPosition(this.me), s2) == 1){
+        if (s2.getX() >= 0 && s2.getX() < plateau.getDim_x() && s2.getY() >= 0 && s2.getY() < plateau.getDim_y() && poids(plateau, plateau.getPlayerPosition(this.me), s2) == 1){
             return new Solution(s2, 1);
         } else {
             return randomSol(plateau, (dir+1)%4);
