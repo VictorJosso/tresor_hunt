@@ -51,6 +51,6 @@ public class Client {
     }
 
     public void addScore(int diff) {
-        this.score += score;
+        this.score += diff;
     }
 }

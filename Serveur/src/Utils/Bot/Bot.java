@@ -62,7 +62,7 @@ public class Bot extends ClientHandler {
     }
 
     public void newClient(){
-        this.client = new Client();
+        //this.client = new Client();
     }
 
     private void fillPlateau(){
@@ -149,12 +149,10 @@ public class Bot extends ClientHandler {
                 break;
             case "203":
                 this.plateauBot.treasureFound(this.username, Integer.parseInt(commande[4]), this.plateauBot.getPlayerPosition(this.username).getX(), this.plateauBot.getPlayerPosition(this.username).getY());
-                this.client.addScore(Integer.parseInt(commande[4]));
                 break;
             case "511":
                 plateauBot.setPosition(commande[1], Integer.parseInt(commande[3]), Integer.parseInt(commande[4]));
                 this.plateauBot.treasureFound(commande[1], Integer.parseInt(commande[6]), Integer.parseInt(commande[3]), Integer.parseInt(commande[4]));
-                this.client.addScore(Integer.parseInt(commande[6]));
                 if (!this.lastMoveSaved){
                     lastMoveSaved = true;
                     this.think();
