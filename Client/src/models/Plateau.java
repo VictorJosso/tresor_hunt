@@ -49,8 +49,8 @@ public class Plateau extends CallbackInstance {
                 new Image("player_1_right.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image("player_2_left.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image("player_2_right.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
-                new Image ("war.png", gameApp.getScreenHeight(), gameApp.getScreenHeight(), false, false),
-                new Image("Visitee.png", COEFF_IMAGE, COEFF_IMAGE, false, false)));
+                new Image("war.png", gameApp.getScreenHeight(), gameApp.getScreenHeight(), false, false)/*,
+                new Image("Visitee.png", COEFF_IMAGE, COEFF_IMAGE, false, false)*/));
 
 
 
@@ -123,7 +123,6 @@ public class Plateau extends CallbackInstance {
                 int newX = Integer.parseInt(command[i]);
                 int newY = Integer.parseInt(command[i+1]);
                 plateau.get(newX).set(newY, new CaseTresor(newX,newY, Integer.parseInt(command[i+2]), listeImages));
-                // comportement trésor inconnu : v=0 ?
                 System.out.println("ajout d'un tresor");
             }
         }
@@ -168,6 +167,7 @@ public class Plateau extends CallbackInstance {
             c.setX(x);
             c.setY(y);
 
+
         }
         gameApp.getConnectionHandler().send("512 "+name+" UPDATED");
 
@@ -195,13 +195,15 @@ public class Plateau extends CallbackInstance {
         compteToursRevealHole=5;
         System.out.println("appel update RevealHole");
         // nombre de tours
-        LeaderBoardItem item = gameApp.getLeaderBoardItems().stream().filter(i -> gameApp.getplayerTurnUsername().equals(i.getUsername())).findAny().orElse(null);
+        LeaderBoardItem item = gameApp.getLeaderBoardItems().stream().filter(i -> gameApp.getPlayerTurnUsername().equals(i.getUsername())).findAny().orElse(null);
         assert item!=null;
         if (item.getScore()-20>=0) {
             Platform.runLater(() -> {
                 item.setScore(item.getScore() - 20);
                 trierLeaderBoard();
             });
+        } else {
+            gameApp.mainApp.getConnectionHandler().send("905 Not enough point");
         }
 
         // révèle les trous dans un rayon 1 autour du joueur pendant 5 tours
@@ -210,21 +212,10 @@ public class Plateau extends CallbackInstance {
     @Override
     public void getNearHoles(String s) { // ou alors: ajouter un map avec int,coord qui indique le chiffre
        String[] command = s.split(" ");
-        if (command[1].equals("NUMBER")) { // TODO: changer ?
-            setTrousRayon1(Integer.parseInt(command[2]));
-            //setTrousRayon1(trousRayonUn());
-        }
        System.out.println("appel getnearHoles");
-       if (compteToursRevealHole > 0) {
-           if(!command[1].equals("NUMBER") && !command[1].equals ("SENDING")){
-               for(int i = 4; i < command.length; i+= 2){
-                   int newX = Integer.parseInt(command[i]);
-                   int newY = Integer.parseInt(command[i+1]);
-                   plateau.get(newX).set(newY, new CaseTrou(newX,newY, listeImages));
-               }
-           }
+       if (command[1].equals("NUMBER")) {
+           setTrousRayon1(Integer.parseInt(command[2]));
        }
-
        /*if (!command[1].equals("SENDING") && !command[1].equals("NUMBER")) {
            for (int i=4; i<command.length;i+=2) {
                int newX = Integer.parseInt(command[i]);
@@ -239,28 +230,14 @@ public class Plateau extends CallbackInstance {
 
 
     public boolean updateCompteToursRevealHole() {
-        if (coordonneesJoueurs.keySet().equals(gameApp.getplayerTurnUsername()) && compteToursRevealHole > 0) {
+        if (coordonneesJoueurs.keySet().equals(gameApp.getPlayerTurnUsername()) && compteToursRevealHole > 0) {
             System.out.println("tour : "+compteToursRevealHole);
             compteToursRevealHole--;
             return true;
         } else {
-            // WTF
-            //int x=coordonneesJoueurs.get(gameApp.getplayerTurnUsername()).getX();
-            //int y=coordonneesJoueurs.get(gameApp.getplayerTurnUsername()).getY();
-            //plateau.remove(x); // TODO: verifier
-            for (int i=0; i<plateau.size();i++) {
-                for (int j=0; j<plateau.get(i).size();j++) {
-                    if (plateau.get(i).get(j) instanceof CaseTrou) {
-                        plateau.get(i).remove(j);
-                    }
-                }
-            }
-            /*for (ArrayList<Case> l : plateau) {
-                l.removeIf(c -> c instanceof CaseTrou);
-            }*/
-            System.out.println("suppressssiiiiiooonnn !");
-
-            System.out.println(plateau);
+            int x=coordonneesJoueurs.get(gameApp.getPlayerTurnUsername()).getX();
+            int y=coordonneesJoueurs.get(gameApp.getPlayerTurnUsername()).getY();
+            plateau.remove(x); // TODO: verifier
         }
         return false;
     }
@@ -303,14 +280,6 @@ public class Plateau extends CallbackInstance {
         }*/
 
         //plateau.get(x).get(y).setVisitee();
-        /*System.out.println("actuellement, il y a "+trousRayonUn()+ " trous autour");
-        setTrousRayon1(trousRayonUn());*/
-        System.out.println("else qu'on veut");
-        if (compteToursRevealHole>0) {
-            System.out.println("reveal hole----------------------------------------");
-            updateCompteToursRevealHole(); // jamais appelé
-        }
-
 
     }
 
@@ -386,7 +355,6 @@ public class Plateau extends CallbackInstance {
     }
 
     public int trousRayonUn() {
-
         int x= coordonneesJoueurs.get(this.gameApp.getServerConfig().getUsername()).getX();
         int y= coordonneesJoueurs.get(this.gameApp.getServerConfig().getUsername()).getY();
         int ctrTrous=0;
@@ -397,8 +365,6 @@ public class Plateau extends CallbackInstance {
                 }
             }
         }
-        System.out.println(ctrTrous+" trous");
-
         return ctrTrous;
     }
 
