@@ -329,7 +329,13 @@ public class Parser {
             case "300":
                 if (response.length == 3 && response[1].equals("REVEAL") && response[2].equals("HOLE")) {
                     // définir prix : fixé à 20 pour l'instant
-                    client.send("301 PAYMENT VALIDATED");
+                    if (client.getClient().getScore()>=20) {
+                        client.getClient().lowScore(20);
+                        client.send("301 PAYMENT VALIDATED");
+                    } else {
+                        client.send("905 Not enough point");
+                        break;
+                    }
                     int x = client.getClient().getCoordonnees().getX();
                     int y = client.getClient().getCoordonnees().getY();
                     // envoyer les trous :
@@ -357,6 +363,7 @@ public class Parser {
                     }
                     // envoi position joueurs ?
                 } else {
+                    //System.out.println(response[1]+ " and "+ response[2]);
                     illegalCommand();
                 }
 

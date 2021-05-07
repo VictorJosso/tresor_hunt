@@ -301,11 +301,12 @@ public class GameApp {
                     }
                 }
             }*/
-            if (plateau.getCompteToursRevealHole()>0) {
+            //----------
+            /*if (plateau.getCompteToursRevealHole()>0) {
                 System.out.println("reveal hole----------------------------------------");
                 plateau.updateCompteToursRevealHole();
-            }
-
+            }*/
+            //----------
          /*   int x = plateau.getCoordonneesJoueurs().get(playerTurnUsername).getX(); // non : on veut pas ça, mais le client seul...
             int y = plateau.getCoordonneesJoueurs().get(playerTurnUsername).getY();
 
@@ -363,7 +364,7 @@ public class GameApp {
                 if (this.mainApp.getServerConfig().getUsername().equals(name)) {
                     gc.drawImage(plateau.getListeImages().get(7), plateau.getCoordonneesJoueurs().get(name).getX() * COEFF_IMAGE, plateau.getCoordonneesJoueurs().get(name).getY() * COEFF_IMAGE);
                     if (this.partie.getModeDeJeu().equals("3")) {
-                        nameToDraw = "Moi"+" | "+plateau.getTrousRayon1()+ " trous";
+                        nameToDraw = "Moi"+" | "+plateau.getTrousRayon1()+ " trou(s)";
                     } else {
                         nameToDraw = "Moi";
                     }

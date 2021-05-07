@@ -15,6 +15,7 @@ public class CaseTresor extends Case {
         this.value = value;
         isFree = true;
         switch (value) {
+            // trésor inconnu : valeur 0 ?
             case 5:
                 this.imageCase = listeImages.get(3);
                 break;

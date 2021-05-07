@@ -54,6 +54,7 @@ public class TourParTour extends Game{
             if (res != -1) {
                 currentPlayerIndex += 1;
                 currentPlayerIndex %= this.stillAlivePlayers.size();
+                // TODO: mettre broadcast après car 500 avant 510 (ça devrait être l'inverse)
                 broadcast("500 " + this.stillAlivePlayers.get(currentPlayerIndex).getUsername() + " TURN");
             }
             return res;

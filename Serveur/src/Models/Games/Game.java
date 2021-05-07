@@ -206,6 +206,7 @@ public abstract class Game {
             return 0;
         } else if (currentCase instanceof CaseTresor){
             int value = ((CaseTresor) currentCase).getValue();
+            client.getClient().addScore(value);
             plateau.setCase(new CaseVide(currentCase.getX(),currentCase.getY()));
             return value;
         } else{

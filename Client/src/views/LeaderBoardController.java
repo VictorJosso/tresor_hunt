@@ -45,7 +45,6 @@ public class LeaderBoardController implements Initializable {
         } else {
             revealHoleButton.setDisable(true);
         }
-
     }
 
     @FXML
