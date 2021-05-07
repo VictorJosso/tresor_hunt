@@ -5,13 +5,14 @@ import Utils.Coordinates;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PlateauBot {
 
     private Case[][] grille;
     private ArrayList<String> players = new ArrayList<>();
     private HashMap<String, Coordinates> coordinatesHashMap = new HashMap<>();
-    private ArrayList<Coordinates> treasuresList = new ArrayList<>();
+    private CopyOnWriteArrayList<Coordinates> treasuresList = new CopyOnWriteArrayList<>();
     private int dim_x;
     private int dim_y;
 
@@ -26,7 +27,7 @@ public class PlateauBot {
         }
     }
 
-    public PlateauBot(Case[][] grille, ArrayList<String> players, HashMap<String, Coordinates> coordinatesHashMap, ArrayList<Coordinates> treasuresList, int dim_x, int dim_y) {
+    public PlateauBot(Case[][] grille, ArrayList<String> players, HashMap<String, Coordinates> coordinatesHashMap, CopyOnWriteArrayList<Coordinates> treasuresList, int dim_x, int dim_y) {
         this.grille = grille;
         this.players = players;
         this.coordinatesHashMap = coordinatesHashMap;
@@ -47,7 +48,7 @@ public class PlateauBot {
         //for (String name: coordinatesHashMap.keySet()){
         //    coordinatesHashMap_copy.put(name, coordinatesHashMap.get(name).copy());
         //}
-        ArrayList<Coordinates> treasureList_copy = new ArrayList<>();
+        CopyOnWriteArrayList<Coordinates> treasureList_copy = new CopyOnWriteArrayList<>();
         treasuresList.forEach(value -> treasureList_copy.add(value.copy()));
         //for (Coordinates c: this.treasuresList){
         //    treasureList_copy.add(c.copy());
@@ -132,7 +133,7 @@ public class PlateauBot {
         affichePlateau();
     }
 
-    public ArrayList<Coordinates> getTreasuresList() {
+    public CopyOnWriteArrayList<Coordinates> getTreasuresList() {
         return treasuresList;
     }
 
