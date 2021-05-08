@@ -71,20 +71,20 @@ public class Parser {
             //110 CREATE mode SIZE x y HOLE h TRES n PLAYERS p ROBOTS r
             case "110":
 
-                if(response.length == 14 && response[1].equals("CREATE") && response[3].equals("SIZE") &&
-                        response[6].equals("HOLE") && response[8].equals("TRES") && response[10].equals("PLAYERS") &&
-                        response[12].equals("ROBOTS") && NumberUtils.isNumeric(response[2]) &&
+                if((response.length == 14 || !client.isGoodClient() && response.length == 10) && response[1].equals("CREATE") && response[3].equals("SIZE") &&
+                        response[6].equals("HOLE") && response[8].equals("TRES") && (!client.isGoodClient() || response[10].equals("PLAYERS")) &&
+                        (!client.isGoodClient() || response[12].equals("ROBOTS")) && NumberUtils.isNumeric(response[2]) &&
                         NumberUtils.isNumeric(response[4]) && NumberUtils.isNumeric(response[5]) &&
                         NumberUtils.isNumeric(response[7]) && NumberUtils.isNumeric(response[9]) &&
-                        NumberUtils.isNumeric(response[11]) && (response[13].equals("false") || response[13].equals("true"))){
+                        (!client.isGoodClient() || NumberUtils.isNumeric(response[11])) && (!client.isGoodClient() || (response[13].equals("false") || response[13].equals("true")))){
 
                     int gameMode = Integer.parseInt(response[2]);
                     int sizeX = Integer.parseInt(response[4]);
                     int sizeY = Integer.parseInt(response[5]);
                     int nbHoles = Integer.parseInt(response[7]);
                     int nbTres = Integer.parseInt(response[9]);
-                    int nbPlayers = Integer.parseInt(response[11]);
-                    boolean robots = Boolean.parseBoolean(response[13]);
+                    int nbPlayers = client.isGoodClient() ? Integer.parseInt(response[11]) : 500;
+                    boolean robots = client.isGoodClient() && Boolean.parseBoolean(response[13]);
                     int nbWalls = (sizeX * sizeY) / 5;
 
                     if(gameMode < 1 || gameMode > 3 ) {
@@ -130,7 +130,7 @@ public class Parser {
                         client.send("556 TREASURES CAN NOT BE LESS THAN 1");
                         break;
                     }
-                    if(nbPlayers > ((sizeX * sizeY) - nbWalls - nbHoles - nbTres) / 20) {
+                    if(client.isGoodClient() && nbPlayers > ((sizeX * sizeY) - nbWalls - nbHoles - nbTres) / 20) {
                         client.send("556 TOO MANY PLAYERS");
                         break;
                     }
