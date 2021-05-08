@@ -13,7 +13,8 @@ public class Unpacker {
         String[] commande = message.split(" ");
         this.n = n;
         this.type = commande[0];
-        this.total = Integer.parseInt(commande[2]);
+
+        this.total = (int) Math.ceil((double) Integer.parseInt(commande[2]) / 5);
         this.callBack = callBack;
     }
 
