@@ -196,8 +196,7 @@ public class HomeController extends CallbackInstance {
         partieCreated.setCreator(true);
 
         mainApp.getConnectionHandler().registerCallback("111", this, CallbackInstance::partieCreationCallback);
-        mainApp.getConnectionHandler().send(String.format("110 CREATE %s SIZE %d %d HOLE %d TRES %d" + (mainApp.getServerConfig().isServeurAmeliore() ? " PLAYERS "+partieCreated.getMaxPlayers()+" ROBOTS "+partieCreated.isRobots() : " PLAYERS "+
-                        partieCreated.getPlayersNames().size()+" ROBOTS "+false),
+        mainApp.getConnectionHandler().send(String.format("110 CREATE %s SIZE %d %d HOLE %d TRES %d" + (mainApp.getServerConfig().isServeurAmeliore() ? " PLAYERS "+partieCreated.getMaxPlayers()+" ROBOTS "+partieCreated.isRobots() : ""),
                 partieCreated.getModeDeJeu(),
                 partieCreated.getDimensionX(),
                 partieCreated.getDimensionY(),
