@@ -9,6 +9,9 @@ import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
+/**
+ * The type Players list view cell.
+ */
 public class PlayersListViewCell extends ListCell<LeaderBoardItem> {
     @FXML
     private Label usernameLabel;

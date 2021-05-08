@@ -193,12 +193,20 @@ public class MainApp extends Application {
         this.configStage.close();
     }
 
+    /**
+     * Start game.
+     *
+     * @param p the p
+     */
     public void startGame(Partie p){
         GameApp game = new GameApp(this, p);
         game.launch();
         this.lobbyStage.close();
     }
 
+    /**
+     * Game stage closed.
+     */
     public void gameStageClosed(){
         this.resumeMainStageStartup();
     }
@@ -253,6 +261,7 @@ public class MainApp extends Application {
     /**
      * Join game lobby.
      *
+     * @param p the p
      * @throws Exception the exception
      */
     public void joinGameLobby(Partie p) throws Exception {

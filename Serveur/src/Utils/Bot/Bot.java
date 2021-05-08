@@ -9,6 +9,9 @@ import Utils.Parser;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * The type Bot.
+ */
 public class Bot extends ClientHandler {
 
     private final ConnectionHandler mainApp;
@@ -27,7 +30,10 @@ public class Bot extends ClientHandler {
     /**
      * Instantiates a new Client handler.
      *
-     * @param mainApp the main app
+     * @param mainApp    the main app
+     * @param gameId     the game id
+     * @param dimensionX the dimension x
+     * @param dimensionY the dimension y
      */
     public Bot(ConnectionHandler mainApp, int gameId, int dimensionX, int dimensionY) {
         this.mainApp = mainApp;
@@ -37,6 +43,11 @@ public class Bot extends ClientHandler {
         this.joinedGames.add(gameId);
     }
 
+    /**
+     * Register.
+     *
+     * @param game the game
+     */
     public void register(Game game){
         if (!game.askForName_BOT(this.username)){
             this.username = "[BOT]"+availableUsernames[(int) (Math.random() * availableUsernames.length)];
@@ -86,6 +97,11 @@ public class Bot extends ClientHandler {
         t.start();
     }
 
+    /**
+     * Am done.
+     *
+     * @param result the result
+     */
     public void iAmDone(String result){
         System.out.println("|| [BOT] || : PENSE = "+result);
         switch (result){

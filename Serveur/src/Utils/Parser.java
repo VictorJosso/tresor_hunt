@@ -49,10 +49,20 @@ public class Parser {
         }
     }
 
+    /**
+     * Is good client boolean.
+     *
+     * @return the boolean
+     */
     public boolean isGoodClient() {
         return goodClient;
     }
 
+    /**
+     * Sets good client.
+     *
+     * @param goodClient the good client
+     */
     public void setGoodClient(boolean goodClient) {
         this.goodClient = goodClient;
     }

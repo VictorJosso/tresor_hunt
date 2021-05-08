@@ -11,6 +11,9 @@ import java.util.*;
 
 import static java.lang.Math.*;
 
+/**
+ * The type Plateau.
+ */
 public class Plateau {
 
     // Variables liées aux paramètres de la grille de jeu
@@ -33,6 +36,16 @@ public class Plateau {
 
     //ArrayList<ArrayList<Case>> grille = new ArrayList<>();
 
+    /**
+     * Instantiates a new Plateau.
+     *
+     * @param hor       the hor
+     * @param vert      the vert
+     * @param nbTrous   the nb trous
+     * @param nbTresors the nb tresors
+     * @param nbMurs    the nb murs
+     * @param game      the game
+     */
     public Plateau(int hor, int vert, int nbTrous, int nbTresors, int nbMurs, Game game ) {
         this.vert=vert;
         this.hor=hor;
@@ -66,6 +79,13 @@ public class Plateau {
         System.out.println("PLATEAU GENERE");
     }
 
+    /**
+     * Hors limite boolean.
+     *
+     * @param x the x
+     * @param y the y
+     * @return the boolean
+     */
     public boolean horsLimite (int x, int y) {
         return x < 0 || x >= hor || y < 0 || y >= vert;
     }
@@ -515,6 +535,13 @@ public class Plateau {
         }
     }
 
+    /**
+     * Get case case.
+     *
+     * @param x the x
+     * @param y the y
+     * @return the case
+     */
     public Case getCase(int x, int y){
         if (horsLimite(x, y)){
             return new ImaginaryCase();
@@ -522,6 +549,11 @@ public class Plateau {
         return grille[x][y];
     }
 
+    /**
+     * Set case.
+     *
+     * @param c the c
+     */
     public void setCase(Case c){
         grille[c.getX()][c.getY()] = c;
     }
@@ -636,14 +668,29 @@ public class Plateau {
         }
     }
 
+    /**
+     * Gets coordinates murs.
+     *
+     * @return the coordinates murs
+     */
     public ArrayList<Coordinates> getCoordinatesMurs() {
         return coordinatesMurs;
     }
 
+    /**
+     * Gets coordinates trous.
+     *
+     * @return the coordinates trous
+     */
     public ArrayList<Coordinates> getCoordinatesTrous() {
         return coordinatesTrous;
     }
 
+    /**
+     * Gets coordinates tresors.
+     *
+     * @return the coordinates tresors
+     */
     public ArrayList<Coordinates> getCoordinatesTresors() {
         return coordinatesTresors;
     }

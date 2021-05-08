@@ -2,6 +2,9 @@ package Utils.Bot;
 
 import java.util.ArrayList;
 
+/**
+ * The type Unpacker.
+ */
 public class Unpacker {
     private String type;
     private ArrayList<String> resutls = new ArrayList<>();
@@ -9,6 +12,13 @@ public class Unpacker {
     private PlateauBot callBack;
     private int n;
 
+    /**
+     * Instantiates a new Unpacker.
+     *
+     * @param message  the message
+     * @param n        the n
+     * @param callBack the call back
+     */
     public Unpacker(String message, int n, PlateauBot callBack) {
         String[] commande = message.split(" ");
         this.n = n;
@@ -18,6 +28,11 @@ public class Unpacker {
         this.callBack = callBack;
     }
 
+    /**
+     * Un pack.
+     *
+     * @param message the message
+     */
     public void unPack(String message){
         String[] commande = message.split(" ");
         for (int i = 4; i < commande.length; i += n){

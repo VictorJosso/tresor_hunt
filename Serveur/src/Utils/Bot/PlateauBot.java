@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * The type Plateau bot.
+ */
 public class PlateauBot {
 
     private Case[][] grille;
@@ -16,6 +19,12 @@ public class PlateauBot {
     private int dim_x;
     private int dim_y;
 
+    /**
+     * Instantiates a new Plateau bot.
+     *
+     * @param dim_x the dim x
+     * @param dim_y the dim y
+     */
     public PlateauBot(int dim_x, int dim_y){
         this.dim_x = dim_x;
         this.dim_y = dim_y;
@@ -27,6 +36,16 @@ public class PlateauBot {
         }
     }
 
+    /**
+     * Instantiates a new Plateau bot.
+     *
+     * @param grille             the grille
+     * @param players            the players
+     * @param coordinatesHashMap the coordinates hash map
+     * @param treasuresList      the treasures list
+     * @param dim_x              the dim x
+     * @param dim_y              the dim y
+     */
     public PlateauBot(Case[][] grille, ArrayList<String> players, HashMap<String, Coordinates> coordinatesHashMap, CopyOnWriteArrayList<Coordinates> treasuresList, int dim_x, int dim_y) {
         this.grille = grille;
         this.players = players;
@@ -36,6 +55,11 @@ public class PlateauBot {
         this.treasuresList = treasuresList;
     }
 
+    /**
+     * Copy plateau bot.
+     *
+     * @return the plateau bot
+     */
     public PlateauBot copy(){
         Case[][] grille_copy = new Case[dim_x][dim_y];
         for (int x = 0; x < dim_x; x ++){
@@ -61,6 +85,13 @@ public class PlateauBot {
         return cop;
     }
 
+    /**
+     * Set position.
+     *
+     * @param player the player
+     * @param posX   the pos x
+     * @param posY   the pos y
+     */
     public void setPosition(String player, int posX, int posY){
         if (coordinatesHashMap.containsKey(player)){
             coordinatesHashMap.get(player).setX(posX);
@@ -70,16 +101,34 @@ public class PlateauBot {
         }
     }
 
+    /**
+     * Treasure found.
+     *
+     * @param player the player
+     * @param value  the value
+     * @param coordX the coord x
+     * @param coordY the coord y
+     */
     public void treasureFound(String player, int value, int coordX, int coordY){
         coordinatesHashMap.get(player).addToValue(value);
         this.grille[coordX][coordY] = new CaseVide(coordX, coordY);
         this.treasuresList.removeIf(c -> c.getX() == coordX && c.getY() == coordY);
     }
 
+    /**
+     * Notify dead.
+     *
+     * @param player the player
+     */
     public void notifyDead(String player){
         this.coordinatesHashMap.remove(player);
     }
 
+    /**
+     * Add player.
+     *
+     * @param username the username
+     */
     public void addPlayer(String username){
         this.players.add(username);
     }
@@ -99,6 +148,13 @@ public class PlateauBot {
         System.out.println(sep);
     }
 
+    /**
+     * Is there a player there boolean.
+     *
+     * @param posX the pos x
+     * @param posY the pos y
+     * @return the boolean
+     */
     public boolean isThereAPlayerThere(int posX, int posY){
         for (Coordinates c: this.coordinatesHashMap.values()){
             if (c.getX() == posX && c.getY() == posY){
@@ -107,10 +163,23 @@ public class PlateauBot {
         }
         return false;
     }
+
+    /**
+     * Get player position coordinates.
+     *
+     * @param username the username
+     * @return the coordinates
+     */
     public Coordinates getPlayerPosition(String username){
         return this.coordinatesHashMap.get(username);
     }
 
+    /**
+     * Receive data.
+     *
+     * @param type the type
+     * @param data the data
+     */
     public void receiveData(String type, ArrayList<String> data){
         for (String coord: data) {
             String[] coordinates = coord.split(" ");
@@ -133,22 +202,47 @@ public class PlateauBot {
         affichePlateau();
     }
 
+    /**
+     * Gets treasures list.
+     *
+     * @return the treasures list
+     */
     public CopyOnWriteArrayList<Coordinates> getTreasuresList() {
         return treasuresList;
     }
 
+    /**
+     * Gets players.
+     *
+     * @return the players
+     */
     public ArrayList<String> getPlayers() {
         return players;
     }
 
+    /**
+     * Get grille case [ ] [ ].
+     *
+     * @return the case [ ] [ ]
+     */
     public Case[][] getGrille() {
         return grille;
     }
 
+    /**
+     * Gets dim x.
+     *
+     * @return the dim x
+     */
     public int getDim_x() {
         return dim_x;
     }
 
+    /**
+     * Gets dim y.
+     *
+     * @return the dim y
+     */
     public int getDim_y() {
         return dim_y;
     }

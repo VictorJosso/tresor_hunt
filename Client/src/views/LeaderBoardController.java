@@ -11,6 +11,9 @@ import utils.PlayersListViewCell;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The type Leader board controller.
+ */
 public class LeaderBoardController implements Initializable {
     @FXML
     private ListView<LeaderBoardItem> leaderBoardListView;
@@ -18,9 +21,17 @@ public class LeaderBoardController implements Initializable {
     private GameApp gameApp;
     private SortedList<LeaderBoardItem> sortedList;
 
+    /**
+     * Instantiates a new Leader board controller.
+     */
     public LeaderBoardController() {
     }
 
+    /**
+     * Set game app.
+     *
+     * @param app the app
+     */
     public void setGameApp(GameApp app){
         this.gameApp = app;
 

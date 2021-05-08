@@ -30,14 +30,23 @@ public abstract class Game {
     private final ConnectionHandler mainHandler;
     private final ClientHandler owner;
     private int treasuresLeft;
+    /**
+     * The Players left.
+     */
     protected int playersLeft;
     private boolean finie=false;
 
+    /**
+     * The Plateau.
+     */
     protected Plateau plateau;
     /**
      * The Mode.
      */
     public int mode;
+    /**
+     * The Players.
+     */
     protected CopyOnWriteArrayList<ClientHandler> players = new CopyOnWriteArrayList<>();
     private final boolean robots;
 
@@ -73,6 +82,12 @@ public abstract class Game {
     }
 
 
+    /**
+     * Ask for name bot boolean.
+     *
+     * @param name the name
+     * @return the boolean
+     */
     public boolean askForName_BOT(String name){
         for (ClientHandler client: this.players){
             if (client.getUsername().equals(name)){
@@ -81,6 +96,7 @@ public abstract class Game {
         }
         return true;
     }
+
     /**
      * Add player.
      *
@@ -111,6 +127,12 @@ public abstract class Game {
         }
     }
 
+    /**
+     * Request start boolean.
+     *
+     * @param requester the requester
+     * @return the boolean
+     */
     public boolean requestStart(ClientHandler requester){
         if (requester == owner){
             this.playersOkToStart.clear();
@@ -122,6 +144,12 @@ public abstract class Game {
         }
     }
 
+    /**
+     * Start request status.
+     *
+     * @param client the client
+     * @param status the status
+     */
     public void startRequestStatus(ClientHandler client, boolean status){
         if (playersOkToStart.contains(client) || playersRefusedToStart.contains(client)){
             return;
@@ -166,21 +194,40 @@ public abstract class Game {
         }
     }
 
+    /**
+     * Send positions.
+     *
+     * @param requester the requester
+     */
     public void sendPositions(ClientHandler requester){
         for(ClientHandler c : this.players){
             requester.send(("510 " + c.getUsername() + " POS " + c.getClient().getCoordonnees().getX() + " "+ c.getClient().getCoordonnees().getY()));
         }
     }
 
+    /**
+     * Start game.
+     */
     protected void startGame(){
         System.out.println("NOMBRE DE JOUEURS : "+players.size());
         this.playersLeft=players.size();
     }
 
+    /**
+     * Broadcast.
+     *
+     * @param message the message
+     */
     public void broadcast(String message){
         broadcast(message, null);
     }
 
+    /**
+     * Broadcast.
+     *
+     * @param message the message
+     * @param except  the except
+     */
     public void broadcast(String message, ClientHandler except){
         System.err.println("ON BROADCAST "+message);
         for (ClientHandler client: this.players){
@@ -190,6 +237,11 @@ public abstract class Game {
         }
     }
 
+    /**
+     * Broadcast ameliore.
+     *
+     * @param message the message
+     */
     public void broadcastAmeliore(String message){
         for (ClientHandler player: this.players){
             if (player.isGoodClient()){
@@ -198,6 +250,13 @@ public abstract class Game {
         }
     }
 
+    /**
+     * Move player int.
+     *
+     * @param client    the client
+     * @param direction the direction
+     * @return the int
+     */
     public int movePlayer(ClientHandler client, String direction){
         if (!client.getClient().isAlive() || finie){
             return -1;
@@ -327,6 +386,11 @@ public abstract class Game {
         mainHandler.getAvailableGamesMap().remove(this.id);
     }
 
+    /**
+     * Gets plateau.
+     *
+     * @return the plateau
+     */
     public Plateau getPlateau() {
         return plateau;
     }
@@ -343,7 +407,9 @@ public abstract class Game {
     }
 
 
-
+    /**
+     * Is fini.
+     */
     protected void isFini(){
         if (playersLeft==1 || treasuresLeft==0){
             ClientHandler best_player = players.get(0);
@@ -357,6 +423,11 @@ public abstract class Game {
         }
     }
 
+    /**
+     * Gets players.
+     *
+     * @return the players
+     */
     public CopyOnWriteArrayList<ClientHandler> getPlayers() {
         return players;
     }

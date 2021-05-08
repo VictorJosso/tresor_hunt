@@ -62,6 +62,12 @@ public class ConnectionHandler {
         }
     }
 
+    /**
+     * Hide game boolean.
+     *
+     * @param id the id
+     * @return the boolean
+     */
     public boolean hideGame(int id){
         if (this.availableGamesMap.containsKey(id)){
             this.availableGamesMap.remove(id);
@@ -72,6 +78,12 @@ public class ConnectionHandler {
         }
     }
 
+    /**
+     * Show game boolean.
+     *
+     * @param id the id
+     * @return the boolean
+     */
     public boolean showGame(int id){
         if (this.availableGamesMap.containsKey(id)){
             return false;
@@ -91,6 +103,11 @@ public class ConnectionHandler {
         return availableGamesMap;
     }
 
+    /**
+     * Gets games map.
+     *
+     * @return the games map
+     */
     public Map<Integer, Game> getGamesMap() {
         return gamesMap;
     }

@@ -69,6 +69,7 @@ public class LobbyController extends CallbackInstance {
      * Sets main app.
      *
      * @param mainApp the main app
+     * @param p       the p
      */
     public void setMainApp(MainApp mainApp, Partie p) {
         this.mainApp = mainApp;
@@ -203,6 +204,9 @@ public class LobbyController extends CallbackInstance {
 
     }
 
+    /**
+     * The type Colored list cell format.
+     */
     public class ColoredListCellFormat extends ListCell<String> {
         @Override
         protected void updateItem(String item, boolean empty) {

@@ -44,7 +44,10 @@ public class ClientHandler implements Runnable{
         this.client = new Client();
 
     }
-    
+
+    /**
+     * Instantiates a new Client handler.
+     */
     public ClientHandler(){
 
     }
@@ -132,6 +135,9 @@ public class ClientHandler implements Runnable{
         return client;
     }
 
+    /**
+     * New client.
+     */
     public void newClient(){
         this.client = new Client();
     }
@@ -150,7 +156,6 @@ public class ClientHandler implements Runnable{
     }
 
 
-
     /**
      * Close connection.
      */
@@ -165,26 +170,56 @@ public class ClientHandler implements Runnable{
         }
     }
 
+    /**
+     * Gets username.
+     *
+     * @return the username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Sets username.
+     *
+     * @param username the username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * Is logged in boolean.
+     *
+     * @return the boolean
+     */
     public boolean isLoggedIn() {
         return loggedIn;
     }
 
+    /**
+     * Sets logged in.
+     *
+     * @param loggedIn the logged in
+     */
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
     }
 
+    /**
+     * Gets joined games.
+     *
+     * @return the joined games
+     */
     public ArrayList<Integer> getJoinedGames() {
         return joinedGames;
     }
 
+    /**
+     * Is good client boolean.
+     *
+     * @return the boolean
+     */
     public boolean isGoodClient(){
         return parser.isGoodClient();
     }

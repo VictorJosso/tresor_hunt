@@ -269,26 +269,56 @@ public class Partie {
         this.robots.set(robots);
     }
 
+    /**
+     * Gets max players.
+     *
+     * @return the max players
+     */
     public int getMaxPlayers() {
         return maxPlayers.get();
     }
 
+    /**
+     * Max players property integer property.
+     *
+     * @return the integer property
+     */
     public IntegerProperty maxPlayersProperty() {
         return maxPlayers;
     }
 
+    /**
+     * Sets max players.
+     *
+     * @param maxPlayers the max players
+     */
     public void setMaxPlayers(int maxPlayers) {
         this.maxPlayers.set(maxPlayers);
     }
 
+    /**
+     * Is creator boolean.
+     *
+     * @return the boolean
+     */
     public boolean isCreator() {
         return creator;
     }
 
+    /**
+     * Sets creator.
+     *
+     * @param creator the creator
+     */
     public void setCreator(boolean creator) {
         this.creator = creator;
     }
 
+    /**
+     * Gets players names.
+     *
+     * @return the players names
+     */
     public ObservableList<String> getPlayersNames() {
         return playersNames;
     }

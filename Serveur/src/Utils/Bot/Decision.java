@@ -9,6 +9,9 @@ import com.sun.jdi.DoubleValue;
 
 import java.util.ArrayList;
 
+/**
+ * The type Decision.
+ */
 public class Decision implements Runnable {
     // Classe pour décision de mouvement.
     private final PlateauBot plateau_off;
@@ -17,6 +20,14 @@ public class Decision implements Runnable {
     private final Bot botInstance;
     private String[] directions = new String[]{"UP", "DOWN", "LEFT", "RIGHT"};
 
+    /**
+     * Instantiates a new Decision.
+     *
+     * @param botInstance  the bot instance
+     * @param plateau_off  the plateau off
+     * @param me           the me
+     * @param targetPlayer the target player
+     */
     public Decision(Bot botInstance, PlateauBot plateau_off, String me, String targetPlayer) {
         this.botInstance = botInstance;
         this.plateau_off = plateau_off;

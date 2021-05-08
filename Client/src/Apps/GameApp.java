@@ -34,12 +34,21 @@ import views.LeaderBoardController;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * The type Game app.
+ */
 public class GameApp {
+    /**
+     * The Main app.
+     */
     public MainApp mainApp;
     private Stage gameStage;
     private Stage leaderBoardStage;
     private final Partie partie;
     private final Plateau plateau;
+    /**
+     * The Gc.
+     */
     public GraphicsContext gc;
     private AnimationTimer timer;
     private final int screenWidth;
@@ -61,6 +70,12 @@ public class GameApp {
     private final Image flammesImage;
     private String playerTurnUsername;
 
+    /**
+     * Instantiates a new Game app.
+     *
+     * @param mainApp the main app
+     * @param partie  the partie
+     */
     public GameApp(MainApp mainApp, Partie partie) {
         this.mainApp = mainApp;
         this.partie = partie;
@@ -90,6 +105,9 @@ public class GameApp {
         mainApp.getConnectionHandler().send("420 GETWALLS");
     }
 
+    /**
+     * Launch.
+     */
     public void launch(){
         this.gameStage = new Stage();
         Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
@@ -234,6 +252,9 @@ public class GameApp {
     }
 
 
+    /**
+     * Draw game.
+     */
     protected void drawGame(){
         for(int x = 0; x < partie.getDimensionX(); x++){
             for(int y = 0; y < partie.getDimensionY(); y++){
@@ -242,6 +263,9 @@ public class GameApp {
         }
     }
 
+    /**
+     * Draw players.
+     */
     protected void drawPlayers() {
         for(String name : plateau.getCoordonneesJoueurs().keySet()) {
             String nameToDraw = name;
@@ -277,6 +301,12 @@ public class GameApp {
         }
     }
 
+    /**
+     * Register draw on top.
+     *
+     * @param imageCrop the image crop
+     * @param duration  the duration
+     */
     public void registerDrawOnTop(ImageCrop imageCrop, long duration){
         System.out.println("On enregistre une demande de draw on top jusqua " + (System.currentTimeMillis() + duration) +" actuellement "+System.currentTimeMillis());
         this.haveToDrawOnTop.put(imageCrop, System.currentTimeMillis() + duration);
@@ -292,54 +322,112 @@ public class GameApp {
         }
     }
 
+    /**
+     * Handle mouse pressed.
+     *
+     * @param e the e
+     */
     protected void handleMousePressed(MouseEvent e)
     {
         this.dragOffsetX = e.getScreenX() - this.leaderBoardStage.getX();
         this.dragOffsetY = e.getScreenY() - this.leaderBoardStage.getY();
     }
 
+    /**
+     * Handle mouse dragged.
+     *
+     * @param e the e
+     */
     protected void handleMouseDragged(MouseEvent e)
     {
         this.leaderBoardStage.setX(e.getScreenX() - this.dragOffsetX);
         this.leaderBoardStage.setY(e.getScreenY() - this.dragOffsetY);
     }
 
+    /**
+     * Gets directions.
+     *
+     * @return the directions
+     */
     public ArrayList<KeyCode> getDirections() {
         return directions;
     }
 
+    /**
+     * Get server config config.
+     *
+     * @return the config
+     */
     public Config getServerConfig(){
         return mainApp.getServerConfig();
     }
 
+    /**
+     * Get connection handler connection handler.
+     *
+     * @return the connection handler
+     */
     public ConnectionHandler getConnectionHandler(){
         return mainApp.getConnectionHandler();
     }
 
+    /**
+     * Gets leader board items.
+     *
+     * @return the leader board items
+     */
     public ObservableList<LeaderBoardItem> getLeaderBoardItems() {
         return leaderBoardItems;
     }
 
+    /**
+     * Gets screen width.
+     *
+     * @return the screen width
+     */
     public int getScreenWidth() {
         return COEFF_IMAGE * partie.getDimensionX();
     }
 
+    /**
+     * Gets screen height.
+     *
+     * @return the screen height
+     */
     public int getScreenHeight() {
         return COEFF_IMAGE * partie.getDimensionY();
     }
 
+    /**
+     * Sets player turn username.
+     *
+     * @param playerTurnUsername the player turn username
+     */
     public void setPlayerTurnUsername(String playerTurnUsername) {
         this.playerTurnUsername = playerTurnUsername;
     }
 
+    /**
+     * Gets timer.
+     *
+     * @return the timer
+     */
     public AnimationTimer getTimer() {
         return timer;
     }
 
+    /**
+     * Gets game stage.
+     *
+     * @return the game stage
+     */
     public Stage getGameStage() {
         return gameStage;
     }
 
+    /**
+     * End game.
+     */
     public void endGame(){
         leaderBoardStage.close();
         gameStage.close();

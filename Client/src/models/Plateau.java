@@ -20,7 +20,13 @@ import utils.LeaderBoardItem;
 import java.io.File;
 import java.util.*;
 
+/**
+ * The type Plateau.
+ */
 public class Plateau extends CallbackInstance {
+    /**
+     * The Plateau.
+     */
     public ArrayList<ArrayList<Case>> plateau = new ArrayList<>();
     private int dimX;
     private int dimY;
@@ -30,6 +36,14 @@ public class Plateau extends CallbackInstance {
 
     private GameApp gameApp;
 
+    /**
+     * Instantiates a new Plateau.
+     *
+     * @param dimX        the dim x
+     * @param dimY        the dim y
+     * @param COEFF_IMAGE the coeff image
+     * @param gameApp     the game app
+     */
     public Plateau(int dimX, int dimY, int COEFF_IMAGE, GameApp gameApp) {
         this.dimX = dimX;
         this.dimY = dimY;
@@ -57,10 +71,21 @@ public class Plateau extends CallbackInstance {
         }
     }
 
+    /**
+     * Gets plateau.
+     *
+     * @return the plateau
+     */
     public ArrayList<ArrayList<Case>> getPlateau() {
         return plateau;
     }
 
+    /**
+     * Set case mur.
+     *
+     * @param x the x
+     * @param y the y
+     */
     public void setCaseMur(int x, int y){
         this.plateau.get(x).set(y, new CaseMur(x, y, listeImages));
     }
@@ -260,18 +285,38 @@ public class Plateau extends CallbackInstance {
         });
     }
 
+    /**
+     * Gets coeff image.
+     *
+     * @return the coeff image
+     */
     public int getCOEFF_IMAGE() {
         return COEFF_IMAGE;
     }
 
+    /**
+     * Sets coeff image.
+     *
+     * @param COEFF_IMAGE the coeff image
+     */
     public void setCOEFF_IMAGE(int COEFF_IMAGE) {
         this.COEFF_IMAGE = COEFF_IMAGE;
     }
 
+    /**
+     * Gets coordonnees joueurs.
+     *
+     * @return the coordonnees joueurs
+     */
     public HashMap<String, Coordinates> getCoordonneesJoueurs() {
         return coordonneesJoueurs;
     }
 
+    /**
+     * Gets liste images.
+     *
+     * @return the liste images
+     */
     public ArrayList<Image> getListeImages() {
         return listeImages;
     }

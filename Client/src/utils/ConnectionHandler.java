@@ -73,6 +73,14 @@ public class ConnectionHandler extends Thread{
         }
     }
 
+    /**
+     * Register callback.
+     *
+     * @param code           the code
+     * @param controller     the controller
+     * @param callback       the callback
+     * @param processBuffers the process buffers
+     */
     public void registerCallback(String code, CallbackInstance controller, CallbackServer callback, boolean processBuffers){
         if (processBuffers && buffers.get(code) != null) {
             for (String command : buffers.get(code)) {
@@ -106,6 +114,9 @@ public class ConnectionHandler extends Thread{
         return timer;
     }
 
+    /**
+     * Upgrade.
+     */
     public void upgrade(){
         send("55 UPGRADE");
     }
