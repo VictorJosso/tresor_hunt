@@ -516,6 +516,9 @@ public class Plateau {
     }
 
     public Case getCase(int x, int y){
+        if (horsLimite(x, y)){
+            return new ImaginaryCase();
+        }
         return grille[x][y];
     }
 

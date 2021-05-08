@@ -301,7 +301,7 @@ public class Parser {
 
             case "150":
                 if (response.length == 3 && response[1].equals("REQUEST") && response[2].equals("START")){
-                    boolean result = mainHandler.getAvailableGamesMap().get(client.getJoinedGames().get(0)).requestStart(client);
+                    boolean result = mainHandler.getGamesMap().get(client.getJoinedGames().get(0)).requestStart(client);
                     if (!result){
                         client.send("151 REFUSED");
                     }
@@ -311,7 +311,7 @@ public class Parser {
                 break;
             case "152":
                 if (response.length == 3 && response[1].equals("START") && (response[2].equals("YES") || response[2].equals("NO"))){
-                    mainHandler.getAvailableGamesMap().get(client.getJoinedGames().get(0)).startRequestStatus(client, response[2].equals("YES"));
+                    mainHandler.getGamesMap().get(client.getJoinedGames().get(0)).startRequestStatus(client, response[2].equals("YES"));
                 } else {
                     illegalCommand();
                 }

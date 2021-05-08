@@ -30,7 +30,7 @@ public abstract class Game {
     private final ConnectionHandler mainHandler;
     private final ClientHandler owner;
     private int treasuresLeft;
-    private int playersLeft;
+    protected int playersLeft;
     private boolean finie=false;
 
     protected Plateau plateau;
@@ -344,7 +344,7 @@ public abstract class Game {
 
 
 
-    private void isFini(){
+    protected void isFini(){
         if (playersLeft==1 || treasuresLeft==0){
             ClientHandler best_player = players.get(0);
             for (ClientHandler client : this.players){

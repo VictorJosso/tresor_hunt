@@ -2,6 +2,7 @@ package Models.Games;
 
 import Apps.ConnectionHandler;
 import Utils.ClientHandler;
+import Utils.Coordinates;
 
 import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -46,12 +47,43 @@ public class TourParTour extends Game{
         broadcast("500 " + this.stillAlivePlayers.get(currentPlayerIndex).getUsername() + " TURN");
     }
 
+    private boolean checkIfBlocked(ClientHandler player){
+        Coordinates coordinates = player.getClient().getCoordonnees().copy();
+        if (this.plateau.getCase(coordinates.getX()+1, coordinates.getY()).isFree() ||
+        this.plateau.getCase(coordinates.getX()-1, coordinates.getY()).isFree() ||
+        this.plateau.getCase(coordinates.getX(), coordinates.getY()+1).isFree() ||
+        this.plateau.getCase(coordinates.getX(), coordinates.getY()-1).isFree()){
+            return false;
+        }
+        return true;
+    }
+
+    private int killBlockedPlayers(){
+        int died = 0;
+        for (ClientHandler player: this.stillAlivePlayers){
+            if (checkIfBlocked(player)){
+                if (this.stillAlivePlayers.indexOf(player) < this.currentPlayerIndex) {
+                    died++;
+                }
+                broadcast("520 "+player.getUsername()+" DIED", player);
+                player.send("666 MOVE HOLE DEAD");
+                this.stillAlivePlayers.remove(player);
+                this.playersLeft--;
+                isFini();
+            }
+        }
+        System.out.println("On a tué "+died+" joueurs");
+        return died;
+    }
+
     @Override
     public int movePlayer(ClientHandler client, String direction) {
         if (client == this.stillAlivePlayers.get(currentPlayerIndex)){
             int res = super.movePlayer(client, direction);
+            this.currentPlayerIndex -= this.killBlockedPlayers();
             if (res == 1) {
                 this.stillAlivePlayers.remove(client);
+                this.currentPlayerIndex -= 1;
             }
             if (res != -1) {
                 currentPlayerIndex += 1;
