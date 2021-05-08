@@ -246,7 +246,7 @@ public class Parser {
                     // PURE RANDOM
                     Game partie = client.getClient().getGameRunning();
                     ArrayList<Coordinates> coordinates = partie.getPlateau().getCoordinatesTrous();
-                    client.send("401 NUMBER " + (int) Math.ceil((double) coordinates.size() / 5));
+                    client.send("401 NUMBER " + (int) Math.ceil((double) coordinates.size()));
                     for (int i = 0; i < (int) Math.ceil((double) coordinates.size() / 5); i++) {
                         StringBuilder message = new StringBuilder("401 MESS " + String.valueOf(i) + " POS");
                         for (int j = 0; 5 * i + j < coordinates.size() && j < 5; j++) {
@@ -266,7 +266,7 @@ public class Parser {
                     // PURE RANDOM
                     Game partie = client.getClient().getGameRunning();
                     ArrayList<Coordinates> coordinates = partie.getPlateau().getCoordinatesTresors();
-                    client.send("411 NUMBER " + (int) Math.ceil((double) coordinates.size() / 5));
+                    client.send("411 NUMBER " + (int) Math.ceil((double) coordinates.size()));
                     for (int i = 0; i < (int) Math.ceil((double) coordinates.size() / 5); i++) {
                         StringBuilder message = new StringBuilder("411 MESS " + String.valueOf(i) + " POS");
                         for (int j = 0; 5 * i + j < coordinates.size() && j < 5; j++) {
@@ -285,7 +285,7 @@ public class Parser {
                     // PURE RANDOM
                     Game partie = client.getClient().getGameRunning();
                     ArrayList<Coordinates> coordinates = partie.getPlateau().getCoordinatesMurs();
-                    client.send("421 NUMBER " + (int) Math.ceil((double) coordinates.size() / 5));
+                    client.send("421 NUMBER " + (int) Math.ceil((double) coordinates.size()));
                     for (int i = 0; i < (int) Math.ceil((double) coordinates.size() / 5); i++) {
                         StringBuilder message = new StringBuilder("421 MESS " + String.valueOf(i) + " POS");
                         for (int j = 0; 5 * i + j < coordinates.size() && j < 5; j++) {
