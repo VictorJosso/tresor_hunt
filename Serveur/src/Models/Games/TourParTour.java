@@ -76,11 +76,18 @@ public class TourParTour extends Game{
         return died;
     }
 
+    private void nextIfBlocked(){
+        if (checkIfBlocked(this.stillAlivePlayers.get(this.currentPlayerIndex))){
+            this.currentPlayerIndex++;
+            nextIfBlocked();
+        }
+    }
+
     @Override
     public int movePlayer(ClientHandler client, String direction) {
         if (client == this.stillAlivePlayers.get(currentPlayerIndex)){
             int res = super.movePlayer(client, direction);
-            this.currentPlayerIndex -= this.killBlockedPlayers();
+            //this.currentPlayerIndex -= this.killBlockedPlayers();
             if (res == 1) {
                 this.stillAlivePlayers.remove(client);
                 this.currentPlayerIndex -= 1;
@@ -88,6 +95,7 @@ public class TourParTour extends Game{
             if (res != -1) {
                 currentPlayerIndex += 1;
                 currentPlayerIndex %= this.stillAlivePlayers.size();
+                nextIfBlocked();
                 broadcast("500 " + this.stillAlivePlayers.get(currentPlayerIndex).getUsername() + " TURN");
             }
             return res;
