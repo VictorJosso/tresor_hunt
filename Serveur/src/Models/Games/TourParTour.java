@@ -79,6 +79,7 @@ public class TourParTour extends Game{
     private void nextIfBlocked(){
         if (checkIfBlocked(this.stillAlivePlayers.get(this.currentPlayerIndex))){
             this.currentPlayerIndex++;
+            currentPlayerIndex %= this.stillAlivePlayers.size();
             nextIfBlocked();
         }
     }
