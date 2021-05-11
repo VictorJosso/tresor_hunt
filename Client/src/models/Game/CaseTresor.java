@@ -26,6 +26,9 @@ public class CaseTresor extends Case {
         this.value = value;
         isFree = true;
         switch (value) {
+            case 0:
+                this.imageCase=listeImages.get(11);
+                break;
             case 5:
                 this.imageCase = listeImages.get(3);
                 break;

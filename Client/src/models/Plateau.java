@@ -60,7 +60,8 @@ public class Plateau extends CallbackInstance {
                 new Image("player_1_left.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image("player_1_right.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image("player_2_left.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
-                new Image("player_2_right.png", COEFF_IMAGE, COEFF_IMAGE, false, false)));
+                new Image("player_2_right.png", COEFF_IMAGE, COEFF_IMAGE, false, false),
+                new Image("trésor MYSTÈRE.png",COEFF_IMAGE,COEFF_IMAGE,false,false)));
 
 
         for(int x = 0; x < dimX; x++){
