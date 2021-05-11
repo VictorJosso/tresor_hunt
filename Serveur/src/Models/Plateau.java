@@ -137,7 +137,13 @@ public class Plateau {
                 case 3 -> 20;
                 default -> 5;
             };
-            grille[tmphor][tmpvert]=new CaseTresor(tmphor,tmpvert,val);
+            // Trésor inconnu : 1 chance sur 4
+            tmp = (int) (Math.random() * 4);
+            boolean inconnu;
+            if (tmp == 0) inconnu=true;
+            else inconnu=false;
+
+            grille[tmphor][tmpvert]=new CaseTresor(tmphor,tmpvert,val,inconnu);
             coordinatesTresors.add(new Coordinates(tmphor, tmpvert, val));
         }
 
