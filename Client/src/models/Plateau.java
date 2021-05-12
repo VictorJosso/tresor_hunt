@@ -131,18 +131,48 @@ public class Plateau extends CallbackInstance {
 
     @Override
     public void getNearWall(String s) {
-        System.out.println("getNearWall");
         String[] command = s.split(" ");
         if (!command[1].equals("NUMBER") && !command[1].equals("SENDING")) {
-            System.out.println("get near wall cond");
             for (int i=4; i< command.length; i+= 2) {
                 int newX = Integer.parseInt(command[i]);
                 int newY = Integer.parseInt(command[i+1]);
                 plateau.get(newX).set(newY, new CaseMur(newX,newY, listeImages));
-                System.out.println(" ajout d'un mur ");
             }
         }
     }
+
+    @Override
+    public void getNearHoles(String s) { // ou alors: ajouter un map avec int,coord qui indique le chiffre
+        String[] command = s.split(" ");
+        System.out.println("appel getnearHoles");
+        if (command[1].equals("NUMBER")) {
+            System.out.println("set trous : "+Integer.parseInt(command[2]));
+            setTrousRayon1(Integer.parseInt(command[2]));
+        }
+        System.out.println("plateau avant : "+plateau);
+        //if (compteToursRevealHole > 0) { // même pas besoin de cette condition (il faut quand même qu'ils existe,t pour pouvoir mourir !!!
+            System.out.println("ajout de trou");
+            if(!command[1].equals("NUMBER") && !command[1].equals ("SENDING")){
+                for(int i = 4; i < command.length; i+= 2){
+                    int newX = Integer.parseInt(command[i]);
+                    int newY = Integer.parseInt(command[i+1]);
+                    plateau.get(newX).set(newY, new CaseTrou(newX,newY, listeImages));
+                }
+            }
+        //}
+        System.out.println("plateau apres trou"+plateau);
+
+
+
+       /*if (!command[1].equals("SENDING") && !command[1].equals("NUMBER")) {
+           for (int i=4; i<command.length;i+=2) {
+               int newX = Integer.parseInt(command[i]);
+               int newY = Integer.parseInt(command[i+1]);
+               plateau.get(newX).set(newY, new CaseTrou(newX,newY, listeImages));
+           }
+       }*/
+    }
+
 
 
 
@@ -209,35 +239,29 @@ public class Plateau extends CallbackInstance {
         // révèle les trous dans un rayon 1 autour du joueur pendant 5 tours
     }
 
-    @Override
-    public void getNearHoles(String s) { // ou alors: ajouter un map avec int,coord qui indique le chiffre
-       String[] command = s.split(" ");
-       System.out.println("appel getnearHoles");
-       if (command[1].equals("NUMBER")) {
-           setTrousRayon1(Integer.parseInt(command[2]));
-       }
-       /*if (!command[1].equals("SENDING") && !command[1].equals("NUMBER")) {
-           for (int i=4; i<command.length;i+=2) {
-               int newX = Integer.parseInt(command[i]);
-               int newY = Integer.parseInt(command[i+1]);
-               plateau.get(newX).set(newY, new CaseTrou(newX,newY, listeImages));
-           }
-       }*/
-    }
 
 
 
 
 
     public boolean updateCompteToursRevealHole() {
-        if (coordonneesJoueurs.keySet().equals(gameApp.getPlayerTurnUsername()) && compteToursRevealHole > 0) {
+        System.out.println("appel updateCompteToursRevealHole, compteToursRevealHole="+compteToursRevealHole);
+        if (/*coordonneesJoueurs.keySet().equals(gameApp.getPlayerTurnUsername()) &&*/ compteToursRevealHole > 0) {
             System.out.println("tour : "+compteToursRevealHole);
             compteToursRevealHole--;
             return true;
         } else {
-            int x=coordonneesJoueurs.get(gameApp.getPlayerTurnUsername()).getX();
-            int y=coordonneesJoueurs.get(gameApp.getPlayerTurnUsername()).getY();
-            plateau.remove(x); // TODO: verifier
+            for (int i=0; i<plateau.size();i++) {
+                for (int j=0; j<plateau.get(i).size();j++) {
+                    if (plateau.get(i).get(j) instanceof CaseTrou) {
+                        System.out.println("SUPPRESSION DE TROU");
+                        // problème : avec remove on a ensuite une erreur
+                        //plateau.get(i).remove(j);
+                        plateau.get(i).set(j, new CaseVide(i, j, listeImages));
+
+                    }
+                }
+            }
         }
         return false;
     }
@@ -266,6 +290,7 @@ public class Plateau extends CallbackInstance {
 
         if (gameApp.getPartie().getModeDeJeu().equals("3")) {
             plateau.get(coordonneesJoueurs.get(username).getX()).get(coordonneesJoueurs.get(username).getY()).setVisitee();
+            updateCompteToursRevealHole();
         }
 
         switch (code) {

@@ -85,7 +85,7 @@ public class WarFog extends Game {
                     }
                 }
             }
-            c.send("320 NUMBER "+ (int)Math.ceil((double) tmp.size()/5));
+            c.send("320 NUMBER "+ (int)Math.ceil((double) tmp.size()));
             for (int i = 0; i < (int) Math.ceil((double) tmp.size() / 5); i++) {
                 StringBuilder message = new StringBuilder("320 MESS " + String.valueOf(i) + " POS");
                 for (int j = 0; 5 * i + j < tmp.size() && j < 5; j++) {
@@ -114,7 +114,7 @@ public class WarFog extends Game {
                     }
                 }
             }
-            c.send("330 NUMBER " + (int) Math.ceil((double) tmp.size() / 5));
+            c.send("330 NUMBER " + (int) Math.ceil((double) tmp.size() ));
             for (int i = 0; i < (int) Math.ceil((double) tmp.size() / 5); i++) {
                 StringBuilder message = new StringBuilder("330 MESS " + String.valueOf(i) + " POS"); // commencer par 1 ?
                 for (int j = 0; 5 * i + j < tmp.size() && j < 5; j++) {
@@ -134,7 +134,7 @@ public class WarFog extends Game {
             int nb;
             ArrayList<Coordinates> tmp = plateau.getCoordinatesTresors();
 
-            c.send("340 NUMBER "+ (int)Math.ceil((double) tmp.size()/5));
+            c.send("340 NUMBER "+ (int)Math.ceil((double) tmp.size()));
             for (int i = 0; i < (int) Math.ceil((double) tmp.size() / 5); i++) {
                 StringBuilder message = new StringBuilder("340 MESS " + String.valueOf(i) + " POS");
                 for (int j = 0; 5 * i + j < tmp.size() && j < 5; j++) {

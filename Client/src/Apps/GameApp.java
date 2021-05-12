@@ -282,12 +282,11 @@ public class GameApp {
             gc.drawImage(plateau.getListeImages().get(11), 0, 0);
             for (int x = 0; x < partie.getDimensionX(); x++) {
                 for (int y = 0; y < partie.getDimensionY(); y++) {
-                    if (!(plateau.getPlateau().get(x).get(y) instanceof CaseVide)) {
-                        //System.out.println("draw !");
+                    if (plateau.getPlateau().get(x).get(y) instanceof CaseMur || plateau.getPlateau().get(x).get(y) instanceof CaseTresor || (plateau.getPlateau().get(x).get(y) instanceof CaseTrou && plateau.getCompteToursRevealHole()>0)) {
+
                         gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
                     } else {
                         if( plateau.getPlateau().get(x).get(y).isVisitee()) {
-                            //System.out.println("visiteeeee");
                             gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
                         }
                     }
