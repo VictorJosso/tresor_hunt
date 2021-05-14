@@ -181,7 +181,31 @@ public class Parser {
                     client.send("121 NUMBER " + mainHandler.getAvailableGamesMap().size());
                     int i = 1;
                     for (int gameId : mainHandler.getAvailableGamesMap().keySet()){
-                        client.send(String.format("121 MESS %d ID %d %d %d %d %d %d %d %s %b", i++, gameId,
+                        StringBuilder builder = new StringBuilder("121 MESS ");
+                        builder.append(i++);
+                        builder.append(" ID ");
+                        builder.append(gameId);
+                        builder.append(" ");
+                        builder.append(mainHandler.getAvailableGamesMap().get(gameId).mode);
+                        builder.append(" ");
+                        builder.append(mainHandler.getAvailableGamesMap().get(gameId).getX());
+                        builder.append(" ");
+                        builder.append(mainHandler.getAvailableGamesMap().get(gameId).getY());
+                        builder.append(" ");
+                        builder.append(mainHandler.getAvailableGamesMap().get(gameId).getHoles());
+                        builder.append(" ");
+                        builder.append(mainHandler.getAvailableGamesMap().get(gameId).getTreasures());
+                        if(client.isGoodClient()){
+                            builder.append(" ");
+                            builder.append(mainHandler.getAvailableGamesMap().get(gameId).getMaxPlayers());
+                            builder.append(" ");
+                            builder.append(mainHandler.getAvailableGamesMap().get(gameId).getOwner().getUsername());
+                            builder.append(" ");
+                            builder.append(mainHandler.getAvailableGamesMap().get(gameId).isRobots());
+
+                        }
+
+                        /*client.send(String.format("121 MESS %d ID %d %d %d %d %d %d %d %s %b", i++, gameId,
                                 mainHandler.getAvailableGamesMap().get(gameId).mode,
                                 mainHandler.getAvailableGamesMap().get(gameId).getX(),
                                 mainHandler.getAvailableGamesMap().get(gameId).getY(),
@@ -189,7 +213,8 @@ public class Parser {
                                 mainHandler.getAvailableGamesMap().get(gameId).getTreasures(),
                                 mainHandler.getAvailableGamesMap().get(gameId).getMaxPlayers(),
                                 mainHandler.getAvailableGamesMap().get(gameId).getOwner().getUsername(),
-                                mainHandler.getAvailableGamesMap().get(gameId).isRobots()));
+                                mainHandler.getAvailableGamesMap().get(gameId).isRobots()));*/
+                        client.send(builder.toString());
                     }
                 }
                 else {
