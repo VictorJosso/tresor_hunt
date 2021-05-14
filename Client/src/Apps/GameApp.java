@@ -94,8 +94,6 @@ public class GameApp {
         mainApp.getConnectionHandler().registerCallback("320", plateau, CallbackInstance::getNearHoles, true);
         mainApp.getConnectionHandler().registerCallback("330", plateau, CallbackInstance::getNearWall,true);
         mainApp.getConnectionHandler().registerCallback("340", plateau, CallbackInstance::getTresors, true);
-        mainApp.getConnectionHandler().registerCallback("311", plateau, CallbackInstance::updateRevealMap);
-
 
 
 
@@ -280,7 +278,7 @@ public class GameApp {
 
 
     protected void drawGame() {
-        if(this.partie.getModeDeJeu().equals("3") && this.plateau.getCompteToursRevealMap()==0) {
+        if(this.partie.getModeDeJeu().equals("3")) {
             gc.drawImage(plateau.getListeImages().get(11), 0, 0);
             for (int x = 0; x < partie.getDimensionX(); x++) {
                 for (int y = 0; y < partie.getDimensionY(); y++) {
@@ -295,53 +293,48 @@ public class GameApp {
                 }
             }
 
-
+           /* for (int x = 0; x < partie.getDimensionX(); x++) {
+                for (int y = 0; y < partie.getDimensionY(); y++) {
+                    if (plateau.getPlateau().get(x).get(x) instanceof  CaseTresor) {
+                        gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
+                    }
+                }
+            }*/
             //----------
             /*if (plateau.getCompteToursRevealHole()>0) {
                 System.out.println("reveal hole----------------------------------------");
                 plateau.updateCompteToursRevealHole();
             }*/
             //----------
+         /*   int x = plateau.getCoordonneesJoueurs().get(playerTurnUsername).getX(); // non : on veut pas ça, mais le client seul...
+            int y = plateau.getCoordonneesJoueurs().get(playerTurnUsername).getY();
 
-        if(this.plateau.getCompteToursRevealMap()>0) {
-
-                for (int x = 0; x < plateau.getRevealedX(); x++) {
-                    for (int y = 0; y < plateau.getRevealedY(); y++) {
-                        if (!(plateau.getPlateau().get(x).get(y) instanceof CaseVide)) {
-                            //System.out.println("draw !");
-                            gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
-                        } else {
-                            if( plateau.getPlateau().get(x).get(y).isVisitee()) {
-                                //System.out.println("visiteeeee");
-                                gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
-                            }
+            for (int i = x-2; i <= x+2; i++) {
+                for (int j = y-2; j <= y+2; j++) {
+                    if (!plateau.horsLimite(i,j)) {
+                        if (plateau.getPlateau().get(i).get(j) instanceof CaseMur || (i==x && j==y)) {
+                            gc.drawImage(plateau.getPlateau().get(i).get(j).getImageCase(), i * this.COEFF_IMAGE, j * this.COEFF_IMAGE);
                         }
                     }
                 }
+            }*/
 
 
-                for (int x = plateau.getRevealedX(); x < plateau.getRevealedX()+4 ; x++) {
-                    for (int y = plateau.getRevealedY(); y < plateau.getRevealedY()+4 ; y++) {
-                        gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
-                    }
-                }
 
-                for (int x = plateau.getRevealedX()+4; x < partie.getDimensionX(); x++) {
-                    for (int y = plateau.getRevealedY()+4; y < partie.getDimensionY(); y++) {
-                        if (!(plateau.getPlateau().get(x).get(y) instanceof CaseVide)) {
-                            //System.out.println("draw !");
-                            gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
-                        } else {
-                            if( plateau.getPlateau().get(x).get(y).isVisitee()) {
-                                //System.out.println("visiteeeee");
-                                gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
+
+            /*for(String name : plateau.getCoordonneesJoueurs().keySet()) {
+                if (name.equals(playerTurnUsername) && plateau.getCompteToursRevealHole()>0) {
+                    System.out.println("tour : "+plateau.getCompteToursRevealHole());
+                    for (int i=x-1;i<=x+1;i++) {
+                        for (int j=y-1;j<=y+1;j++) {
+                            if  (plateau.getPlateau().get(i).get(j) instanceof CaseTrou) {
+                                gc.drawImage(plateau.getPlateau().get(i).get(j).getImageCase(), i * this.COEFF_IMAGE, j * this.COEFF_IMAGE);
                             }
                         }
                     }
+                    plateau.updateCompteToursRevealHole();
                 }
-                this.plateau.setCompteToursRevealMap(this.plateau.getCompteToursRevealMap()-1);
-        }
-
+            }*/
 
         } else {
             for (int x = 0; x < partie.getDimensionX(); x++) {

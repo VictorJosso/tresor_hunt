@@ -30,5 +30,4 @@ public class CallbackInstance {
     public void updateRevealHole(String s) { };
     public void getNearHoles(String s) {};
     public void getNearWall(String s) {};
-    public void updateRevealMap(String s){};
 }

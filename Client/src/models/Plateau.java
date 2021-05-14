@@ -28,9 +28,6 @@ public class Plateau extends CallbackInstance {
     private HashMap<String, Coordinates> coordonneesJoueurs = new HashMap<>();
     private int compteToursRevealHole;
     private int trousRayon1;
-    private int compteToursRevealMap;
-    private int revealedX;
-    private int revealedY;
 
 
     private GameApp gameApp;
@@ -68,7 +65,25 @@ public class Plateau extends CallbackInstance {
 
 
 
+    public boolean horsLimite (int x, int y) {
+        return x < 0 || x >= dimX || y < 0 || y >= dimY;
+    }
 
+    public ArrayList<ArrayList<Case>> getPlateau() {
+        return plateau;
+    }
+
+    public void setCaseMur(int x, int y){
+        this.plateau.get(x).set(y, new CaseMur(x, y, listeImages));
+    }
+
+    public void setCompteToursRevealHole(int i) {
+        compteToursRevealHole=i;
+    }
+
+    public int getCompteToursRevealHole() {
+        return compteToursRevealHole;
+    }
 
     @Override
     public void getWalls(String s) {
@@ -227,6 +242,8 @@ public class Plateau extends CallbackInstance {
 
 
 
+
+
     public boolean updateCompteToursRevealHole() {
         System.out.println("appel updateCompteToursRevealHole, compteToursRevealHole="+compteToursRevealHole);
         if (/*coordonneesJoueurs.keySet().equals(gameApp.getPlayerTurnUsername()) &&*/ compteToursRevealHole > 0) {
@@ -249,16 +266,6 @@ public class Plateau extends CallbackInstance {
         return false;
     }
 
-
-    public void updateRevealMap(String s) {
-        String[] command = s.split(" ");
-        int x = Integer.parseInt(command[3]);
-        int y = Integer.parseInt(command[4]);
-        this.revealedX=x;
-        this.revealedY=y;
-        compteToursRevealHole=5;
-        System.out.println("Je vais réveler la map");
-    }
 
 
     @Override
@@ -418,35 +425,5 @@ public class Plateau extends CallbackInstance {
 
     public int getTrousRayon1() {
         return trousRayon1;
-    }
-
-    public boolean horsLimite (int x, int y) {
-        return x < 0 || x >= dimX || y < 0 || y >= dimY;
-    }
-
-    public ArrayList<ArrayList<Case>> getPlateau() {
-        return plateau;
-    }
-
-    public void setCaseMur(int x, int y){
-        this.plateau.get(x).set(y, new CaseMur(x, y, listeImages));
-    }
-
-    public void setCompteToursRevealHole(int i) {
-        compteToursRevealHole=i;
-    }
-
-    public int getCompteToursRevealHole() {
-        return compteToursRevealHole;
-    }
-
-    public int getCompteToursRevealMap() { return compteToursRevealMap;}
-
-    public int getRevealedX() {return revealedX;}
-
-    public int getRevealedY() {return revealedY;}
-
-    public void setCompteToursRevealMap(int compteToursRevealMap) {
-        this.compteToursRevealMap = compteToursRevealMap;
     }
 }
