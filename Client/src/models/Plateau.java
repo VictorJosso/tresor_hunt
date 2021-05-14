@@ -159,6 +159,7 @@ public class Plateau extends CallbackInstance {
         int x = coordonneesJoueurs.get(s.split(" ")[1]).getX();
         int y = coordonneesJoueurs.get(s.split(" ")[1]).getY();
         plateau.get(x).set(y, new CaseVide(x, y, listeImages));
+        gameApp.getConnectionHandler().send("512 "+s.split(" ")[1]+" UPDATED");
     }
 
     @Override
