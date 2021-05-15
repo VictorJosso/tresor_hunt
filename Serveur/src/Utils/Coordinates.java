@@ -89,6 +89,9 @@ public class Coordinates {
         this.value += diff;
     }
 
+    public void decreaseValue(int diff){
+        this.value -= diff;
+    }
 
     /**
      * Sets x.

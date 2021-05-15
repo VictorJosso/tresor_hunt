@@ -303,6 +303,7 @@ public abstract class Game {
             return 0;
         } else if (currentCase instanceof CaseTresor){
             int value = ((CaseTresor) currentCase).getValue();
+            client.getClient().addScore(value);
             plateau.setCase(new CaseVide(currentCase.getX(),currentCase.getY()));
             client.getClient().addScore(value);
             treasuresLeft--;
@@ -316,11 +317,14 @@ public abstract class Game {
         }
     }
 
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
+    public void sendTres() {}
+    public void sendHoles( ){}
+    public void sendWalls() {}
+        /**
+         * Gets id.
+         *
+         * @return the id
+         */
     public int getId() {
         return id;
     }

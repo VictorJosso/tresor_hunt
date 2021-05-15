@@ -13,7 +13,8 @@ public class Client {
     private Game gameRunning;
     private Coordinates coordonnees = new Coordinates(0,0);
     private boolean alive = true;
-    private int score = 0;
+    private int score;
+
 
 
     /**
@@ -21,73 +22,35 @@ public class Client {
      */
     public Client(){}
 
-    /**
-     * Gets coordonnees.
-     *
-     * @return the coordonnees
-     */
     public Coordinates getCoordonnees() {
         return coordonnees;
     }
 
-    /**
-     * Sets coordonnees.
-     *
-     * @param coordonnees the coordonnees
-     */
     public void setCoordonnees(Coordinates coordonnees) {
         this.coordonnees = coordonnees;
     }
 
-    /**
-     * Gets game running.
-     *
-     * @return the game running
-     */
     public Game getGameRunning() {
         return gameRunning;
     }
 
-    /**
-     * Sets game running.
-     *
-     * @param gameRunning the game running
-     */
     public void setGameRunning(Game gameRunning) {
         this.gameRunning = gameRunning;
     }
 
-    /**
-     * Is alive boolean.
-     *
-     * @return the boolean
-     */
     public boolean isAlive() {
         return alive;
     }
 
-    /**
-     * Kill.
-     */
     public void kill() {
         this.alive = false;
     }
 
-    /**
-     * Gets score.
-     *
-     * @return the score
-     */
-    public int getScore() {
-        return score;
-    }
+    public int getScore() { return score; }
 
-    /**
-     * Add score.
-     *
-     * @param diff the diff
-     */
-    public void addScore(int diff) {
-        this.score += diff;
-    }
+    public void addScore(int val) {score+=val;}
+
+    public void lowScore(int val) {score-=val;}
+
+
 }
