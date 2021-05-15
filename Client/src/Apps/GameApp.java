@@ -298,7 +298,7 @@ public class GameApp {
 
     protected void drawGame() {
         if(this.partie.getModeDeJeu().equals("3") /*&& this.plateau.getCompteToursRevealMap()==0*/) {
-            gc.drawImage(plateau.getListeImages().get(11), 0, 0);
+            gc.drawImage(plateau.getListeImages().get(12), 0, 0);
             for (int x = 0; x < partie.getDimensionX(); x++) {
                 for (int y = 0; y < partie.getDimensionY(); y++) {
                     if (plateau.getPlateau().get(x).get(y) instanceof CaseMur || plateau.getPlateau().get(x).get(y) instanceof CaseTresor || (plateau.getPlateau().get(x).get(y) instanceof CaseTrou && plateau.getCompteToursRevealHole()>0)) {
