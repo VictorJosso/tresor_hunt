@@ -20,16 +20,12 @@ public class WarFog extends Game {
     private CopyOnWriteArrayList<ClientHandler> stillAlivePlayers;
     //private HashMap<ClientHandler,Integer> seeHoles; // les tours restant pendants lesquels on affiche les trous
     //private HashMap<ClientHandler,>;
-    private int resteToursPieges;
-    private int resteToursMap;
+    //private int resteToursPieges;
+    //private int resteToursMap;
     //private int revealHoleTour;
 
     //Attributs
 
-    /**
-     * The Mode.
-     */
-    public int mode = 3;
 
 
     /**
@@ -189,7 +185,7 @@ public class WarFog extends Game {
 
 
 
-    public int getResteToursPieges() {
+    /*public int getResteToursPieges() {
         return resteToursPieges;
     }
 
@@ -206,7 +202,7 @@ public class WarFog extends Game {
     public void revealMap(ClientHandler client) {
         // assurer le paiement du client
         // et révéler partie de la map (choisie arbitrairement) pendant 3 tours
-    }
+    }*/
 
 }
 
