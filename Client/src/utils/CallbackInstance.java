@@ -27,6 +27,7 @@ public class CallbackInstance {
     public void declareDead(String s) { };
     public void handleNotYourTurn(String s) { };
     public void handleTurnChanged(String s) { };
+    public void partieFinie(String s){};
     public void updateRevealHole(String s) { };
     public void getNearHoles(String s) {};
     public void getNearWall(String s) {};

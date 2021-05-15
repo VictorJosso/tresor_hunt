@@ -4,6 +4,7 @@ import Apps.GameApp;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -66,13 +67,33 @@ public class Plateau extends CallbackInstance {
         }
     }
 
+    /**
+     * Gets plateau.
+     *
+     * @return the plateau
+     */
+    public ArrayList<ArrayList<Case>> getPlateau() {
+        return plateau;
+    }
+
+    /**
+     * Set case mur.
+     *
+     * @param x the x
+     * @param y the y
+     */
+    public void setCaseMur(int x, int y){
+        this.plateau.get(x).set(y, new CaseMur(x, y, listeImages));
+    }
+
+
+
 
 
 
 
     @Override
     public void getWalls(String s) {
-       // System.out.println("appel de getwalls");
         String[] command = s.split(" ");
         if(!command[1].equals("NUMBER")){
             for(int i = 4; i < command.length; i+= 2){
@@ -80,8 +101,12 @@ public class Plateau extends CallbackInstance {
                 int newY = Integer.parseInt(command[i+1]);
                 plateau.get(newX).set(newY, new CaseMur(newX,newY, listeImages));
             }
+            gameApp.declareCallBacksMaybe();
+        } else {
+            gameApp.tellYouNeedSomeInfos((int) Math.ceil((double) Integer.parseInt(command[2]) / 5));
         }
     }
+
 
     @Override
     public void getHoles(String s) {
@@ -92,8 +117,12 @@ public class Plateau extends CallbackInstance {
                 int newY = Integer.parseInt(command[i+1]);
                 plateau.get(newX).set(newY, new CaseTrou(newX,newY, listeImages));
             }
+            gameApp.declareCallBacksMaybe();
+        } else {
+            gameApp.tellYouNeedSomeInfos((int) Math.ceil((double) Integer.parseInt(command[2]) / 5));
         }
     }
+
 
     @Override
     public void getTresors(String s) {
@@ -102,13 +131,16 @@ public class Plateau extends CallbackInstance {
         System.out.println(command[1]);
 
         if(!command[1].equals("NUMBER") && !command[1].equals("SENDING")){
-            System.out.println("appel gettresor cond **");
 
             for(int i = 4; i < command.length; i+= 3){
                 int newX = Integer.parseInt(command[i]);
                 int newY = Integer.parseInt(command[i+1]);
                 plateau.get(newX).set(newY, new CaseTresor(newX,newY, Integer.parseInt(command[i+2]), listeImages));
-                System.out.println("ajout d'un tresor");
+            }
+            gameApp.declareCallBacksMaybe();
+        } else {
+            if (!(gameApp.getPartie().getModeDeJeu().equals("3"))) {
+                gameApp.tellYouNeedSomeInfos((int) Math.ceil((double) Integer.parseInt(command[2]) / 5));
             }
         }
         System.out.println("plateau : "+plateau);
@@ -165,7 +197,6 @@ public class Plateau extends CallbackInstance {
 
     @Override
     public void updatePlayerPosition(String s) {
-        System.out.println("~update player pos~");
         System.out.println("On a recu : "+s);
         String[] command = s.split(" ");
         String name = command[1];
@@ -177,16 +208,11 @@ public class Plateau extends CallbackInstance {
             coordonneesJoueurs.put(name, new Coordinates(x, y));
             gameApp.getLeaderBoardItems().add(new LeaderBoardItem(name, "#1", 0));
             plateau.get(x).get(y).setVisitee();
-
         } else {
             c.setX(x);
             c.setY(y);
-
-
         }
         gameApp.getConnectionHandler().send("512 "+name+" UPDATED");
-
-
     }
 
     @Override
@@ -202,6 +228,7 @@ public class Plateau extends CallbackInstance {
         int x = coordonneesJoueurs.get(s.split(" ")[1]).getX();
         int y = coordonneesJoueurs.get(s.split(" ")[1]).getY();
         plateau.get(x).set(y, new CaseVide(x, y, listeImages));
+        gameApp.getConnectionHandler().send("512 "+s.split(" ")[1]+" UPDATED");
     }
 
     @Override
@@ -285,7 +312,6 @@ public class Plateau extends CallbackInstance {
             plateau.get(coordonneesJoueurs.get(username).getX()).get(coordonneesJoueurs.get(username).getY()).setVisitee();
             updateCompteToursRevealHole();
         }
-
         switch (code) {
             case UP -> this.coordonneesJoueurs.get(username).addToY(-1);
             case DOWN -> this.coordonneesJoueurs.get(username).addToY(1);
@@ -293,12 +319,6 @@ public class Plateau extends CallbackInstance {
             case RIGHT -> this.coordonneesJoueurs.get(username).addToX(1);
             default -> handleMoveAllowed(s);
         }
-        /*if (gameApp.getPartie().getModeDeJeu().equals("3")) {
-            plateau.get(coordonneesJoueurs.get(username).getX()).get(coordonneesJoueurs.get(username).getY()).setVisitee();
-        }*/
-
-        //plateau.get(x).get(y).setVisitee();
-
     }
 
     @Override
@@ -372,19 +392,6 @@ public class Plateau extends CallbackInstance {
         }
     }
 
-    public int trousRayonUn() {
-        int x= coordonneesJoueurs.get(this.gameApp.getServerConfig().getUsername()).getX();
-        int y= coordonneesJoueurs.get(this.gameApp.getServerConfig().getUsername()).getY();
-        int ctrTrous=0;
-        for (int i=x-1;i<=x+1;i++) {
-            for (int j=y-1; j<=y+1;j++) {
-                if (!(horsLimite(i,j)) && plateau.get(i).get(j) instanceof CaseTrou) {
-                    ctrTrous++;
-                }
-            }
-        }
-        return ctrTrous;
-    }
 
     @Override
     public void handleNotYourTurn(String s) {
@@ -396,21 +403,60 @@ public class Plateau extends CallbackInstance {
         this.gameApp.setPlayerTurnUsername(s.split(" ")[1]);
     }
 
+    @Override
+    public void partieFinie(String s) {
+        String gagnant = s.split(" ")[1];
+        gameApp.getTimer().stop();
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("NOUS AVONS UN VAINQUEUR");
+            alert.setContentText("Et le vainqueur est ... " +gagnant+"!");
+            alert.initOwner(gameApp.getGameStage().getOwner());
+            alert.setHeaderText(null);
+            alert.showAndWait();
+
+            gameApp.endGame();
+        });
+    }
+
+    /**
+     * Gets coeff image.
+     *
+     * @return the coeff image
+     */
     public int getCOEFF_IMAGE() {
         return COEFF_IMAGE;
     }
 
+    /**
+     * Sets coeff image.
+     *
+     * @param COEFF_IMAGE the coeff image
+     */
     public void setCOEFF_IMAGE(int COEFF_IMAGE) {
         this.COEFF_IMAGE = COEFF_IMAGE;
     }
 
+    /**
+     * Gets coordonnees joueurs.
+     *
+     * @return the coordonnees joueurs
+     */
     public HashMap<String, Coordinates> getCoordonneesJoueurs() {
         return coordonneesJoueurs;
     }
 
+    /**
+     * Gets liste images.
+     *
+     * @return the liste images
+     */
     public ArrayList<Image> getListeImages() {
         return listeImages;
     }
+
+
+
 
     public void setTrousRayon1(int trousRayon1) {
         this.trousRayon1=trousRayon1;
@@ -424,13 +470,6 @@ public class Plateau extends CallbackInstance {
         return x < 0 || x >= dimX || y < 0 || y >= dimY;
     }
 
-    public ArrayList<ArrayList<Case>> getPlateau() {
-        return plateau;
-    }
-
-    public void setCaseMur(int x, int y){
-        this.plateau.get(x).set(y, new CaseMur(x, y, listeImages));
-    }
 
     public void setCompteToursRevealHole(int i) {
         compteToursRevealHole=i;

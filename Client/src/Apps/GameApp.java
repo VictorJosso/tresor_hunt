@@ -64,8 +64,17 @@ public class GameApp {
 
     private final Image flammesImage;
     private String playerTurnUsername;
-    // ajouter méthode d'initialisation du compte tours et ajouter update dans drawgame suivant la valeur du comptetour
 
+    private int infos_gathered = 0;
+    private int total_infos_to_get = 0;
+    private int number_of_info_types_requested = 0;
+
+    /**
+     * Instantiates a new Game app.
+     *
+     * @param mainApp the main app
+     * @param partie  the partie
+     */
     public GameApp(MainApp mainApp, Partie partie) {
         this.mainApp = mainApp;
         this.partie = partie;
@@ -83,12 +92,9 @@ public class GameApp {
         mainApp.getConnectionHandler().registerCallback("401", plateau, CallbackInstance::getHoles);
         mainApp.getConnectionHandler().registerCallback("411", plateau, CallbackInstance::getTresors);
         mainApp.getConnectionHandler().registerCallback("421", plateau, CallbackInstance::getWalls);
-        mainApp.getConnectionHandler().registerCallback("500", plateau, CallbackInstance::handleTurnChanged, true);
-        mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition, true);
-        mainApp.getConnectionHandler().registerCallback("511", plateau, CallbackInstance::updatePlayerTresor);
-        mainApp.getConnectionHandler().registerCallback("520", plateau, CallbackInstance::declareDead);
         mainApp.getConnectionHandler().registerCallback("666", plateau, CallbackInstance::handleMoveDead);
         mainApp.getConnectionHandler().registerCallback("902", plateau, CallbackInstance::handleNotYourTurn);
+
 
         mainApp.getConnectionHandler().registerCallback("301", plateau, CallbackInstance::updateRevealHole);
         mainApp.getConnectionHandler().registerCallback("320", plateau, CallbackInstance::getNearHoles, true);
@@ -96,19 +102,38 @@ public class GameApp {
         mainApp.getConnectionHandler().registerCallback("340", plateau, CallbackInstance::getTresors, true);
         mainApp.getConnectionHandler().registerCallback("311", plateau, CallbackInstance::updateRevealMap);
 
-
-
-
-
-
-        if (!(partie.getModeDeJeu().equals("3"))) {
-            mainApp.getConnectionHandler().send("410 GETTREASURES");
-            mainApp.getConnectionHandler().send("400 GETHOLES");
-            mainApp.getConnectionHandler().send("420 GETWALLS");
+        if (partie.getModeDeJeu().equals("3")) {
+            mainApp.getConnectionHandler().registerCallback("500", plateau, CallbackInstance::handleTurnChanged, true);
+            mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition, true);
+            mainApp.getConnectionHandler().registerCallback("511", plateau, CallbackInstance::updatePlayerTresor);
+            mainApp.getConnectionHandler().registerCallback("520", plateau, CallbackInstance::declareDead);
         }
 
 
+
+
     }
+
+    public void declareCallBacksMaybe(){
+        infos_gathered ++;
+        System.err.println("On a recupéré "+infos_gathered+" informations");
+        if (infos_gathered == total_infos_to_get && number_of_info_types_requested == 3){
+            mainApp.getConnectionHandler().registerCallback("500", plateau, CallbackInstance::handleTurnChanged, true);
+            mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition, true);
+            mainApp.getConnectionHandler().registerCallback("511", plateau, CallbackInstance::updatePlayerTresor, true);
+            mainApp.getConnectionHandler().registerCallback("520", plateau, CallbackInstance::declareDead, true);
+            mainApp.getConnectionHandler().registerCallback("530", plateau, CallbackInstance::partieFinie, true);
+        }
+    }
+
+    public void tellYouNeedSomeInfos(int nb){
+        this.total_infos_to_get += nb;
+        this.number_of_info_types_requested ++;
+        System.err.println("On a besoin de récupérer "+ total_infos_to_get+ " informations");
+    }
+
+
+
 
     public void launch(){
         this.gameStage = new Stage();
@@ -132,11 +157,7 @@ public class GameApp {
         if (partie.getModeDeJeu().equals("3")) {
             gc.drawImage(new Image ("war.png", screenHeight, screenWidth, false, false), 0, 0);
 
-            //gameScene.setFill(plateau.getListeImages().get(11));
         }
-
-
-
 
         timer = new AnimationTimer(){
             @Override
@@ -208,6 +229,11 @@ public class GameApp {
         this.leaderBoardStage.show();
         int enc = (int) (this.gameStage.getHeight() - partie.getDimensionY()*this.COEFF_IMAGE);
         this.leaderBoardStage.setY(y + enc);
+        if (!(partie.getModeDeJeu().equals("3"))) {
+            mainApp.getConnectionHandler().send("410 GETTREASURES");
+            mainApp.getConnectionHandler().send("400 GETHOLES");
+            mainApp.getConnectionHandler().send("420 GETWALLS");
+        }
     }
 
     private void releaseAllCallbacks(){
@@ -287,14 +313,6 @@ public class GameApp {
             }
 
 
-            //----------
-            /*if (plateau.getCompteToursRevealHole()>0) {
-                System.out.println("reveal hole----------------------------------------");
-                plateau.updateCompteToursRevealHole();
-            }*/
-            //----------
-
-
         } else {
             for (int x = 0; x < partie.getDimensionX(); x++) {
                 for (int y = 0; y < partie.getDimensionY(); y++) {
@@ -348,6 +366,12 @@ public class GameApp {
         }
     }
 
+    /**
+     * Register draw on top.
+     *
+     * @param imageCrop the image crop
+     * @param duration  the duration
+     */
     public void registerDrawOnTop(ImageCrop imageCrop, long duration){
         System.out.println("On enregistre une demande de draw on top jusqua " + (System.currentTimeMillis() + duration) +" actuellement "+System.currentTimeMillis());
         this.haveToDrawOnTop.put(imageCrop, System.currentTimeMillis() + duration);
@@ -363,45 +387,120 @@ public class GameApp {
         }
     }
 
+    /**
+     * Handle mouse pressed.
+     *
+     * @param e the e
+     */
     protected void handleMousePressed(MouseEvent e)
     {
         this.dragOffsetX = e.getScreenX() - this.leaderBoardStage.getX();
         this.dragOffsetY = e.getScreenY() - this.leaderBoardStage.getY();
     }
 
+    /**
+     * Handle mouse dragged.
+     *
+     * @param e the e
+     */
     protected void handleMouseDragged(MouseEvent e)
     {
         this.leaderBoardStage.setX(e.getScreenX() - this.dragOffsetX);
         this.leaderBoardStage.setY(e.getScreenY() - this.dragOffsetY);
     }
 
+    /**
+     * Gets directions.
+     *
+     * @return the directions
+     */
     public ArrayList<KeyCode> getDirections() {
         return directions;
     }
 
+    /**
+     * Get server config config.
+     *
+     * @return the config
+     */
     public Config getServerConfig(){
         return mainApp.getServerConfig();
     }
 
+    /**
+     * Get connection handler connection handler.
+     *
+     * @return the connection handler
+     */
     public ConnectionHandler getConnectionHandler(){
         return mainApp.getConnectionHandler();
     }
 
+    /**
+     * Gets leader board items.
+     *
+     * @return the leader board items
+     */
     public ObservableList<LeaderBoardItem> getLeaderBoardItems() {
         return leaderBoardItems;
     }
 
+    /**
+     * Gets screen width.
+     *
+     * @return the screen width
+     */
     public int getScreenWidth() {
         return COEFF_IMAGE * partie.getDimensionX();
     }
 
+    /**
+     * Gets screen height.
+     *
+     * @return the screen height
+     */
     public int getScreenHeight() {
         return COEFF_IMAGE * partie.getDimensionY();
     }
 
+    /**
+     * Sets player turn username.
+     *
+     * @param playerTurnUsername the player turn username
+     */
     public void setPlayerTurnUsername(String playerTurnUsername) {
         this.playerTurnUsername = playerTurnUsername;
     }
+
+    /**
+     * Gets timer.
+     *
+     * @return the timer
+     */
+    public AnimationTimer getTimer() {
+        return timer;
+    }
+
+    /**
+     * Gets game stage.
+     *
+     * @return the game stage
+     */
+    public Stage getGameStage() {
+        return gameStage;
+    }
+
+    /**
+     * End game.
+     */
+    public void endGame(){
+        leaderBoardStage.close();
+        gameStage.close();
+        releaseAllCallbacks();
+        mainApp.gameStageClosed();
+    }
+
+
 
     public Partie getPartie() {
         return partie;
@@ -414,4 +513,6 @@ public class GameApp {
     public Plateau getPlateau() {
         return plateau;
     }
+
+
 }

@@ -2,6 +2,8 @@ package Utils;
 
 
 import Apps.ConnectionHandler;
+import Models.Cases.Case;
+import Models.Cases.CaseTresor;
 import Models.Games.Game;
 import Models.Games.SpeedingContest;
 import Models.Games.TourParTour;
@@ -170,8 +172,31 @@ public class Parser {
                     int i = 1;
                     //System.out.println("jeux disponibles : "+mainHandler.getAvailableGamesMap());
                     for (int gameId : mainHandler.getAvailableGamesMap().keySet()){
+                        StringBuilder builder = new StringBuilder("121 MESS ");
+                        builder.append(i++);
+                        builder.append(" ID ");
+                        builder.append(gameId);
+                        builder.append(" ");
+                        builder.append(mainHandler.getAvailableGamesMap().get(gameId).mode);
+                        builder.append(" ");
+                        builder.append(mainHandler.getAvailableGamesMap().get(gameId).getX());
+                        builder.append(" ");
+                        builder.append(mainHandler.getAvailableGamesMap().get(gameId).getY());
+                        builder.append(" ");
+                        builder.append(mainHandler.getAvailableGamesMap().get(gameId).getHoles());
+                        builder.append(" ");
+                        builder.append(mainHandler.getAvailableGamesMap().get(gameId).getTreasures());
+                        if(client.isGoodClient()){
+                            builder.append(" ");
+                            builder.append(mainHandler.getAvailableGamesMap().get(gameId).getMaxPlayers());
+                            builder.append(" ");
+                            builder.append(mainHandler.getAvailableGamesMap().get(gameId).getOwner().getUsername());
+                            builder.append(" ");
+                            builder.append(mainHandler.getAvailableGamesMap().get(gameId).isRobots());
 
-                        client.send(String.format("121 MESS %d ID %d %d %d %d %d %d %d %s %b", i++, gameId,
+                        }
+
+                        /*client.send(String.format("121 MESS %d ID %d %d %d %d %d %d %d %s %b", i++, gameId,
                                 mainHandler.getAvailableGamesMap().get(gameId).mode,
                                 mainHandler.getAvailableGamesMap().get(gameId).getX(),
                                 mainHandler.getAvailableGamesMap().get(gameId).getY(),
@@ -179,9 +204,8 @@ public class Parser {
                                 mainHandler.getAvailableGamesMap().get(gameId).getTreasures(),
                                 mainHandler.getAvailableGamesMap().get(gameId).getMaxPlayers(),
                                 mainHandler.getAvailableGamesMap().get(gameId).getOwner().getUsername(),
-                                mainHandler.getAvailableGamesMap().get(gameId).isRobots()));
-                        System.out.println("mode de jeu : (serveir) "+mainHandler.getAvailableGamesMap().get(gameId).mode);
-
+                                mainHandler.getAvailableGamesMap().get(gameId).isRobots()));*/
+                        client.send(builder.toString());
                     }
 
                 }
@@ -261,16 +285,21 @@ public class Parser {
                 if (response.length == 2 && response[1].equals("GETHOLES")) {
                     // PURE RANDOM
                     Game partie = client.getClient().getGameRunning();
-                    ArrayList<Coordinates> coordinates = partie.getPlateau().getCoordinatesTrous();
-                    client.send("401 NUMBER " + (int) Math.ceil((double) coordinates.size()));
+                    ArrayList<Coordinates> coordinates = partie.getPlateau().getCoordinatesTresors();
+                    client.send("411 NUMBER " + (int) Math.ceil((double) coordinates.size()));
                     for (int i = 0; i < (int) Math.ceil((double) coordinates.size() / 5); i++) {
-                        StringBuilder message = new StringBuilder("401 MESS " + String.valueOf(i) + " POS");
+                        StringBuilder message = new StringBuilder("411 MESS " + String.valueOf(i) + " POS");
                         for (int j = 0; 5 * i + j < coordinates.size() && j < 5; j++) {
-                            message.append(" ").append(coordinates.get(5 * i + j).getX()).append(" ").append(coordinates.get(5 * i + j).getY());
+                            Case tres = partie.getPlateau().getCase(coordinates.get(5*i+j).getX(),coordinates.get(i*5+j).getY());
+                            if (tres instanceof CaseTresor && ((CaseTresor) tres).isSecret()) {
+                                message.append(" ").append(coordinates.get(5 * i + j).getX()).append(" ").append(coordinates.get(5 * i + j).getY()).append(" ").append(0);
+                            } else {
+                                message.append(" ").append(coordinates.get(5 * i + j).getX()).append(" ").append(coordinates.get(5 * i + j).getY()).append(" ").append(coordinates.get(5 * i + j).getValue());
+                            }
                         }
                         client.send(message.toString());
                     }
-                    partie.sendPositions(client);
+
                 }
                 else {
                     illegalCommand();
@@ -334,7 +363,7 @@ public class Parser {
                 break;
             case "300":
                 if (response.length == 3 && response[1].equals("REVEAL") && response[2].equals("HOLE")) {
-                    // définir prix : fixé à 20 pour l'instant
+                    // définir prix : fixé à 20
                     if (client.getClient().getScore()>=20) {
                         client.getClient().lowScore(20);
                         client.send("301 PAYMENT VALIDATED");
@@ -367,9 +396,8 @@ public class Parser {
                         }
                         client.send(message.toString());
                     }
-                    // envoi position joueurs ?
+
                 } else {
-                    //System.out.println(response[1]+ " and "+ response[2]);
                     illegalCommand();
                 }
 
