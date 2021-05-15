@@ -6,7 +6,6 @@ import Models.Games.Game;
 import Models.Games.SpeedingContest;
 import Models.Games.TourParTour;
 import Models.Games.WarFog;
-import com.sun.javafx.UnmodifiableArrayList;
 
 import java.util.ArrayList;
 
@@ -155,7 +154,7 @@ public class Parser {
                     if(Integer.parseInt(response[2]) == 3) {
                         WarFog partie = new WarFog(sizeX, sizeY, nbTres, nbHoles, nbPlayers, robots, client, mainHandler);
                         client.send("111 MAP CREATED " + partie.getId());
-
+                        System.out.println("creat de warfog");
                     }
 
                 }
@@ -169,7 +168,9 @@ public class Parser {
                 if (response.length == 2 && response[1].equals("GETLIST")){
                     client.send("121 NUMBER " + mainHandler.getAvailableGamesMap().size());
                     int i = 1;
+                    //System.out.println("jeux disponibles : "+mainHandler.getAvailableGamesMap());
                     for (int gameId : mainHandler.getAvailableGamesMap().keySet()){
+
                         client.send(String.format("121 MESS %d ID %d %d %d %d %d %d %d %s %b", i++, gameId,
                                 mainHandler.getAvailableGamesMap().get(gameId).mode,
                                 mainHandler.getAvailableGamesMap().get(gameId).getX(),
@@ -179,7 +180,10 @@ public class Parser {
                                 mainHandler.getAvailableGamesMap().get(gameId).getMaxPlayers(),
                                 mainHandler.getAvailableGamesMap().get(gameId).getOwner().getUsername(),
                                 mainHandler.getAvailableGamesMap().get(gameId).isRobots()));
+                        System.out.println("mode de jeu : (serveir) "+mainHandler.getAvailableGamesMap().get(gameId).mode);
+
                     }
+
                 }
                 else {
                     illegalCommand();
