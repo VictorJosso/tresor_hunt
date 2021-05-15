@@ -34,7 +34,6 @@ public class Plateau {
 
 
 
-    //ArrayList<ArrayList<Case>> grille = new ArrayList<>();
 
     /**
      * Instantiates a new Plateau.
@@ -57,12 +56,7 @@ public class Plateau {
 
         System.out.println("GENERATION DU PLATEAU");
 
-       /* do {
-            coordinatesTrous.clear();
-            coordinatesMurs.clear();
-            coordinatesTresors.clear();
-            generate();
-        } while (!parcoursProfondeur());*/
+
         coordinatesTrous.clear();
         coordinatesMurs.clear();
         coordinatesTresors.clear();
@@ -159,22 +153,18 @@ public class Plateau {
     }
 
     private boolean connexe(int mI, int mJ) {
-        //System.out.println("appel connexe()");
         for (int i=0;i<hor;i++) {
             for (int j=0;j<vert;j++) {
                 if (!(grille[i][j].isMarked()) && (grille[i][j] instanceof CaseVide || grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseTrou) ) {
                     System.out.println(i+" "+j+" pas connexe");
                     if (!chercheConnexe(i,j)) {
                         smartSuppr(i, j, mI, mJ);
-                        //suppr(i,j,mI,mJ);
                     }
                     return false;
-                    //trouve(i,j);
-                    //return false;
+
                 }
             }
         }
-        //System.out.println("est enfin connexe");
         return true;
     }
 
@@ -192,17 +182,7 @@ public class Plateau {
         explore(tmphor, tmpvert);
         return connexe(tmphor,tmpvert);
 
-        //if (!connexe()) parcours();
 
-        //if (!connexe()) parcours();
-        /*for (int i=0; i<hor; i++) {
-            for (int j=0; j<vert;j++) {
-                if (!grille[i][j].isMarked()) {
-                    chercheConnexe(i,j);
-                    parcours();
-                }
-            }
-        }*/
     }
 
     private void supprime(int initI, int initJ, int finI, int finJ) {
@@ -218,7 +198,6 @@ public class Plateau {
 
                 j++;
             }
-            //return;
         }
         if(finJ<initJ) {
 
@@ -231,7 +210,6 @@ public class Plateau {
 
                 j--;
             }
-            //return;
         }
         if(finI>initI) {
 
@@ -242,7 +220,6 @@ public class Plateau {
 
                 i++;
             }
-            ///return;
         }
         if(finI<initI) {
 
@@ -252,48 +229,40 @@ public class Plateau {
 
                 i--;
             }
-            //return;
         }
     }
 
     private boolean chercheConnexe(int i, int j) {
-       // System.out.println("appel chercheConnexe()");
 
         int h = j;
         int b = j;
         int d = i;
         int g = i;
         while (d < hor || b < vert || g >= 0 || h >= 0) {
-            //System.out.println("boucle");
             d++;
             b++;
             g--;
             h--;
             if (!horsLimite(d,j) && grille[d][j].isMarked() && (grille[d][j] instanceof CaseVide || grille[d][j] instanceof CaseTresor)) {
-                System.out.println(i+" "+j+"est marquee");
                 supprime(i, j, d, j);
                 return true;
             }
             if (!horsLimite(g,j) &&  grille[g][j].isMarked() && (grille[g][j] instanceof CaseVide || grille[g][j] instanceof CaseTresor)) {
-                //System.out.println("gauche");
                 supprime(i, j, g, j);
                 return true ;
             }
             if (!horsLimite(i,h) && grille[i][h].isMarked() && (grille[i][h] instanceof CaseVide || grille[i][h] instanceof CaseTresor)) {
-                //System.out.println("haut");
 
                 supprime(i, j, i, h);
                 return true;
             }
             if (!horsLimite(i,b) && grille[i][b].isMarked() && (grille[i][b] instanceof CaseVide || grille[i][b] instanceof CaseTresor)) {
-                //System.out.println("bas");
 
                 supprime(i, j, i, b);
                 return true;
             }
 
         }
-        System.out.println("pas trouvé "+i+ " "+j);
         return false;
 
 
@@ -303,7 +272,6 @@ public class Plateau {
 
 
     private void supprime(int i, int j) {
-        System.out.println("suppr i:"+i+" j:"+j);
         if (grille[i][j] instanceof CaseMur) {
             coordinatesMurs.removeIf(coordinates -> coordinates.getX() == i && coordinates.getY() == j);
             grille[i][j]=new CaseVide(i,j);
@@ -316,26 +284,22 @@ public class Plateau {
     }
 
     private void smartSuppr(int initI, int initJ, int finI, int finJ) {
-        System.out.println("appel smart de ");
         int i=initI;
         int j=initJ;
         if (initI<=finI && initJ<=finJ) {
             while ( i<finI || j<finJ) {
                 if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                    System.out.println("finito");
                     return;
                 }
                 if (i!=finI && j!=finJ) {
                     i++;
                     supprime(i,j);
                     if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                        System.out.println("finito");
                         return;
                     }
                     j++;
                     supprime(i,j);
                     if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                        System.out.println("finito");
                         return;
                     }
                 }
@@ -343,7 +307,6 @@ public class Plateau {
                     j++;
                     supprime(i,j);
                     if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                        System.out.println("finito");
                         return;
                     }
                 } else {
@@ -351,7 +314,6 @@ public class Plateau {
                         i++;
                         supprime(i,j);
                         if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                            System.out.println("finito");
                             return;
                         }
                     }
@@ -362,7 +324,6 @@ public class Plateau {
         if (initI>=finI && initJ>=finJ) {
             while ((i>finI || j>finJ)) {
                 if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                    System.out.println("finito");
 
                     return;
                 }
@@ -371,13 +332,11 @@ public class Plateau {
                     i--;
                     supprime(i, j);
                     if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                        System.out.println("finito");
                         return;
                     }
                     j--;
                     supprime(i, j);
                     if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                        System.out.println("finito");
                         return;
                     }
                 }
@@ -385,7 +344,6 @@ public class Plateau {
                     j--;
                     supprime(i,j);
                     if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                        System.out.println("finito");
                         return;
                     }
                 } else {
@@ -393,7 +351,6 @@ public class Plateau {
                         i--;
                         supprime(i,j);
                         if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                            System.out.println("finito");
                             return;
                         }
                     }
@@ -405,7 +362,6 @@ public class Plateau {
         if (initI<=finI && initJ>=finJ) {
             while ( (i<finI || j>finJ)) {
                 if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                    System.out.println("finito");
 
                     return;
                 }
@@ -413,13 +369,11 @@ public class Plateau {
                     i++;
                     supprime(i,j);
                     if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                        System.out.println("finito");
                         return;
                     }
                     j--;
                     supprime(i,j);
                     if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                        System.out.println("finito");
                         return;
                     }
                 }
@@ -427,7 +381,6 @@ public class Plateau {
                     j--;
                     supprime(i,j);
                     if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                        System.out.println("finito");
                         return;
                     }
                 } else {
@@ -435,7 +388,6 @@ public class Plateau {
                         i++;
                         supprime(i,j);
                         if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                            System.out.println("finito");
                             return;
                         }
                     }
@@ -447,7 +399,6 @@ public class Plateau {
         if (initI>=finI && initJ<=finJ) {
             while ((i>finI || j<finJ)) {
                 if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                    System.out.println("finito");
 
                     return;
                 }
@@ -455,13 +406,11 @@ public class Plateau {
                     i--;
                     supprime(i,j);
                     if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                        System.out.println("finito");
                         return;
                     }
                     j++;
                     supprime(i,j);
                     if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                        System.out.println("finito");
                         return;
                     }
                 }
@@ -469,7 +418,6 @@ public class Plateau {
                     j++;
                     supprime(i,j);
                     if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                        System.out.println("finito");
                         return;
                     }
                 } else {
@@ -477,7 +425,6 @@ public class Plateau {
                         i--;
                         supprime(i,j);
                         if (grille[i][j].isMarked() && (grille[i][j] instanceof CaseTresor || grille[i][j] instanceof CaseVide)) {
-                            System.out.println("finito");
                             return;
                         }
                     }
@@ -490,7 +437,6 @@ public class Plateau {
     }
 
     private void suppr (int initI, int initJ, int finI, int finJ) {
-        System.out.println("appel suppr");
         int i=initI;
         int j=initJ;
         if (finI < initI) {
@@ -600,23 +546,7 @@ public class Plateau {
             for (int j=0; j<vert;j++) {
                 if (!(grille[i][j].isMarked()) && (grille[i][j] instanceof CaseVide || grille[i][j] instanceof CaseTresor)) {
                     System.out.println(i+", "+j+" n'est pas marquée");
-                    //return false;
 
-                    /*for (int y=j; y<vert; y++){
-                        for(int x=0; x<max(i, hor-i); x++){
-                            if(!horsLimite(i+x,j) && grille[x+i][j] instanceof CaseMur){
-                                grille[x+i][j] = new CaseVide(x+i, j);
-                                resetMarked();
-                                explorer(tmphor, tmpvert);
-                                return estConnexe(tmphor, tmpvert);
-                            } else if(!horsLimite(i-x,j) && grille[i-x][j] instanceof CaseMur){
-                                grille[i-x][j] = new CaseVide(i-x, j);
-                                resetMarked();
-                                explorer(tmphor, tmpvert);
-                                return estConnexe(tmphor, tmpvert);
-                            }
-                        }
-                    }*/
                     destroyCloseWall(i, j ,new Tracker());
                     destroyed += 1;
                     resetMarked();
@@ -632,16 +562,7 @@ public class Plateau {
 
     // On vérifie à partir de chaque position si la grille est connexe
     private boolean parcoursProfondeur() {
-        /*for (int i=0; i<vert; i++) {
-            for (int j=0; j<hor; j++) {
-                if (!grille[i][j].isMarked()) explorer(i,j);
-                if (!estConnexe()) {
-                    return false;
-                }
-                //if (i!=vert-1) desac();
-            }
-        }
-        return true;*/
+
         int tmpvert = (int)(Math.random() * vert);
         int tmphor = (int)(Math.random() * hor);
         if (grille[tmphor][tmpvert] instanceof CaseVide){
