@@ -8,6 +8,7 @@ import javafx.scene.control.ListView;
 import utils.LeaderBoardItem;
 import utils.PlayersListViewCell;
 import javafx.scene.control.*;
+import java.util.Random;
 
 
 import java.net.URL;
@@ -55,8 +56,10 @@ public class LeaderBoardController implements Initializable {
 
     @FXML
     private void handleRevealMapClick() {
-        int x = this.gameApp.getPlateau().getCoordonneesJoueurs().get(this.gameApp.getPlayerTurnUsername()).getX();
-        int y = this.gameApp.getPlateau().getCoordonneesJoueurs().get(this.gameApp.getPlayerTurnUsername()).getY();
+        Random random = new Random();
+
+        int x = random.nextInt(this.gameApp.getPlateau().getDimX()-4);
+        int y = random.nextInt(this.gameApp.getPlateau().getDimY()-4);
         gameApp.mainApp.getConnectionHandler().send("310 REVEAL MAP "+x+" "+y);
 
         System.out.println("310 REVEAL MAP "+x+" "+y);

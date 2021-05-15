@@ -6,6 +6,8 @@ import Models.Games.Game;
 import Models.Games.SpeedingContest;
 import Models.Games.TourParTour;
 import Models.Games.WarFog;
+import com.sun.javafx.UnmodifiableArrayList;
+
 import java.util.ArrayList;
 
 /**
@@ -373,9 +375,80 @@ public class Parser {
 
             case "310":
                 if (response.length == 5 && response[1].equals("REVEAL") && response[2].equals("MAP")) {
+
                     int x = Integer.parseInt(response[3]);
                     int y = Integer.parseInt(response[4]);
-                    client.send("311 PAYMENT VALIDATED "+x+" "+y);
+
+                    if (client.getClient().getScore()>=50) {
+                        client.getClient().lowScore(50);
+                        client.send("311 PAYMENT VALIDATED"+x+y);
+                    } else {
+                        client.send("905 Not enough point");
+                        break;
+                    }
+
+
+
+
+
+
+                    // On envoie tout d'abord les trous
+                    Game partie = client.getClient().getGameRunning();
+                    ArrayList<Coordinates> coordinates = partie.getPlateau().getCoordinatesTrous();
+                    ArrayList<Coordinates> holes = new ArrayList<>();
+
+                    client.send("320 SENDING HOLES");
+
+                    for (Coordinates c: coordinates) {
+                        for (int i=x-1;i<x+1;i++) {
+                            for (int j=y-1;j<y+1;j++) {
+                                if (c.getX()==i && c.getY()==j) {
+                                    holes.add(c);
+                                }
+                            }
+                        }
+                    }
+
+                    client.send("320 NUMBER " + (int) Math.ceil((double) holes.size()));
+                    for (int i = 0; i < (int) Math.ceil((double) holes.size() /5); i++) {
+                        StringBuilder message = new StringBuilder("320 MESS " + String.valueOf(i) + " POS");
+                        for (int j = 0; 5 * i + j < holes.size() && j < 5; j++) {
+                            message.append(" ").append(holes.get(5 * i + j).getX()).append(" ").append(holes.get(5 * i + j).getY());
+                        }
+                        client.send(message.toString());
+                    }
+
+
+
+
+                    // on envoie les murs ensuite
+                    coordinates = partie.getPlateau().getCoordinatesMurs();
+                    ArrayList<Coordinates> walls = new ArrayList<>();
+                    client.send("330 SENDING WALLS");
+
+                    //On ajoute dans l'arraylist walls toutes les cases de la zone qui nous intéresse
+                    for (Coordinates c: coordinates) {
+                        for (int i=x;i<x+4;i++) {
+                            for (int j=y;j<y+4;j++) {
+                                if (c.getX()==i && c.getY()==j) {
+                                    walls.add(c);
+                                }
+                            }
+                        }
+                    }
+
+                    client.send("330 NUMBER " + (int) Math.ceil((double) walls.size()));
+                    for (int i = 0; i < (int) Math.ceil((double) walls.size() /5); i++) {
+                        StringBuilder message = new StringBuilder("320 MESS " + String.valueOf(i) + " POS");
+                        for (int j = 0; 5 * i + j < walls.size() && j < 5; j++) {
+                            message.append(" ").append(walls.get(5 * i + j).getX()).append(" ").append(walls.get(5 * i + j).getY());
+                        }
+                        client.send(message.toString());
+                    }
+
+
+
+
                 } else {
                     client.send("c pas bon ?");
                     illegalCommand();

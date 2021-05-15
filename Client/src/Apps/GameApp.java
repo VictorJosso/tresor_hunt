@@ -303,45 +303,6 @@ public class GameApp {
             }*/
             //----------
 
-        if(this.plateau.getCompteToursRevealMap()>0) {
-
-                for (int x = 0; x < plateau.getRevealedX(); x++) {
-                    for (int y = 0; y < plateau.getRevealedY(); y++) {
-                        if (!(plateau.getPlateau().get(x).get(y) instanceof CaseVide)) {
-                            //System.out.println("draw !");
-                            gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
-                        } else {
-                            if( plateau.getPlateau().get(x).get(y).isVisitee()) {
-                                //System.out.println("visiteeeee");
-                                gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
-                            }
-                        }
-                    }
-                }
-
-
-                for (int x = plateau.getRevealedX(); x < plateau.getRevealedX()+4 ; x++) {
-                    for (int y = plateau.getRevealedY(); y < plateau.getRevealedY()+4 ; y++) {
-                        gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
-                    }
-                }
-
-                for (int x = plateau.getRevealedX()+4; x < partie.getDimensionX(); x++) {
-                    for (int y = plateau.getRevealedY()+4; y < partie.getDimensionY(); y++) {
-                        if (!(plateau.getPlateau().get(x).get(y) instanceof CaseVide)) {
-                            //System.out.println("draw !");
-                            gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
-                        } else {
-                            if( plateau.getPlateau().get(x).get(y).isVisitee()) {
-                                //System.out.println("visiteeeee");
-                                gc.drawImage(plateau.getPlateau().get(x).get(y).getImageCase(), x * this.COEFF_IMAGE, y * this.COEFF_IMAGE);
-                            }
-                        }
-                    }
-                }
-                this.plateau.setCompteToursRevealMap(this.plateau.getCompteToursRevealMap()-1);
-        }
-
 
         } else {
             for (int x = 0; x < partie.getDimensionX(); x++) {

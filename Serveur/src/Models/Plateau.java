@@ -644,6 +644,10 @@ public class Plateau {
         return coordinatesTresors;
     }
 
+    public Case[][] getGrille() {
+        return grille;
+    }
+
     /*int x;
     int y;
     int nb_murs;

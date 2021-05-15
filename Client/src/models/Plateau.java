@@ -449,4 +449,12 @@ public class Plateau extends CallbackInstance {
     public void setCompteToursRevealMap(int compteToursRevealMap) {
         this.compteToursRevealMap = compteToursRevealMap;
     }
+
+    public int getDimX() {
+        return dimX;
+    }
+
+    public int getDimY() {
+        return dimY;
+    }
 }
