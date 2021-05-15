@@ -66,7 +66,7 @@ public class Parser {
      * @param response_text the response text
      */
 //Méthode principale qui lit la commande envoyée par l'utilisateur et agit en fonction
-    protected void parse(String response_text){
+    public void parse(String response_text){
         System.out.println("PROCESSING COMMAND : "+ response_text);
         String[] response = response_text.split(" ");
         switch (response[0]){
