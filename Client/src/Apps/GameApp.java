@@ -101,22 +101,11 @@ public class GameApp {
 
 
 
-
-        if (partie.getModeDeJeu().equals("3")) {
-            //mainApp.getConnectionHandler().send("410 GETTREASURES");
-            //mainApp.getConnectionHandler().send("420 GETWALLS");
-            //mainApp.getConnectionHandler().send("400 GETHOLES");
-
-
-            // pb: broadcast des joueurs : utiliser 400,410,420 ?
-
-        } else {
+        if (!(partie.getModeDeJeu().equals("3"))) {
             mainApp.getConnectionHandler().send("410 GETTREASURES");
             mainApp.getConnectionHandler().send("400 GETHOLES");
             mainApp.getConnectionHandler().send("420 GETWALLS");
         }
-
-
 
 
     }
@@ -134,16 +123,18 @@ public class GameApp {
         Scene gameScene = new Scene(root);
         gameStage.setScene(gameScene);
 
-        if (partie.getModeDeJeu().equals("3")) {
-            //gameScene.setFill(plateau.getListeImages().get(11));
-        }
 
         Canvas canvas = new Canvas(partie.getDimensionX()*this.COEFF_IMAGE, partie.getDimensionY()*this.COEFF_IMAGE);
         root.getChildren().add(canvas);
         canvas.setFocusTraversable(true);
 
         this.gc = canvas.getGraphicsContext2D();
-        gc.drawImage(new Image ("war.png", screenHeight, screenWidth, false, false), 0, 0);
+        if (partie.getModeDeJeu().equals("3")) {
+            gc.drawImage(new Image ("war.png", screenHeight, screenWidth, false, false), 0, 0);
+
+            //gameScene.setFill(plateau.getListeImages().get(11));
+        }
+
 
 
 
@@ -280,7 +271,7 @@ public class GameApp {
 
 
     protected void drawGame() {
-        if(this.partie.getModeDeJeu().equals("3") && this.plateau.getCompteToursRevealMap()==0) {
+        if(this.partie.getModeDeJeu().equals("3") /*&& this.plateau.getCompteToursRevealMap()==0*/) {
             gc.drawImage(plateau.getListeImages().get(11), 0, 0);
             for (int x = 0; x < partie.getDimensionX(); x++) {
                 for (int y = 0; y < partie.getDimensionY(); y++) {
