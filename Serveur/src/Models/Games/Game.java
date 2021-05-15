@@ -410,11 +410,21 @@ public abstract class Game {
     /**
      * Is fini.
      */
+
+    private ClientHandler getFirstPlayerAlive(){
+        for (ClientHandler player: this.players){
+            if (player.getClient().isAlive()){
+                return player;
+            }
+        }
+        return null;
+    }
     protected void isFini(){
-        if (playersLeft==1 || treasuresLeft==0){
-            ClientHandler best_player = players.get(0);
+        if (playersLeft <= 1 || treasuresLeft==0){
+            ClientHandler best_player = getFirstPlayerAlive();
+            assert best_player != null;
             for (ClientHandler client : this.players){
-                if(client.getClient().getScore() > best_player.getClient().getScore()){
+                if(client.getClient().getScore() > best_player.getClient().getScore() && client.getClient().isAlive()){
                     best_player = client;
                 }
             }

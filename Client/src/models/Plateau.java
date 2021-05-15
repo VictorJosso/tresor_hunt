@@ -100,6 +100,9 @@ public class Plateau extends CallbackInstance {
                 int newY = Integer.parseInt(command[i+1]);
                 plateau.get(newX).set(newY, new CaseMur(newX,newY, listeImages));
             }
+            gameApp.declareCallBacksMaybe();
+        } else {
+            gameApp.tellYouNeedSomeInfos((int) Math.ceil((double) Integer.parseInt(command[2]) / 5));
         }
     }
 
@@ -112,6 +115,9 @@ public class Plateau extends CallbackInstance {
                 int newY = Integer.parseInt(command[i+1]);
                 plateau.get(newX).set(newY, new CaseTrou(newX,newY, listeImages));
             }
+            gameApp.declareCallBacksMaybe();
+        } else {
+            gameApp.tellYouNeedSomeInfos((int) Math.ceil((double) Integer.parseInt(command[2]) / 5));
         }
     }
 
@@ -124,6 +130,9 @@ public class Plateau extends CallbackInstance {
                 int newY = Integer.parseInt(command[i+1]);
                 plateau.get(newX).set(newY, new CaseTresor(newX,newY, Integer.parseInt(command[i+2]), listeImages));
             }
+            gameApp.declareCallBacksMaybe();
+        } else {
+            gameApp.tellYouNeedSomeInfos((int) Math.ceil((double) Integer.parseInt(command[2]) / 5));
         }
     }
 

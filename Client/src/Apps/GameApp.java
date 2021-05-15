@@ -70,6 +70,10 @@ public class GameApp {
     private final Image flammesImage;
     private String playerTurnUsername;
 
+    private int infos_gathered = 0;
+    private int total_infos_to_get = 0;
+    private int number_of_info_types_requested = 0;
+
     /**
      * Instantiates a new Game app.
      *
@@ -93,16 +97,27 @@ public class GameApp {
         mainApp.getConnectionHandler().registerCallback("401", plateau, CallbackInstance::getHoles);
         mainApp.getConnectionHandler().registerCallback("411", plateau, CallbackInstance::getTresors);
         mainApp.getConnectionHandler().registerCallback("421", plateau, CallbackInstance::getWalls);
-        mainApp.getConnectionHandler().registerCallback("500", plateau, CallbackInstance::handleTurnChanged, true);
-        mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition);
-        mainApp.getConnectionHandler().registerCallback("511", plateau, CallbackInstance::updatePlayerTresor);
-        mainApp.getConnectionHandler().registerCallback("520", plateau, CallbackInstance::declareDead);
-        mainApp.getConnectionHandler().registerCallback("530", plateau, CallbackInstance::partieFinie);
         mainApp.getConnectionHandler().registerCallback("666", plateau, CallbackInstance::handleMoveDead);
         mainApp.getConnectionHandler().registerCallback("902", plateau, CallbackInstance::handleNotYourTurn);
-        mainApp.getConnectionHandler().send("410 GETTREASURES");
-        mainApp.getConnectionHandler().send("400 GETHOLES");
-        mainApp.getConnectionHandler().send("420 GETWALLS");
+
+    }
+
+    public void declareCallBacksMaybe(){
+        infos_gathered ++;
+        System.err.println("On a recupéré "+infos_gathered+" informations");
+        if (infos_gathered == total_infos_to_get && number_of_info_types_requested == 3){
+            mainApp.getConnectionHandler().registerCallback("500", plateau, CallbackInstance::handleTurnChanged, true);
+            mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition, true);
+            mainApp.getConnectionHandler().registerCallback("511", plateau, CallbackInstance::updatePlayerTresor, true);
+            mainApp.getConnectionHandler().registerCallback("520", plateau, CallbackInstance::declareDead, true);
+            mainApp.getConnectionHandler().registerCallback("530", plateau, CallbackInstance::partieFinie, true);
+        }
+    }
+
+    public void tellYouNeedSomeInfos(int nb){
+        this.total_infos_to_get += nb;
+        this.number_of_info_types_requested ++;
+        System.err.println("On a besoin de récupérer "+ total_infos_to_get+ " informations");
     }
 
     /**
@@ -199,6 +214,9 @@ public class GameApp {
         this.leaderBoardStage.show();
         int enc = (int) (this.gameStage.getHeight() - partie.getDimensionY()*this.COEFF_IMAGE);
         this.leaderBoardStage.setY(y + enc);
+        mainApp.getConnectionHandler().send("410 GETTREASURES");
+        mainApp.getConnectionHandler().send("400 GETHOLES");
+        mainApp.getConnectionHandler().send("420 GETWALLS");
     }
 
     private void releaseAllCallbacks(){
