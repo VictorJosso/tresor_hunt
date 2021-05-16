@@ -105,8 +105,9 @@ public class GameApp {
         if (partie.getModeDeJeu().equals("3")) {
             mainApp.getConnectionHandler().registerCallback("500", plateau, CallbackInstance::handleTurnChanged, true);
             mainApp.getConnectionHandler().registerCallback("510", plateau, CallbackInstance::updatePlayerPosition, true);
-            mainApp.getConnectionHandler().registerCallback("511", plateau, CallbackInstance::updatePlayerTresor);
-            mainApp.getConnectionHandler().registerCallback("520", plateau, CallbackInstance::declareDead);
+            mainApp.getConnectionHandler().registerCallback("511", plateau, CallbackInstance::updatePlayerTresor, true);
+            mainApp.getConnectionHandler().registerCallback("520", plateau, CallbackInstance::declareDead, true);
+            mainApp.getConnectionHandler().registerCallback("530", plateau, CallbackInstance::partieFinie, true);
         }
 
 
