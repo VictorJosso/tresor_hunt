@@ -12,7 +12,7 @@
          </font>
       </Label>
       <ListView fx:id="leaderBoardListView" layoutY="88.0" prefHeight="312.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="88.0" />
-      <Button fx:id="revealHole" layoutX="117.0" layoutY="43.0" mnemonicParsing="false" onAction="#handleRevealHoleClick" prefHeight="27.0" prefWidth="90.0" text="Reveal hole" />
-      <Button fx:id="revealMap" layoutX="117.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleRevealMapClick" prefHeight="27.0" prefWidth="89.0" text="Reveal map" />
+      <Button fx:id="revealHoleButton" layoutX="117.0" layoutY="43.0" mnemonicParsing="false" onAction="#handleRevealHoleClick" prefHeight="27.0" prefWidth="90.0" text="Reveal hole" />
+      <Button fx:id="revealMapButton" layoutX="117.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleRevealMapClick" prefHeight="27.0" prefWidth="89.0" text="Reveal map" />
    </children>
 </AnchorPane>

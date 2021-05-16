@@ -24,6 +24,9 @@ public class LeaderBoardController implements Initializable {
     @FXML
     private Button revealHoleButton;
 
+    @FXML
+    private Button revealMapButton;
+
     public LeaderBoardController() {
     }
 
@@ -33,6 +36,10 @@ public class LeaderBoardController implements Initializable {
         sortedList = new SortedList<>(app.getLeaderBoardItems());
         leaderBoardListView.setCellFactory(playersListView -> new PlayersListViewCell());
         leaderBoardListView.setItems(sortedList);
+        if (!(gameApp.getPartie().getModeDeJeu().equals("3"))) {
+            revealHoleButton.setVisible(false);
+            revealMapButton.setVisible(false);
+        }
 
     }
 
@@ -40,13 +47,7 @@ public class LeaderBoardController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
     }
 
-    private void disableButton() {
-        if (gameApp.getPartie().getModeDeJeu().equals("3")) {
-            revealHoleButton.setDisable(false);
-        } else {
-            revealHoleButton.setDisable(true);
-        }
-    }
+
 
     @FXML
     private void handleRevealHoleClick() {
