@@ -48,6 +48,7 @@ public class WarFog extends Game {
 
     @Override
     protected void startGame() {
+        super.startGame();
         // d'abord on broadcast a chaque joueur ce qu'il doit savoir
         this.stillAlivePlayers = new CopyOnWriteArrayList<>(this.players);
         Collections.shuffle(this.stillAlivePlayers);
