@@ -140,7 +140,6 @@ public class Plateau extends CallbackInstance {
 
     @Override
     public void getTresors(String s) {
-        System.out.println("appel gettresor");
         String[] command = s.split(" ");
         System.out.println(command[1]);
 
@@ -157,7 +156,6 @@ public class Plateau extends CallbackInstance {
                 gameApp.tellYouNeedSomeInfos((int) Math.ceil((double) Integer.parseInt(command[2]) / 5));
             }
         }
-        System.out.println("plateau : "+plateau);
     }
 
     @Override
@@ -177,11 +175,8 @@ public class Plateau extends CallbackInstance {
         String[] command = s.split(" ");
         System.out.println("appel getnearHoles");
         if (command[1].equals("NUMBER")) {
-            System.out.println("set trous : "+Integer.parseInt(command[2]));
             setTrousRayon1(Integer.parseInt(command[2]));
         }
-        System.out.println("plateau avant : "+plateau);
-        //if (compteToursRevealHole > 0) { // même pas besoin de cette condition (il faut quand même qu'ils existe,t pour pouvoir mourir !!!
             System.out.println("ajout de trou");
             if(!command[1].equals("NUMBER") && !command[1].equals ("SENDING")){
                 for(int i = 4; i < command.length; i+= 2){
@@ -190,18 +185,7 @@ public class Plateau extends CallbackInstance {
                     plateau.get(newX).set(newY, new CaseTrou(newX,newY, listeImages));
                 }
             }
-        //}
-        System.out.println("plateau apres trou"+plateau);
 
-
-
-       /*if (!command[1].equals("SENDING") && !command[1].equals("NUMBER")) {
-           for (int i=4; i<command.length;i+=2) {
-               int newX = Integer.parseInt(command[i]);
-               int newY = Integer.parseInt(command[i+1]);
-               plateau.get(newX).set(newY, new CaseTrou(newX,newY, listeImages));
-           }
-       }*/
     }
 
 
@@ -218,7 +202,6 @@ public class Plateau extends CallbackInstance {
         int y = Integer.parseInt(command[4]);
         Coordinates c = coordonneesJoueurs.get(name);
         if(c == null) {
-            System.out.println("La hashmap ne contenait pas le nom : "+name);
             coordonneesJoueurs.put(name, new Coordinates(x, y));
             gameApp.getLeaderBoardItems().add(new LeaderBoardItem(name, "#1", 0));
             plateau.get(x).get(y).setVisitee();
@@ -249,7 +232,6 @@ public class Plateau extends CallbackInstance {
     public void updateRevealHole(String s) {
 
         compteToursRevealHole=5;
-        System.out.println("appel update RevealHole");
         // nombre de tours
         LeaderBoardItem item = gameApp.getLeaderBoardItems().stream().filter(i -> gameApp.getPlayerTurnUsername().equals(i.getUsername())).findAny().orElse(null);
         assert item!=null;
@@ -272,7 +254,6 @@ public class Plateau extends CallbackInstance {
      * @return the boolean
      */
     public boolean updateCompteToursRevealHole() {
-        System.out.println("appel updateCompteToursRevealHole, compteToursRevealHole="+compteToursRevealHole);
         if (/*coordonneesJoueurs.keySet().equals(gameApp.getPlayerTurnUsername()) &&*/ compteToursRevealHole > 0) {
             System.out.println("tour : "+compteToursRevealHole);
             compteToursRevealHole--;
@@ -281,9 +262,6 @@ public class Plateau extends CallbackInstance {
             for (int i=0; i<plateau.size();i++) {
                 for (int j=0; j<plateau.get(i).size();j++) {
                     if (plateau.get(i).get(j) instanceof CaseTrou) {
-                        System.out.println("SUPPRESSION DE TROU");
-                        // problème : avec remove on a ensuite une erreur
-                        //plateau.get(i).remove(j);
                         plateau.get(i).set(j, new CaseVide(i, j, listeImages));
 
                     }
@@ -301,7 +279,6 @@ public class Plateau extends CallbackInstance {
         this.revealedX=x;
         this.revealedY=y;
         compteToursRevealHole=5;
-        System.out.println("Je vais réveler la map");
     }
 
 
