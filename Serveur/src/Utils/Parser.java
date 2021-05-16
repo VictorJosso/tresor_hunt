@@ -4,6 +4,7 @@ package Utils;
 import Apps.ConnectionHandler;
 import Models.Cases.Case;
 import Models.Cases.CaseTresor;
+import Models.Cases.CaseTrou;
 import Models.Games.Game;
 import Models.Games.SpeedingContest;
 import Models.Games.TourParTour;
@@ -285,20 +286,17 @@ public class Parser {
                 if (response.length == 2 && response[1].equals("GETHOLES")) {
                     // PURE RANDOM
                     Game partie = client.getClient().getGameRunning();
-                    ArrayList<Coordinates> coordinates = partie.getPlateau().getCoordinatesTresors();
+                    ArrayList<Coordinates> coordinates = partie.getPlateau().getCoordinatesTrous();
                     client.send("411 NUMBER " + (int) Math.ceil((double) coordinates.size()));
                     for (int i = 0; i < (int) Math.ceil((double) coordinates.size() / 5); i++) {
-                        StringBuilder message = new StringBuilder("411 MESS " + String.valueOf(i) + " POS");
+                        StringBuilder message = new StringBuilder("401 MESS " + String.valueOf(i) + " POS");
                         for (int j = 0; 5 * i + j < coordinates.size() && j < 5; j++) {
-                            Case tres = partie.getPlateau().getCase(coordinates.get(5*i+j).getX(),coordinates.get(i*5+j).getY());
-                            if (tres instanceof CaseTresor && ((CaseTresor) tres).isSecret()) {
-                                message.append(" ").append(coordinates.get(5 * i + j).getX()).append(" ").append(coordinates.get(5 * i + j).getY()).append(" ").append(0);
-                            } else {
-                                message.append(" ").append(coordinates.get(5 * i + j).getX()).append(" ").append(coordinates.get(5 * i + j).getY()).append(" ").append(coordinates.get(5 * i + j).getValue());
-                            }
+                                message.append(" ").append(coordinates.get(5 * i + j).getX()).append(" ").append(coordinates.get(5 * i + j).getY());
                         }
                         client.send(message.toString());
+
                     }
+                    partie.sendPositions(client);
 
                 }
                 else {
@@ -315,7 +313,12 @@ public class Parser {
                     for (int i = 0; i < (int) Math.ceil((double) coordinates.size() / 5); i++) {
                         StringBuilder message = new StringBuilder("411 MESS " + String.valueOf(i) + " POS");
                         for (int j = 0; 5 * i + j < coordinates.size() && j < 5; j++) {
-                            message.append(" ").append(coordinates.get(5 * i + j).getX()).append(" ").append(coordinates.get(5 * i + j).getY()).append(" ").append(coordinates.get(5 * i + j).getValue());
+                            Case tres = partie.getPlateau().getCase(coordinates.get(5*i+j).getX(),coordinates.get(i*5+j).getY());
+                            if (tres instanceof CaseTrou && ((CaseTresor) tres).isSecret()) {
+                                message.append(" ").append(coordinates.get(5 * i + j).getX()).append(" ").append(coordinates.get(5 * i + j).getY()).append(" ").append(0);
+                            } else {
+                                message.append(" ").append(coordinates.get(5 * i + j).getX()).append(" ").append(coordinates.get(5 * i + j).getY()).append(" ").append(coordinates.get(5 * i + j).getValue());
+                            }
                         }
                         client.send(message.toString());
                     }
