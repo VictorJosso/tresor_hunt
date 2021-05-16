@@ -59,7 +59,7 @@ public class WarFog extends Game {
         sendWalls();
         sendTres();
         for (ClientHandler c : stillAlivePlayers) {
-            c.send("510 " + c.getUsername() + " POS " + c.getClient().getCoordonnees().getX() + " "+ c.getClient().getCoordonnees().getY());
+            super.sendPositions(c);
         }
     }
 
