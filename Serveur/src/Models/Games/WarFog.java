@@ -59,7 +59,7 @@ public class WarFog extends Game {
         sendWalls();
         sendTres();
         for (ClientHandler c : stillAlivePlayers) {
-            sendPositions(c);
+            c.send("510 " + c.getUsername() + " POS " + c.getClient().getCoordonnees().getX() + " "+ c.getClient().getCoordonnees().getY());
         }
     }
 
@@ -166,7 +166,7 @@ public class WarFog extends Game {
         }
     }
 
-    @Override
+    /*@Override
     public void sendPositions(ClientHandler requester){
        //TODO: envoyer position des joueurs a rayons 2 max du joueur requester
         System.out.println("appel sendposition de warfog");
@@ -182,7 +182,7 @@ public class WarFog extends Game {
             }
         }
 
-    }
+    }*/
 
 
 
