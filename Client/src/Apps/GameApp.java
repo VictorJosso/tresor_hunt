@@ -38,12 +38,21 @@ import views.LeaderBoardController;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * The type Game app.
+ */
 public class GameApp {
+    /**
+     * The Main app.
+     */
     public MainApp mainApp;
     private Stage gameStage;
     private Stage leaderBoardStage;
     private final Partie partie;
     private final Plateau plateau;
+    /**
+     * The Gc.
+     */
     public GraphicsContext gc;
     private AnimationTimer timer;
     private final int screenWidth;
@@ -117,6 +126,9 @@ public class GameApp {
 
     }
 
+    /**
+     * Declare call backs maybe.
+     */
     public void declareCallBacksMaybe(){
         infos_gathered ++;
         System.err.println("On a recupéré "+infos_gathered+" informations");
@@ -129,6 +141,11 @@ public class GameApp {
         }
     }
 
+    /**
+     * Tell you need some infos.
+     *
+     * @param nb the nb
+     */
     public void tellYouNeedSomeInfos(int nb){
         this.total_infos_to_get += nb;
         this.number_of_info_types_requested ++;
@@ -136,8 +153,9 @@ public class GameApp {
     }
 
 
-
-
+    /**
+     * Launch.
+     */
     public void launch(){
         this.gameStage = new Stage();
         this.gameStage.getIcons().add(new Image("logo2.png"));
@@ -309,12 +327,9 @@ public class GameApp {
     }
 
 
-
-
-
-
-
-
+    /**
+     * Draw game.
+     */
     protected void drawGame() {
         if(this.partie.getModeDeJeu().equals("3") /*&& this.plateau.getCompteToursRevealMap()==0*/) {
             gc.drawImage(this.fondBrouillard.getImage(), this.fondBrouillard.getCropStartX(), this.fondBrouillard.getCropStartY(), this.fondBrouillard.getCropWidth(), this.fondBrouillard.getCropHeight(), 0, 0, getScreenWidth(), getScreenHeight());
@@ -341,6 +356,9 @@ public class GameApp {
         }
     }
 
+    /**
+     * Draw players.
+     */
     protected void drawPlayers() {
         for(String name : plateau.getCoordonneesJoueurs().keySet()) {
             String nameToDraw;
@@ -520,15 +538,29 @@ public class GameApp {
     }
 
 
-
+    /**
+     * Gets partie.
+     *
+     * @return the partie
+     */
     public Partie getPartie() {
         return partie;
     }
 
+    /**
+     * Gets player turn username.
+     *
+     * @return the player turn username
+     */
     public String getPlayerTurnUsername() {
         return playerTurnUsername;
     }
 
+    /**
+     * Gets plateau.
+     *
+     * @return the plateau
+     */
     public Plateau getPlateau() {
         return plateau;
     }

@@ -317,14 +317,26 @@ public abstract class Game {
         }
     }
 
+    /**
+     * Send tres.
+     */
     public void sendTres() {}
+
+    /**
+     * Send holes.
+     */
     public void sendHoles( ){}
+
+    /**
+     * Send walls.
+     */
     public void sendWalls() {}
-        /**
-         * Gets id.
-         *
-         * @return the id
-         */
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     public int getId() {
         return id;
     }
@@ -423,6 +435,10 @@ public abstract class Game {
         }
         return null;
     }
+
+    /**
+     * Is fini.
+     */
     protected void isFini(){
         if (playersLeft <= 1 || treasuresLeft==0){
             ClientHandler best_player = getFirstPlayerAlive();

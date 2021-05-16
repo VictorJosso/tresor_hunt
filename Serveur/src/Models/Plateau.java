@@ -32,9 +32,6 @@ public class Plateau {
     private Game game;
 
 
-
-
-
     /**
      * Instantiates a new Plateau.
      *

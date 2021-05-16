@@ -20,7 +20,13 @@ import utils.LeaderBoardItem;
 import java.io.File;
 import java.util.*;
 
+/**
+ * The type Plateau.
+ */
 public class Plateau extends CallbackInstance {
+    /**
+     * The Plateau.
+     */
     public ArrayList<ArrayList<Case>> plateau = new ArrayList<>();
     private int dimX;
     private int dimY;
@@ -36,6 +42,14 @@ public class Plateau extends CallbackInstance {
 
     private GameApp gameApp;
 
+    /**
+     * Instantiates a new Plateau.
+     *
+     * @param dimX        the dim x
+     * @param dimY        the dim y
+     * @param COEFF_IMAGE the coeff image
+     * @param gameApp     the game app
+     */
     public Plateau(int dimX, int dimY, int COEFF_IMAGE, GameApp gameApp) {
         this.dimX = dimX;
         this.dimY = dimY;
@@ -252,8 +266,11 @@ public class Plateau extends CallbackInstance {
     }
 
 
-
-
+    /**
+     * Update compte tours reveal hole boolean.
+     *
+     * @return the boolean
+     */
     public boolean updateCompteToursRevealHole() {
         System.out.println("appel updateCompteToursRevealHole, compteToursRevealHole="+compteToursRevealHole);
         if (/*coordonneesJoueurs.keySet().equals(gameApp.getPlayerTurnUsername()) &&*/ compteToursRevealHole > 0) {
@@ -456,43 +473,98 @@ public class Plateau extends CallbackInstance {
     }
 
 
-
-
+    /**
+     * Sets trous rayon 1.
+     *
+     * @param trousRayon1 the trous rayon 1
+     */
     public void setTrousRayon1(int trousRayon1) {
         this.trousRayon1=trousRayon1;
     }
 
+    /**
+     * Gets trous rayon 1.
+     *
+     * @return the trous rayon 1
+     */
     public int getTrousRayon1() {
         return trousRayon1;
     }
 
+    /**
+     * Hors limite boolean.
+     *
+     * @param x the x
+     * @param y the y
+     * @return the boolean
+     */
     public boolean horsLimite (int x, int y) {
         return x < 0 || x >= dimX || y < 0 || y >= dimY;
     }
 
 
+    /**
+     * Sets compte tours reveal hole.
+     *
+     * @param i the
+     */
     public void setCompteToursRevealHole(int i) {
         compteToursRevealHole=i;
     }
 
+    /**
+     * Gets compte tours reveal hole.
+     *
+     * @return the compte tours reveal hole
+     */
     public int getCompteToursRevealHole() {
         return compteToursRevealHole;
     }
 
+    /**
+     * Gets compte tours reveal map.
+     *
+     * @return the compte tours reveal map
+     */
     public int getCompteToursRevealMap() { return compteToursRevealMap;}
 
+    /**
+     * Gets revealed x.
+     *
+     * @return the revealed x
+     */
     public int getRevealedX() {return revealedX;}
 
+    /**
+     * Gets revealed y.
+     *
+     * @return the revealed y
+     */
     public int getRevealedY() {return revealedY;}
 
+    /**
+     * Sets compte tours reveal map.
+     *
+     * @param compteToursRevealMap the compte tours reveal map
+     */
     public void setCompteToursRevealMap(int compteToursRevealMap) {
         this.compteToursRevealMap = compteToursRevealMap;
     }
 
+    /**
+     * Gets dim x.
+     *
+     * @return the dim x
+     */
     public int getDimX() {
         return dimX;
     }
 
+    /**
+     * Gets dim y.
+     *
+     * @return the dim y
+     */
     public int getDimY() {
         return dimY;
     }

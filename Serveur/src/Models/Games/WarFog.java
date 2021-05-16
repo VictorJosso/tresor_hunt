@@ -27,7 +27,6 @@ public class WarFog extends Game {
     //Attributs
 
 
-
     /**
      * Instantiates a new War fog.
      *
