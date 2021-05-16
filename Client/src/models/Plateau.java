@@ -41,18 +41,19 @@ public class Plateau extends CallbackInstance {
         this.dimY = dimY;
         this.COEFF_IMAGE = COEFF_IMAGE;
         this.gameApp = gameApp;
+
         listeImages = new ArrayList<>(Arrays.asList(new Image(Objects.requireNonNull(getClass().getResource("../Mur.png")).toExternalForm(), COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image(Objects.requireNonNull(getClass().getResource("../Trou.png")).toExternalForm(), COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image(Objects.requireNonNull(getClass().getResource("../Vide.png")).toExternalForm(), COEFF_IMAGE, COEFF_IMAGE, false, false),
-                new Image(Objects.requireNonNull(getClass().getResource("../trésor BRONZE.png")).toExternalForm(), COEFF_IMAGE, COEFF_IMAGE, false, false),
-                new Image(Objects.requireNonNull(getClass().getResource("../trésor ARGENT.png")).toExternalForm(), COEFF_IMAGE, COEFF_IMAGE, false, false),
-                new Image(Objects.requireNonNull(getClass().getResource("../trésor OR.png")).toExternalForm(), COEFF_IMAGE, COEFF_IMAGE, false, false),
-                new Image(Objects.requireNonNull(getClass().getResource("../trésor DIAMANT.png")).toExternalForm(), COEFF_IMAGE, COEFF_IMAGE, false, false),
+                new Image(Objects.requireNonNull(getClass().getResource("../tresor_BRONZE.png")).toExternalForm(), COEFF_IMAGE, COEFF_IMAGE, false, false),
+                new Image(Objects.requireNonNull(getClass().getResource("../tresor_ARGENT.png")).toExternalForm(), COEFF_IMAGE, COEFF_IMAGE, false, false),
+                new Image(Objects.requireNonNull(getClass().getResource("../tresor_OR.png")).toExternalForm(), COEFF_IMAGE, COEFF_IMAGE, false, false),
+                new Image(Objects.requireNonNull(getClass().getResource("../tresor_DIAMANT.png")).toExternalForm(), COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image(Objects.requireNonNull(getClass().getResource("../player_1_left.png")).toExternalForm(), COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image(Objects.requireNonNull(getClass().getResource("../player_1_right.png")).toExternalForm(), COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image(Objects.requireNonNull(getClass().getResource("../player_2_left.png")).toExternalForm(), COEFF_IMAGE, COEFF_IMAGE, false, false),
                 new Image(Objects.requireNonNull(getClass().getResource("../player_2_right.png")).toExternalForm(), COEFF_IMAGE, COEFF_IMAGE, false, false),
-                new Image(Objects.requireNonNull(getClass().getResource("../trésor MYSTÈRE.png")).toExternalForm(),COEFF_IMAGE,COEFF_IMAGE,false,false),
+                new Image(Objects.requireNonNull(getClass().getResource("../tresor_MYSTERE.png")).toExternalForm(),COEFF_IMAGE,COEFF_IMAGE,false,false),
                 new Image(Objects.requireNonNull(getClass().getResource("../war.png")).toExternalForm(), gameApp.getScreenHeight(), gameApp.getScreenHeight(), false, false)));
 
 
