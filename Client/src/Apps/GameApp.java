@@ -65,6 +65,8 @@ public class GameApp {
     private final Image flammesImage;
     private String playerTurnUsername;
 
+    private ImageCrop fondBrouillard;
+
     private int infos_gathered = 0;
     private int total_infos_to_get = 0;
     private int number_of_info_types_requested = 0;
@@ -159,6 +161,20 @@ public class GameApp {
             gc.drawImage(new Image ("war.png", screenHeight, screenWidth, false, false), 0, 0);
 
         }
+
+        double ratio = 528.0 / 522.0;
+        int py = (int) (getScreenWidth() / ratio);
+        int px = (int) (getScreenHeight() * ratio);
+        int Sx, Sy;
+        if (py < getScreenHeight()){
+            Sx = px;
+            Sy = getScreenHeight();
+        } else {
+            Sx = getScreenWidth();
+            Sy = py;
+        }
+        Image screamer = new Image("war.png", Sx, Sy, false, false);
+        fondBrouillard = new ImageCrop(screamer, Sx, Sy , (Sx - getScreenWidth()) / 2, (Sy - getScreenHeight()) / 2, getScreenWidth(), getScreenHeight());
 
         timer = new AnimationTimer(){
             @Override
@@ -282,7 +298,7 @@ public class GameApp {
     private void handleKeyPressed(KeyEvent keyEvent) {
         long currentTime = System.currentTimeMillis();
         Long lastCall = this.keyEvents.get(keyEvent.getCode());
-        if (lastCall == null || (currentTime - lastCall) > 250){
+        if (lastCall == null || (currentTime - lastCall) > 10){
             this.keyEvents.put(keyEvent.getCode(), currentTime);
             this.processKeyEvent(keyEvent);
         } else {
@@ -299,7 +315,7 @@ public class GameApp {
 
     protected void drawGame() {
         if(this.partie.getModeDeJeu().equals("3") /*&& this.plateau.getCompteToursRevealMap()==0*/) {
-            gc.drawImage(plateau.getListeImages().get(12), 0, 0);
+            gc.drawImage(this.fondBrouillard.getImage(), this.fondBrouillard.getCropStartX(), this.fondBrouillard.getCropStartY(), this.fondBrouillard.getCropWidth(), this.fondBrouillard.getCropHeight(), 0, 0, getScreenWidth(), getScreenHeight());
             for (int x = 0; x < partie.getDimensionX(); x++) {
                 for (int y = 0; y < partie.getDimensionY(); y++) {
                     if (plateau.getPlateau().get(x).get(y) instanceof CaseMur || plateau.getPlateau().get(x).get(y) instanceof CaseTresor || (plateau.getPlateau().get(x).get(y) instanceof CaseTrou && plateau.getCompteToursRevealHole()>0)) {
