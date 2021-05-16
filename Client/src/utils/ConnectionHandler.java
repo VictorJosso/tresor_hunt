@@ -78,8 +78,8 @@ public class ConnectionHandler extends Thread{
             for (String command : buffers.get(code)) {
                 callback.call(controller, command);
             }
-            registerCallback(code, controller, callback);
         }
+        registerCallback(code, controller, callback);
     }
 
     /**

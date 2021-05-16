@@ -32,7 +32,7 @@ public class Config {
 
     private void defaultConfig(){
         adresseServeur = "tresor.josso.fr";
-        portServeur = 12345;
+        portServeur = 7236;
         serveurAmeliore = true;
 
     }

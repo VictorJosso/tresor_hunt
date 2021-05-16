@@ -194,7 +194,7 @@ public class PlateauBot {
                     break;
                 case "411":
                     int value = Integer.parseInt(coordinates[2]);
-                    grille[posX][posY] = new CaseTresor(posX, posY, value);
+                    grille[posX][posY] = new CaseTresor(posX, posY, (value != 0) ? value : 12);
                     this.treasuresList.add(new Coordinates(posX, posY));
                     break;
             }
