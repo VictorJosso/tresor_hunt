@@ -1,6 +1,7 @@
 package Apps;
 
 import javafx.event.EventHandler;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.WindowEvent;
 import models.Config;
@@ -122,7 +123,7 @@ public class MainApp extends Application {
         try {
             // On nomme le stage.
             this.primaryStage.setTitle("Chasse au trésor");
-
+            this.primaryStage.getIcons().add(new Image("logo2.png"));
             // On crée un nouveau Loader et on lui donne le fichier fxml qui correspond à la fenêtre d'acceuil
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/views/home.fxml"));
@@ -157,6 +158,7 @@ public class MainApp extends Application {
         // Meme procédure que pour resumeMainStageStartup
         this.configStage = new Stage();
         this.configStage.setTitle("Configuration du jeu");
+        this.configStage.getIcons().add(new Image("logo2.png"));
 
         FXMLLoader configLoader = new FXMLLoader();
         configLoader.setLocation(getClass().getResource("/views/welcome.fxml"));
@@ -178,6 +180,7 @@ public class MainApp extends Application {
         fetchPartiesListTimer.cancel();
         this.lobbyStage = new Stage();
         this.lobbyStage.setTitle("Lobby");
+        this.lobbyStage.getIcons().add(new Image("logo2.png"));
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/views/lobby.fxml"));
 

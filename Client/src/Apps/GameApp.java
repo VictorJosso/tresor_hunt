@@ -140,6 +140,7 @@ public class GameApp {
 
     public void launch(){
         this.gameStage = new Stage();
+        this.gameStage.getIcons().add(new Image("logo2.png"));
         Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
         double x = bounds.getMinX() + 5;
         double y = bounds.getMinY() + 5;
@@ -216,6 +217,7 @@ public class GameApp {
 
 
         this.leaderBoardStage = new Stage();
+        this.leaderBoardStage.getIcons().add(new Image("logo2.png"));
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/views/leaderBoard.fxml"));
         AnchorPane rootPane = null;
