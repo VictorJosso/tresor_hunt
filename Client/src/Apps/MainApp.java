@@ -15,6 +15,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.Partie;
@@ -59,6 +60,7 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        Font.loadFont(getClass().getResource("../Chilanka-Regular.ttf").toExternalForm(), 10);
         this.primaryStage = primaryStage;
 
         displayConfigStage();
